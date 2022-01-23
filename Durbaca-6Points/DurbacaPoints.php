@@ -169,7 +169,7 @@
       $Comment = "/";
     }
     $text = "Name;" . $StudentName . "; Points; " . $Marks . " ; Cookie; " . $Cookie . " ; Comment; " . $Comment . " ; Task; " . $Task . "\n";
-    $fp = fopen('..\testfolder\points.txt', 'a+');
+    $fp = fopen('points.txt', 'a+');
 
     if (fwrite($fp, $text)) {
       echo 'saved :)';

@@ -1,6 +1,6 @@
 <?php
 
-$filename = '../testfolder/points.txt';
+$filename = 'points.txt';
 if (file_exists($filename)) {
     $handle = fopen($filename, "r");
     while (($line = fgets($handle)) !== false) {
