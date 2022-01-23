@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Win</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!--<link rel='stylesheet' type='text/css' media='screen' href='main.css'>-->
+    <script>
+        function ReStart() {
+            window.location.href = 'picture.html';
+        }
+
+    </script>
+
+    <style>
+        .color {
+
+            display: flex;
+            position: relative;
+            align-items: center;
+            flex-direction: column;
+            top: 790px;
+
+
+
+        }
+
+        #span {
+            background-color: blue;
+            color: yellow;
+        }
+
+        body {
+            background-image: url("win_wallpaper.png");
+            background-repeat: no-repeat;
+            background-size: 100%;
+
+        }
+
+        #hidden {
+            display: none;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div class="color">
+        <h1><Span id="span">Well Played!!!</Span></h1>
+        <button onclick="ReStart();">Restart</button>
+    </div>
+    <audio id="hidden" control loop autoplay src="Pokemon_Opening.mp3">
+</body>
+
+</html>

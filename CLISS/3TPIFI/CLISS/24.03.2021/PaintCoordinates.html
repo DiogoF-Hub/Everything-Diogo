@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='PaintCoordinates.js'></script>
+    <style>
+        .box{
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+        }
+        
+        #canvas{
+            border: solid 5px black;
+        }
+    </style>
+</head>
+<body onload="FirstDrawing();">
+    <canvas id="canvas" width="1500" height="600"></canvas>
+    <h2>Please draw here</h2>
+    <div id="xCoord"></div>
+    <div id="yCoord"></div>
+    <button id="btn">Stop drawing</button> <br>
+</body>
+</html>

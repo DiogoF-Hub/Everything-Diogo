@@ -1,0 +1,17 @@
+.box {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+}
+
+.redBox {
+    background-color: red;
+}
+
+.greenBox {
+    background-color: green;
+}
+
+.blueBox {
+    background-color: blue;
+}

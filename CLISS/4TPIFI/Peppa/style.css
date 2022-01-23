@@ -1,0 +1,33 @@
+.products {
+    position: relative;
+    text-align: center;
+    border: solid 1px red;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+}
+
+.image {
+    width: 400px;
+}
+
+
+#soldout {
+    position: absolute;
+    top: 50%;
+    background-color: red;
+}
+
+#allpepas {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#fullcontainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+

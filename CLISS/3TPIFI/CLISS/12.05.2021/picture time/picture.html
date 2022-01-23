@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Memory Card Game (Pokémon Edition)</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!--<link rel='stylesheet' type='text/css' media='screen' href='main.css'>-->
+    <script src='picture.js'></script>
+    <style>
+        .allCards
+        {
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .oneCard
+        {
+            display: inline-block;
+            width: 200px;
+            height: 300px;
+        }
+
+        body {
+            background-image: url("wallpaper_game.png");
+        }
+
+        #lifesId{
+            background-color: white;
+        }
+    </style>
+</head>
+<body onload="Start();">
+    <h1><span id="lifesId"></span></h1>
+    <!--<button id="buttonmode" onclick="Easymode();">Easy Mode</button>
+    <button id="buttonmode" onclick="Hardmode();">Hard Mode</button>-->
+    <div id="myGame" class="allCards"></div>
+
+</body>
+</html>

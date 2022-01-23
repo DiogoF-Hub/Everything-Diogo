@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset='utf-8'>
+ <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+ <title>Alternative page</title>
+ <meta name='viewport' content='width=device-width, initial-scale=1'>
+ <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+ <script src='PaintCoordinates.js'></script>
+ <style>
+ .toolBar
+ {
+ border: red 1px solid;
+ margin: 5px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ width: 70px;
+ position: fixed;
+ top: 0px;
+ right: 0px;
+ background-color: gray;
+ }
+ 
+ .tool
+ {
+ color: white;
+ position: relative;
+ width: 60px;
+ height: 50px;
+ background-color: blue;
+ margin: 2px;
+ border:yellow 1px solid;
+ }
+ 
+ .toolOptions
+ {
+ display: flex;
+ flex-direction: row-reverse;
+ position: absolute;
+ right: 100%;
+ height: 50px;
+ background-color: black;
+ transform-origin: top right;
+ transform: scale(0);
+ transition: transform 0.5s;
+ }
+ 
+ .tool:hover .toolOptions
+ {
+ transform: scale(1);
+ }
+ 
+ .box
+ {
+ display: inline-block;
+ width: 50px;
+ height: 50px;
+ }
+ 
+ #canvas{
+ border: solid 5px black;
+ }
+ </style>
+</head>
+<body onload="FirstDrawing();">
+ <canvas id="canvas" width="1300" height="600"></canvas>
+ <div id="xCoord"></div>
+ <div id="yCoord"></div>
+
+ <div class="toolBar">
+
+ <div class="tool" id="colorpick">
+ <div class="toolOptions"></div>
+ </div>
+
+ <div class="tool" id="colorpick">
+ <div class="toolOptions" ></div>
+ </div>
+ 
+ <button class="tool" id="btn">Stop drawing</button>
+
+ </div>
+</body>
+</html>
