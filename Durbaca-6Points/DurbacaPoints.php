@@ -31,7 +31,7 @@
     }
 
     body {
-      justify-content: flex-end;
+      text-align: center;
       background: #fff;
       max-width: 60ch;
       margin: 10px auto;
