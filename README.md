@@ -1,5 +1,5 @@
-# Welcome to GitHub Desktop!
+# Welcome to my Everything GitHub!
 
-This is your README. READMEs are where you can communicate what your project is and how to use it.
+Here you will find any type of my code from every language.
 
-Write your name on line 6, save it, and then head back to GitHub Desktop.
+HTML, CSS, JS, Python, PHP etc
