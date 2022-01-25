@@ -6,47 +6,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        .box {
-            height: 50px;
-            width: 50px;
-            border: black 1px solid;
-        }
-
-        .blue {
-            background-color: blue;
-        }
-
-        .red {
-            background-color: red;
-        }
-
-        .yellow {
-            background-color: yellow;
-        }
-    </style>
 </head>
 
 <body>
 
-    <?php
+    <form method="POST">
 
-    $filename = 'ex1.txt';
-    $handle = fopen($filename, "r");
-    while (($line = fgets($handle)) !== false) {
-        $arraytest = explode(";", $line);
-        for ($i = 1; $i <= $arraytest[0]; $i++) {
-    ?>
-            <div class="box <?= $arraytest[1] ?>"><?= $i ?></div>
-        <?php
+        <input type="text" name="myinput">
+        <button type="submit">Go</button>
+
+    </form>
+
+    <?php
+    $result = 0;
+    $cal = "";
+    if (isset($_POST["myinput"])) {
+        for ($i = 1; $i <= $_POST["myinput"]; $i++) {
+            $result = $i * ($i + 1) + $result;
+
+            if ($i == $_POST["myinput"]) {
+                $cal = $cal . "$i * ($i + 1)";
+            } else {
+                $cal = $cal . "$i * ($i + 1) + ";
+            }
         }
-        ?>
-        <br>
+    ?>
+        <div><?= $cal ?> = <?= $result ?></div>
     <?php
     }
-
     ?>
-
 </body>
 
 </html>

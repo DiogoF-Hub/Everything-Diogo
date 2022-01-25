@@ -1,0 +1,13 @@
+Bereldange
+Golf;10
+Turan;2
+Passat;5
+Dacia;3
+Howald
+Golf;2
+Dacia;3
+Skoda;5
+Ettelbruck
+Dacia;3
+Passat;2
+Skoda;2
