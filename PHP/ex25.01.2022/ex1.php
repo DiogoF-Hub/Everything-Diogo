@@ -66,6 +66,20 @@
 
     <div>The total amount of cars is <?= $totalcars ?></div>
 
+    <br><br>
+
+    <?php
+
+    $mycarsArr2 = [];
+    $handle2 = fopen($filename, "r");
+    while (($line2 = fgets($handle2)) !== false) {
+        $arraytest2 = explode(";", $line2);
+        if ($arraytest2 < 1) {
+        }
+    }
+
+    ?>
+
 </body>
 
 </html>
