@@ -1,0 +1,375 @@
+/*Font used for the website */
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Source+Sans+Pro:ital@1&display=swap");
+
+/*Register page styles*/
+
+.form {
+    position: relative;
+    top: 2ch;
+    border-radius: 40px;
+    max-width: 40%;
+    background: #ffffff;
+    margin: auto;
+    padding: 40px;
+    text-align: center;
+}
+
+
+/*the fill in with personal information zone*/
+
+.form input {
+    background: #f2f2f2;
+    width: 90%;
+    border: 0;
+    margin: 0 0 35px;
+    padding: 20px;
+}
+
+
+/*the country select button*/
+
+.form select {
+    width: 50ch;
+    background: #f2f2f2;
+    border: 0;
+    padding: 20px;
+    color: #666666;
+}
+
+.form select option {
+    color: #1a1a1a;
+}
+
+
+/*submit buttun*/
+
+.form button {
+    background: rgba(0, 136, 169, 1);
+    border-radius: 50px;
+    padding: 15px;
+    color: #edf0f1;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.form button:hover {
+    background: rgba(0, 136, 169, 0.6);
+}
+
+
+/*Navigation bar styles*/
+
+.wrapper {
+    top: 0;
+}
+
+body {
+    margin: 0;
+}
+
+nav {
+    height: 44px;
+    background: #323232;
+}
+
+nav ul {
+    display: flex;
+    height: 44px;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0;
+    margin: 0 auto;
+    list-style-type: none;
+}
+
+
+nav a {
+    display: block;
+    color: white;
+    font-size: 15px;
+    font-weight: lighter;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #b8b8b8;
+}
+
+.appleNav {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.iPhone {
+    height: 100%;
+    width: auto;
+    display: block;
+    margin: auto;
+    max-height: 543px;
+    width: 50%;
+    background-color: #00ACEE;
+    float: right;
+    left: 200px;
+    box-sizing: content-box;
+}
+
+.dropdown .dropbtn {
+    border: none;
+    color: #d4dbdd;
+    background-color: #1d1d1f;
+}
+
+.navbar a:hover,
+.dropdown-content a:hover,
+.dropdown:hover .dropbtn {
+    color: #ffffff;
+    transition: all 0.5s ease 0s;
+}
+
+
+/*
+  }
+  .dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 160px;
+  z-index: 1;
+  }
+  .dropdown-content a {
+  background-color: #24252a;
+  text-decoration: none;
+  display: block;
+  }
+  .dropdown:hover .dropdown-content {
+  display: block;
+  }
+*/
+
+
+/*iPad page styles*/
+
+
+/*New Generation Banana Pad Image */
+
+.Banana_Pad_Pro {
+    display: flex;
+    width: 87ch;
+    z-index: 3;
+}
+
+
+/*This is for the animation in the banana page */
+
+@keyframes showTopText {
+    0% {
+        transform: translate3d(0, 100%, 0);
+    }
+    40%,
+    60% {
+        transform: translate3d(0, 50%, 0);
+    }
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes showBottomText {
+    0% {
+        transform: translate3d(0, -100%, 0);
+    }
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.animated-title {
+    color: #222;
+    left: 32%;
+    position: absolute;
+    overflow: hidden;
+    width: 35%;
+    height: 50vmin;
+    display: flex;
+    top: 15ch;
+}
+
+.animated-title>div {
+    height: 50%;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    color: #222;
+}
+
+.animated-title>div div {
+    font-size: 4vw;
+    position: absolute;
+    color: #222;
+}
+
+.animated-title>div div span {
+    display: block;
+    color: #222;
+    font-size: 3vw;
+}
+
+.animated-title>div.text-top {
+    border-bottom: 0.5vw solid #000;
+    display: block;
+    top: 0;
+}
+
+.animated-title>div.text-top div {
+    animation: showTopText 1s;
+    animation-delay: 0.5s;
+    animation-fill-mode: forwards;
+    bottom: 0;
+    transform: translate(0, 100%);
+}
+
+.animated-title>div.text-top div div:first-child {
+    color: #222;
+    position: absolute;
+}
+
+.animated-title>div.text-bottom {
+    bottom: 0;
+}
+
+.animated-title>div.text-bottom div {
+    animation: showBottomText 0.5s;
+    animation-delay: 1.8s;
+    animation-fill-mode: forwards;
+    top: 0;
+    transform: translate(0, -100%);
+}
+
+
+/*learn more button under the animation */
+
+.Banana_Pad_Pro_bottom-btn {
+    padding: 5px 5px;
+    background-color: rgba(0, 136, 169, 1);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    display: flex;
+    width: 45%;
+    margin-top: 15%;
+    color: #edf0f1;
+}
+
+.Banana_Pad_Pro_bottom-btn:hover {
+    background-color: rgba(0, 136, 169, 0.8);
+}
+
+
+/*everything uses this classes*/
+
+* {
+    font-family: "Montserrat", sans-serif;
+}
+
+.allin {
+    margin-top: 3%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.iPhone_image_Property {
+    margin: 10px;
+    max-width: 100%;
+    height: auto;
+}
+
+.center {
+    display: block;
+    width: auto;
+    height: auto;
+    margin: auto;
+    padding: 100px;
+}
+
+.centermain {
+    text-align: center;
+    display: block;
+    width: auto;
+    height: auto;
+    margin: auto;
+}
+
+.leftSided {
+    display: flex;
+    flex-direction: row;
+}
+
+.rightSided {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.image_Property {
+    display: block;
+    width: 30ch;
+}
+
+
+/*<br> substitutor xD*/
+
+p div {
+    display: block;
+}
+
+.bottom-btn1 {
+    padding: 5px 5px;
+    background-color: rgba(0, 136, 169, 1);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    color: #edf0f1;
+}
+
+.bottom-btn2 {
+    color: rgba(0, 136, 169, 1);
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    border: none;
+    background-color: white;
+    text-decoration: none;
+}
+
+.bottom-btn:hover {
+    background-color: rgba(0, 136, 169, 0.8);
+}
+
+.bottom-btn1:hover {
+    background-color: rgba(0, 136, 169, 0.8);
+}
+
+
+/*iPhone page styles*/
+
+@media screen and (max-width: 800px) {
+    header>.navbar {
+        align-items: flex-start;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media screen and (min-width: 801px) {
+    header {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .register_page {
+        max-width: 55%;
+        margin: auto;
+    }
+}

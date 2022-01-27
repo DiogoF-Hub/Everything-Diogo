@@ -1,0 +1,347 @@
+
+body {
+    background-image: url(../Images/background.jpg);
+}
+
+#nav {
+    position: fixed;
+    background-color: lightblue;
+    height: 50px;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: 10;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.section1 {
+    position: relative;
+    top: 85px;
+}
+
+#language1 {
+    width: 53px;
+    height: 35px;
+    box-shadow: 3px 3px 3px white;
+}
+
+.aclass {
+    position: relative;
+    font-size: 30px;
+    color: black;
+    text-decoration: none;
+    margin: 13px;
+    text-shadow: 2px 2px 1px white;
+}
+
+.texthoverhome:hover, .blueGreenSpan:hover {
+    transition: font-size 0.4s ;
+    font-size: 20px;
+}
+
+.aclass:hover, .dropbtn:hover, #homeH1 {
+    transition: font-size 0.4s ;
+    font-size: 33px;
+}
+
+.active, .texthoverhome:hover, .greenPrice:hover, .blueGreenSpan:hover, .dropdown:hover, .aclass:hover, .dropbtn:hover {
+    background-color: yellowgreen;
+}
+
+.productimage {
+    height: 135px;
+}
+
+.product {
+    background-color: #DAF4FB;
+    display: flex;
+    flex-direction: column;
+    width: 140px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.oneLineOfProduct {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.dropbtn { 
+    font-size: 30px;
+    text-shadow: 2px 2px white;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 190px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+/* @media querry */
+
+@media screen and (min-width: 500px) and (max-width: 1000px) {
+    #nav {
+        position: fixed;
+        height: 100%;
+        top: 0px;
+        width: 160px;
+        z-index: 10;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        background-color: lightblue;
+        top: 0px;
+        left: 0px;
+        display: flex;
+    }
+    .aclass {
+        margin: 0px;
+    }
+
+    .section1 {
+        margin-left: 160px;
+    }
+
+
+    .dropdown-content {
+        left: 100%;
+        top: 0;
+        z-index: 11;
+    }
+
+    .blueSpan, .blueGreenSpan {
+        font-size: 65%;
+    }
+
+    .ldlcLogo {
+        width: 300px;
+        height: 110px;
+    }
+
+}
+
+/* Form */
+
+    .label1 {
+        margin: 12px;
+    }
+
+    #flex1 {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        width: 10px;
+    }
+
+    .divform {
+        background-color: lightblue;
+        padding: 35px;
+        width: 305px;
+    }
+
+
+/* End html action form */
+
+.divEnd {
+    display: flex;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+    top: 335px;
+}
+
+.blueSpan {
+    background-color: lightblue;
+}
+
+/* iframe */
+
+.iframe1 {
+    box-shadow: 3px 3px 1px black;
+    width: 300px;
+    height: 200px;
+}
+
+.iframeHome {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.iframeMaps, .divHome1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.divHome1 {
+    margin-left: 25px;
+}
+
+.ldlcLogo {
+    box-shadow: 3px 3px 1px black;
+}
+
+.divAbout {
+    background-color: #DAF4FB;
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+
+
+/* IMG slider */
+
+.slider-holder
+        {
+            width: 600px;
+            height: 600px;
+            background-color: yellow;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 0px;
+            text-align: center;
+            overflow: hidden;
+        }
+       
+        .image-holder
+        {
+            width: 1800px;
+            background-color: red;
+            height: 600px;
+            clear: both;
+            position: relative;
+           
+            -webkit-transition: left 2s;
+            -moz-transition: left 2s;
+            -o-transition: left 2s;
+            transition: left 2s;
+        }
+       
+        .slider-image
+        {
+            width: 600px;
+            height: 600px;
+            float: left;
+            margin: 0px;
+            padding: 0px;
+            position: relative;
+        }
+       
+        #slider-image-1:target ~ .image-holder
+        {
+            left: 0px;
+        }
+       
+        #slider-image-2:target ~ .image-holder
+        {
+            left: -600px;
+        }
+       
+        #slider-image-3:target ~ .image-holder
+        {
+            left: -1200px;
+        }
+       
+        .button-holder
+        {
+            position: relative;
+            top: -20px;
+        }
+       
+        .slider-change
+        {
+            display: inline-block;
+            height: 10px;
+            width: 10px;
+            border-radius: 5px;
+            background-color: yellowgreen;
+        }
+
+
+
+        
+#testDiv {
+    /*display: flex;
+    justify-content: center;
+    align-items: center;
+    */
+
+    width: 340px;
+    padding: 10px;
+    border: 5px solid yellowgreen;
+    margin: 0;
+    text-align: center;
+    background-color: lightblue;
+}
+
+
+
+
+/* Table */
+table, th, td {
+    border:5px solid yellowgreen;
+}
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+    text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr {
+    background-color: lightblue;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}

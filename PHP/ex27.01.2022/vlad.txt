@@ -1,0 +1,3 @@
+1;leftSided;iphone_se;iPhone SE;Lots to love.;Less to spend.;399;
+2;rightSided;iphone_11;iPhone 11;Just the right amount;of everything.;499;
+3;leftSided;iphone_11_pro;iPhone 11 Pro;Pro cameras.;Pro display.;699;
