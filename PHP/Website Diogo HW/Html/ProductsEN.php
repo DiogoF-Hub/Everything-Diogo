@@ -18,6 +18,11 @@
 
     <section class="section1">
 
+        <select name="pricerange">
+            <option value="sds">fdfd</option>
+            <option value="">dfdf</option>
+        </select>
+
         <?php
         $filename = '../database/database.txt';
         if (file_exists($filename)) {
