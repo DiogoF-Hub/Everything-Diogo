@@ -17,8 +17,17 @@
 <body>
 
   <?php
+
+  if (isset($_GET["pricerange"])) {
+    if (!in_array($_GET["pricerange"], array("normal", "price_asc", "price_desc"))) {
+      $_GET["pricerange"] = "normal";
+    }
+  } else {
+    $_GET["pricerange"] = "normal";
+  }
+
   include_once("nav.php");
-  navbar("ProductsEN.php", "products", 5, "PT");
+  navbar("ProductsEN.php?pricerange=" . $_GET["pricerange"], "products", 5, "PT");
   ?>
 
   <section class="section1">
@@ -27,21 +36,13 @@
 
       <select name="pricerange" onchange="pricerangefunc();">
         <option <?php if (isset($_GET["pricerange"]) && $_GET["pricerange"] == "normal") echo "selected"; ?> value="normal">Normal</option>
-        <option <?php if (isset($_GET["pricerange"]) && $_GET["pricerange"] == "price_asc") echo "selected"; ?> value="price_asc">Price ascending</option>
-        <option <?php if (isset($_GET["pricerange"]) && $_GET["pricerange"] == "price_desc") echo "selected"; ?> value="price_desc">Price descending</option>
+        <option <?php if (isset($_GET["pricerange"]) && $_GET["pricerange"] == "price_asc") echo "selected"; ?> value="price_asc">Preço ascendente</option>
+        <option <?php if (isset($_GET["pricerange"]) && $_GET["pricerange"] == "price_desc") echo "selected"; ?> value="price_desc">Preço descendente</option>
       </select>
 
     </form>
 
     <?php
-
-    if (isset($_GET["pricerange"])) {
-      if (!in_array($_GET["pricerange"], array("normal", "price_asc", "price_desc"))) {
-        die();
-      }
-    } else {
-      $_GET["pricerange"] = "normal";
-    }
 
 
     $PricesIds = [];
@@ -75,7 +76,7 @@
       foreach ($PricesIds as $id => $price) {
         $idnumber = substr($id, 0, -1); //remove the letter from my productId    ex: like "1a" to only "1"
 
-        $file = new SplFileObject($filename); //read a certain line from the txt file withut reading the whole file
+        $file = new SplFileObject($filename); //read a certain line from the txt file without reading the whole file
         $file->seek($idnumber - 1);
 
         $arraytest = explode(";", $file->current());

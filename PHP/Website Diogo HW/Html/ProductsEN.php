@@ -17,8 +17,17 @@
 <body>
 
     <?php
+    if (isset($_GET["pricerange"])) {
+        if (!in_array($_GET["pricerange"], array("normal", "price_asc", "price_desc"))) {
+            $_GET["pricerange"] = "normal";
+        }
+    } else {
+        $_GET["pricerange"] = "normal";
+    }
+
+
     include_once("nav.php");
-    navbar("ProductsPT.php", "products", 0, "EN");
+    navbar("ProductsPT.php?pricerange=" . $_GET["pricerange"], "products", 0, "EN");
     ?>
 
     <section class="section1">
@@ -34,14 +43,6 @@
         </form>
 
         <?php
-
-        if (isset($_GET["pricerange"])) {
-            if (!in_array($_GET["pricerange"], array("normal", "price_asc", "price_desc"))) {
-                die();
-            }
-        } else {
-            $_GET["pricerange"] = "normal";
-        }
 
 
         $PricesIds = [];
@@ -75,7 +76,7 @@
             foreach ($PricesIds as $id => $price) {
                 $idnumber = substr($id, 0, -1); //remove the letter from my productId    ex: like "1a" to only "1"
 
-                $file = new SplFileObject($filename); //read a certain line from the txt file withut reading the whole file
+                $file = new SplFileObject($filename); //read a certain line from the txt file without reading the whole file
                 $file->seek($idnumber - 1);
 
                 $arraytest = explode(";", $file->current());
@@ -106,7 +107,9 @@
             die("File not found");
         }
 
+        print $_SESSION["username"];
         ?>
+
 
 
     </section>

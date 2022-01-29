@@ -33,6 +33,11 @@ function navbar($URL, $ActivePage, $toggle, $language)
             <a class="aclass <?php if ($ActivePage == "about") print "active" ?>" href="About<?= $language ?>.php"><?= $arraytest[4 + $toggle] ?></a>
         </div>
 
+        <?php
+
+        ?>
+        <a href="user.php">Login</a>
+
         <a href="<?= $URL ?>">
             <img src="../Images/Languages.jpg" alt="PT/EN" id="language1">
         </a>

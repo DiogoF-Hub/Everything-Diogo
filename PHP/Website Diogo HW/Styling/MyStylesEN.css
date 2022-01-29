@@ -347,4 +347,9 @@ table, th, td {
 }
 
 
+.BoxDiv {
+    width: 205px;
+    height: auto;
+    border: solid 1px black;
+}
 

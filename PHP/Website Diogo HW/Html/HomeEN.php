@@ -11,6 +11,7 @@
 
 <body>
     <?php
+
     include_once("nav.php");
     navbar("HomePT.php", "home", 0, "EN");
     ?>
