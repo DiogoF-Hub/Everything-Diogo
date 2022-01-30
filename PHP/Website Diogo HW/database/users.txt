@@ -1,4 +1,1 @@
 DFER7;1234;Diogo;Fernandes;
-Li;4321;Shaopeng;Li;
-Rui;5678;Rui;Ferreira;
-josef2;bla123;Jose;Francisco

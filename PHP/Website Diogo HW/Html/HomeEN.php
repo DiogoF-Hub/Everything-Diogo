@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,7 +16,7 @@
     <?php
 
     include_once("nav.php");
-    navbar("HomePT.php", "home", 0, "EN");
+    navbar("HomePT.php", "home", 0, "EN", $logedIn);
     ?>
 
     <section class="section1">

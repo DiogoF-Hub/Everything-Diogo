@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 if (isset($_GET["ProductID"])) {
 
@@ -81,50 +82,55 @@ if (isset($_GET["ProductID"])) {
                 <a href="#slider-image-3" class="slider-change"></a>
             </div>
         </div>
-        <div id="testDiv"><?= $arraytest[11 + $toggle] ?></div>
 
-        <table class="styled-table">
-            <tr>
-                <th><?php if ($_GET["lang"] == "EN") {
-                        print "Product Name:";
-                    } else {
-                        print "Nome do produto:";
-                    } ?></th>
-                <th><?= $arraytest[12] ?></th>
-            </tr>
+        <br>
 
-            <tr>
-                <th><?php if ($_GET["lang"] == "PT") {
-                        print $arraytest[13 + $toggle - 1];
-                    } else {
-                        print $arraytest[13];
-                    }  ?></th>
-                <td><?= $arraytest[14] ?></td>
-            </tr>
+        <div class="CenterBox">
+            <div id="testDiv"><?= $arraytest[11 + $toggle] ?></div>
 
-            <tr>
-                <th><?php if ($_GET["lang"] == "PT") {
-                        print $arraytest[15 + $toggle - 2];
-                    } else {
-                        print $arraytest[15];
-                    }  ?></th>
-                <td><?= $arraytest[16] ?></td>
-            </tr>
+            <table class="styled-table">
+                <tr>
+                    <th><?php if ($_GET["lang"] == "EN") {
+                            print "Product Name:";
+                        } else {
+                            print "Nome do produto:";
+                        } ?></th>
+                    <th><?= $arraytest[12] ?></th>
+                </tr>
 
-            <tr>
-                <th><?php if ($_GET["lang"] == "PT") {
-                        print $arraytest[17 + $toggle - 3];
-                    } else {
-                        print $arraytest[17];
-                    }  ?></th>
-                <td><?php if ($arraytest[18] == "Yes" && $_GET["lang"] == "PT") {
-                        print "Sim";
-                    } else {
-                        print $arraytest[18];
-                    } ?></td>
-            </tr>
+                <tr>
+                    <th><?php if ($_GET["lang"] == "PT") {
+                            print $arraytest[13 + $toggle - 1];
+                        } else {
+                            print $arraytest[13];
+                        }  ?></th>
+                    <td><?= $arraytest[14] ?></td>
+                </tr>
 
-        </table>
+                <tr>
+                    <th><?php if ($_GET["lang"] == "PT") {
+                            print $arraytest[15 + $toggle - 2];
+                        } else {
+                            print $arraytest[15];
+                        }  ?></th>
+                    <td><?= $arraytest[16] ?></td>
+                </tr>
+
+                <tr>
+                    <th><?php if ($_GET["lang"] == "PT") {
+                            print $arraytest[17 + $toggle - 3];
+                        } else {
+                            print $arraytest[17];
+                        }  ?></th>
+                    <td><?php if ($arraytest[18] == "Yes" && $_GET["lang"] == "PT") {
+                            print "Sim";
+                        } else {
+                            print $arraytest[18];
+                        } ?></td>
+                </tr>
+
+            </table>
+        </div>
     </section>
 
 </body>

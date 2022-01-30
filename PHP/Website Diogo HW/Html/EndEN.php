@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,6 +13,10 @@
 </head>
 
 <body>
+    <?php
+    include_once("nav.php");
+    navbar("FormPT.php", "form", 5, "EN");
+    ?>
 
     <div class="divEnd">
         <h1><span class="blueSpan">Your request has been successfully submitted</span></h1>

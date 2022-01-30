@@ -34,9 +34,31 @@ function navbar($URL, $ActivePage, $toggle, $language)
         </div>
 
         <?php
-
+        if (!isset($_SESSION["username"])) {
         ?>
-        <a href="user.php">Login</a>
+            <a class="aclass <?php if ($ActivePage == "logbutton") print "active" ?>" href="user.php?lang=<?= $language ?>"><?php if ($language == "EN") print "Login";
+                                                                                                                            else print "Entrar"; ?></a>
+        <?php
+        } else {
+        ?>
+            <div><?php if ($language == "EN") print "Hi,";
+                    else print "Ola," ?> <?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></div>
+            <form method="POST" id="logoutform">
+                <input hidden type="text" name="logoutbutton">
+                <a name="logoutbutton" onclick="document.getElementById('logoutform').submit();" class="aclass <?php if ($ActivePage == "logbutton") print "active" ?>" href="#"><?php if ($language == "EN") print "Logout";
+                                                                                                                                                                                    else print "Sair"; ?></a>
+            </form>
+        <?php
+        }
+        ?>
+
+        <?php
+        if (isset($_POST["logoutbutton"])) {
+            session_unset();
+            session_destroy();
+            header("Refresh:0");
+        }
+        ?>
 
         <a href="<?= $URL ?>">
             <img src="../Images/Languages.jpg" alt="PT/EN" id="language1">

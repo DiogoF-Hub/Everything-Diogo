@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -107,7 +111,6 @@
             die("File not found");
         }
 
-        print $_SESSION["username"];
         ?>
 
 
