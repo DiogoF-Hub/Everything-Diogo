@@ -2,3 +2,4 @@
 4;red
 2;red
 6;yellow
+7;blue
