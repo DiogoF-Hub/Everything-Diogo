@@ -15,8 +15,23 @@
 </head>
 
 <body>
+    <?php $data = ["1" => "blue", "2" => "red", "3" => "green"]; ?>
+
+    <form method="GET">
+        Please choose the box color: <select name="colorChoice">
+            <?php foreach ($data as $key => $value) { ?>
+                <option value="<?= $key; ?>"> <?= $value; ?> </option>
+            <?php } ?>
+        </select>
+
+        <br>
+
+        Please write how many boxes you want: <input type="number" name="NoBoxes">
+        <button type="submit">Go</button>
+    </form>
+
     <?php
-    $data = ["1" => "blue", "2" => "red", "3" => "green"];
+
 
     if (isset($_GET["colorChoice"], $_GET["NoBoxes"])) {
         if (is_numeric($_GET["NoBoxes"]) && (isset($data[$_GET["colorChoice"]]))) {
@@ -27,21 +42,8 @@
         } else {
             print("Please enter a number");
         }
-    } else {
+
         ?>
-
-        <form method="GET">
-            Please choose the box color: <select name="colorChoice">
-                <?php foreach ($data as $key => $value) { ?>
-                    <option value="<?= $key; ?>"> <?= $value; ?> </option>
-                <?php } ?>
-            </select>
-
-            <br>
-
-            Please write how many boxes you want: <input type="number" name="NoBoxes">
-            <button type="submit">Go</button>
-        </form>
     <?php } ?>
 </body>
 
