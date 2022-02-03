@@ -23,6 +23,12 @@
 
     $carsArr = [];
 
+    $arr = [];
+    $arr["peppa"] = "pig";
+    print_r($arr);
+    print "<br>";
+    print $arr["peppa"];
+
     $filename = 'losch.txt';
     $handle = fopen($filename, "r");
     while (($line = fgets($handle)) !== false) {
@@ -43,42 +49,29 @@
 
         <tr>
             <th>Name</th>
-            <th>Count</th>
+            <th>Amount</th>
         </tr>
 
         <?php
 
-        foreach ($carsArr as $name => $count) {
+        foreach ($carsArr as $name => $amount) {
         ?>
             <tr>
                 <td><?= $name ?></td>
-                <td><?= $count ?></td>
+                <td><?= $amount ?></td>
             </tr>
         <?php
-            $totalcars += $count;
+            $totalcars += $amount;
         }
 
         ?>
 
+        <tr>
+            <th>TOTAL:</th>
+            <th><?= $totalcars ?></th>
+        </tr>
+
     </table>
-
-    <br>
-
-    <div>The total amount of cars is <?= $totalcars ?></div>
-
-    <br><br>
-
-    <?php
-
-    $mycarsArr2 = [];
-    $handle2 = fopen($filename, "r");
-    while (($line2 = fgets($handle2)) !== false) {
-        $arraytest2 = explode(";", $line2);
-        if ($arraytest2 < 1) {
-        }
-    }
-
-    ?>
 
 </body>
 

@@ -13,6 +13,7 @@
     <form method="POST">
         <select name="myselect">
             <option disabled selected>Choose</option>
+            <option value="normal">Normal</option>
             <option value="number_asc1">ascending</option>
             <option value="number_desc1">descending</option>
         </select>
@@ -26,16 +27,15 @@
         $filename = 'ex1.txt';
         $handle = fopen($filename, "r");
         while (($line = fgets($handle)) !== false) {
-            $arraytest = explode(";", $line);
             array_push($arr, $line);
         }
 
         if ($_POST["myselect"] == "number_asc1") {
-            asort($arr);
+            asort($arr); //ascending
         }
 
         if ($_POST["myselect"] == "number_desc1") {
-            arsort($arr);
+            arsort($arr); //descending
         }
 
 
@@ -47,7 +47,8 @@
         //MUST use a foreach bcs after arsort or asort the index will keep as they are, so if asort the key will keep the same so if u do a for loop and print from 0 to count($arr) will print as the key is = to and not sorted as u want
         //So using a foreach will print what is inside the arr as it is.    Use print_r so see how the  arr is after arsort or asort, then with this foreach will print on same order whatever is their key
         foreach ($arr as $key => $val) {
-            echo "$val\n";
+            print $val;
+            print "<br>";
         }
     }
 
