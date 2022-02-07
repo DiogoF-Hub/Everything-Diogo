@@ -35,22 +35,22 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
         while (!feof($handle)) {
             $buffer = fgets($handle);
             if (strpos($buffer, $_POST["usernamelogin"]) !== FALSE) {
-                break; //if it finds, I want him to stop
+                //break; //if it finds, I want him to stop
+
+                $arraytest2 = explode(";", $buffer); //explode the result and then compare to what was written inside the inputs
+
+                if ($_POST["usernamelogin"] == $arraytest2[0] && $_POST["passwordlogin"] == $arraytest2[1]) {
+                    //echo "loged in :)";
+                    $_SESSION["username"] = $arraytest2[0];
+                    $_SESSION["firstname"] = $arraytest2[2];
+                    $_SESSION["lastname"] = $arraytest2[3];
+                    echo '<script>window.location.href="Home' . $_GET["lang"] . '.php"</script>'; //This will redirect me to home to whatever language im in
+                } else {
+                    $wrongUser = 1;
+                }
             }
         }
         fclose($handle);
-    }
-
-    $arraytest2 = explode(";", $buffer); //explode the result and then compare to what was written inside the inputs
-
-    if ($_POST["usernamelogin"] == $arraytest2[0] && $_POST["passwordlogin"] == $arraytest2[1]) {
-        //echo "loged in :)";
-        $_SESSION["username"] = $arraytest2[0];
-        $_SESSION["firstname"] = $arraytest2[2];
-        $_SESSION["lastname"] = $arraytest2[3];
-        echo '<script>window.location.href="Home' . $_GET["lang"] . '.php"</script>'; //This will redirect me to home to whatever language im in
-    } else {
-        $wrongUser = 1;
     }
 }
 
@@ -202,17 +202,19 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                 while (!feof($handle2)) {
                     $buffer2 = fgets($handle2);
                     if (strpos($buffer2, $_POST["usernamereg"]) !== FALSE) {
-                        break;
+                        //break;
+
+                        $arraytest3 = explode(";", $buffer2);
+
+                        if ($arraytest3[0] == $_POST["usernamereg"]) {
+                            $UserFound = 1;;
+                        }
                     }
                 }
                 fclose($handle2);
             }
 
-            $arraytest3 = explode(";", $buffer2);
 
-            if ($arraytest3[0] == $_POST["usernamereg"]) {
-                $UserFound = 1;;
-            }
 
             if ($UserFound == 0) {
                 $fp = fopen('../database/users.txt', 'a+');
