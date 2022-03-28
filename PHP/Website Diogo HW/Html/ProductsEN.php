@@ -78,10 +78,10 @@ session_start();
             $lineNumber = 0;
 
             foreach ($PricesIds as $id => $price) {
-                $idnumber = substr($id, 0, -1); //remove the letter from my productId    ex: like "1a" to only "1"
+                // $idnumber = substr($id, 0, -1); //remove the letter from my productId    ex: like "1a" to only "1"
 
                 $file = new SplFileObject($filename); //read a certain line from the txt file without reading the whole file
-                $file->seek($idnumber - 1);
+                $file->seek($id - 1);
 
                 $arraytest = explode(";", $file->current());
 

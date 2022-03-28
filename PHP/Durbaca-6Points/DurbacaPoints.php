@@ -30,7 +30,7 @@
       color: yellow;
     }
 
-    body {
+    #form {
       text-align: center;
       background: #fff;
       max-width: 60ch;
@@ -151,7 +151,7 @@
       }
     }
 
-    $Task = trim(preg_replace('/\s+/', ' ', $Task));
+    $Task = trim(preg_replace('/\s+/', '\n', $Task));
 
 
     if (strlen($Comment = $_POST["comment"]) <= 100) {
@@ -162,7 +162,7 @@
       die();
     }
 
-    $Comment = trim(preg_replace('/\s+/', ' ', $Comment));
+    $Comment = trim(preg_replace('/\s+/', '\n', $Comment));
 
 
     if (empty($Comment)) {
@@ -389,52 +389,68 @@
 
 
 <body onload="loadthis();">
-  <form id="myForm" method="post">
-    <h1>6 Points for compétences 2TPIFI</h1>
+  <div id="form">
+    <form id="myForm" method="post">
+      <h1>6 Points for compétences 2TPIFI</h1>
 
-    <div class="right_side">Student Name:</div>
-    <select name="studentname" id="StudentSelect">
-      <option hidden value="-1">Select Student</option>
-      <?php
-      for ($i = 0; $i < count($arrayOfStudents); $i++) {
-      ?>
-        <option id="<?= $arrayOfStudents[$i] ?>" value="<?= $arrayOfStudents[$i] ?>"><?= $arrayOfStudents[$i] ?></option>
-      <?php
-      }
-      ?>
-    </select>
-    <br>
-    <span id="spanStudentErr" class="error"></span>
-    <br><br>
+      <div class="right_side">Student Name:</div>
+      <select name="studentname" id="StudentSelect">
+        <option hidden value="-1">Select Student</option>
+        <?php
+        for ($i = 0; $i < count($arrayOfStudents); $i++) {
+        ?>
+          <option id="<?= $arrayOfStudents[$i] ?>" value="<?= $arrayOfStudents[$i] ?>"><?= $arrayOfStudents[$i] ?></option>
+        <?php
+        }
+        ?>
+      </select>
+      <br>
+      <span id="spanStudentErr" class="error"></span>
+      <br><br>
 
-    <div class="right_side">Points:</div>
-    <input id="InputPoints" name="points" type="range" min="0" max="6" value="0" onchange="pointsNumber(value);">
-    <span class="red" id="NumberId"></span>
-    <br>
-    <span id="spanPointsErr" class="error"></span>
+      <div class="right_side">Points:</div>
+      <input id="InputPoints" name="points" type="range" min="0" max="6" value="0" onchange="pointsNumber(value);">
+      <span class="red" id="NumberId"></span>
+      <br>
+      <span id="spanPointsErr" class="error"></span>
 
-    <div class="right_side" id="hidden"></div>
-    <span class="error"></span>
-    <div class="right_side" id="hidden2"></div>
-    <span id="spanCookieErr" class="error"></span>
-    <br><br>
+      <div class="right_side" id="hidden"></div>
+      <span class="error"></span>
+      <div class="right_side" id="hidden2"></div>
+      <span id="spanCookieErr" class="error"></span>
+      <br><br>
 
 
-    <div class="right_side">Task:</div>
-    <textarea maxlength="100" id="taskId" name="task" rows="5" cols="45">http://192.168./**.*:port/</textarea>
-    <br>
-    <span id="spanTaskErr" class="error"></span>
-    <br><br>
+      <div class="right_side">Task:</div>
+      <textarea maxlength="100" id="taskId" name="task" rows="5" cols="45">http://192.168./**.*:port/</textarea>
+      <br>
+      <span id="spanTaskErr" class="error"></span>
+      <br><br>
 
-    <div class="right_side">Comment:</div>
-    <textarea maxlength="100" id="commentId" name="comment" rows="5" cols="45"></textarea>
-    <br>
-    <span id="spanCommentErr" class="error"></span>
-  </form>
+      <div class="right_side">Comment:</div>
+      <textarea maxlength="100" id="commentId" name="comment" rows="5" cols="45"></textarea>
+      <br>
+      <span id="spanCommentErr" class="error"></span>
+    </form>
 
-  <button onclick="checkForm();">Submit</button>
+    <button onclick="checkForm();">Submit</button>
 
-  <div id="peppaImgDiv"></div>
+    <div id="peppaImgDiv"></div>
+  </div>
+
+  <div>
+    <?php
+    $filename2 = 'points.txt';
+    $handle2 = fopen($filename2, "r");
+    while (($line2 = fgets($handle2)) !== false) {
+      $arraytest2 = explode(";", $line2);
+      $Comment2 = str_replace('\n', PHP_EOL, $arraytest2[7]);
+      print "<script>alert('" . $Comment2 . "')</script>";
+    }
+    ?>
+
+
+  </div>
 </body>
 
 </html>
