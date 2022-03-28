@@ -15,20 +15,19 @@
     $host = "localhost";
     $user = "root";
     $psw = "";
-    $portnu = 3306;
     $database = "animalsinsert";
+    $portnu = 3306;
     $connection = new mysqli($host, $user, $psw, $database, $portnu);
 
     if (isset($_POST["newAnimal"])) {
-        print "You want to insert a " . $_POST["newAnimal"]." into the database";
+        print "You want to insert a " . $_POST["newAnimal"] . " into the database";
+
         $sqlStatement = $connection->prepare("INSERT INTO Animals(animalName,Continent) VALUES(?,?)");
-        $sqlStatement-> bind_param("ss",$_POST["newAnimal"],$_POST["Continent"]);
-        if(!$sqlStatement->execute())
-        {
+        $sqlStatement->bind_param("ss", $_POST["newAnimal"], $_POST["Continent"]);
+
+        if (!$sqlStatement->execute()) {
             print "We inserted the animal into the database";
-        }
-        else
-        {
+        } else {
             print "We did not insert the animal into the database";
         }
     }
@@ -42,7 +41,7 @@
         print("No animals were found: :(");
     } else {
         while ($row = $result->fetch_assoc()) {
-            print $row["AnimalName"] ." lives in ".$row["Continent"]. "<br>";
+            print $row["AnimalName"] . " lives in " . $row["Continent"] . "<br>";
         }
     }
     ?>
@@ -50,12 +49,12 @@
 
         <input name="newAnimal">
         <select name="Continent">
-        <option>Europe</option>
-        <option>America</option>
-        <option>Africa</option>
-        <option>Asia</option>
-        <option>Antarctica</option>
-        <option>Australia</option>
+            <option>Europe</option>
+            <option>America</option>
+            <option>Africa</option>
+            <option>Asia</option>
+            <option>Antarctica</option>
+            <option>Australia</option>
         </select>
 
         <input type="submit" value="go">
@@ -63,7 +62,7 @@
 
 
     <?php
-    
+
     ?>
 </body>
 
