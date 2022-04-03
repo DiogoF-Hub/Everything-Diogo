@@ -48,71 +48,64 @@ session_start();
 
         <?php
 
+        $host = "localhost";
+        $user = "root";
+        $psw = "";
+        $database = "productsdatabase";
+        $portNo = 3306;
 
-        $PricesIds = [];
-        $filename = '../database/database.txt';
-        if (file_exists($filename)) {
-            $handle = fopen($filename, "r");
-            while (($line = fgets($handle)) !== false) {
-                $arraytest = explode(";", $line);
-                if (count($arraytest) >= 20) {
-                    $Price = trim($arraytest[10]);
-                    $Price2 = explode("€", $Price);
-                    $PricesIds[$arraytest[0]] = (int)$Price2[0];
-                }
-            }
-            fclose($handle);
+        $connection = new mysqli($host, $user, $psw, $database, $portNo);
 
+        $Productsorder = "";
 
-
-            if ($_GET["pricerange"] == "price_asc") {
-                asort($PricesIds); //ascending 1-10
-            } else {
-                if ($_GET["pricerange"] == "price_desc") {
-                    arsort($PricesIds); //descending 10-1
-                }
-            }
-
-
-
-            $lineNumber = 0;
-
-            foreach ($PricesIds as $id => $price) {
-                // $idnumber = substr($id, 0, -1); //remove the letter from my productId    ex: like "1a" to only "1"
-
-                $file = new SplFileObject($filename); //read a certain line from the txt file without reading the whole file
-                $file->seek($id - 1);
-
-                $arraytest = explode(";", $file->current());
-
-
-                if ($lineNumber == 0)
-                    print("<div class='oneLineOfProduct'>");
-        ?>
-                <div class="product">
-                    <a href="ShowProduct.php?ProductID=<?= trim($arraytest[0]) ?>&lang=EN#slider-image-1"><img src="<?= trim($arraytest[1]) ?>.jpg" alt="<?= trim($arraytest[2]) ?>" class="productimage"></a>
-                    <div><?= trim($arraytest[3]) ?></div>
-                    <div><?= trim($arraytest[4]) ?></div>
-                    <div><?= trim($arraytest[5]) ?></div>
-                    <span><?= trim($arraytest[6]) ?></span>
-                    <div><?= trim($arraytest[7]) ?></div>
-                    <div><?= trim($arraytest[8]) ?></div>
-                    <a href="<?= trim($arraytest[9]) ?>" target="_blank"><span class="greenPrice"><?= trim($arraytest[10]) ?></span></a>
-                </div>
-
-        <?php
-                $lineNumber++;
-                if ($lineNumber == 9) {
-                    print("</div>");
-                    $lineNumber = 0;
-                }
-            }
+        if ($_GET["pricerange"] == "price_asc") {
+            $Productsorder = "ORDER BY Price ASC";
+            //asort($PricesIds); //ascending 1-10
         } else {
-            die("File not found");
+            if ($_GET["pricerange"] == "price_desc") {
+                $Productsorder = "ORDER BY Price DESC";
+                //arsort($PricesIds); //descending 10-1
+            }
         }
 
-        ?>
 
+        $sqlStatement = $connection->prepare("SELECT * from products natural join description where IDLang=1 " . $Productsorder);
+        $sqlStatement->execute();
+        $result = $sqlStatement->get_result();
+        $numberofproducts = $result->num_rows;
+
+        $lineNumber = 0;
+        ?>
+        <div id="ProductsCleaner">
+            <?php
+            if ($numberofproducts == 0) {
+                print("No Products were found :(");
+            } else {
+                while ($row = $result->fetch_assoc()) {
+                    if ($lineNumber == 0)
+                        print("<div class='oneLineOfProduct'>");
+            ?>
+                    <div class="product">
+                        <a href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>&lang=EN#slider-image-1"><img src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductName"] ?>" class="productimage"></a>
+                        <div><?= $row["ProductName"] ?></div>
+                        <div><?= $row["Subtitle1"] ?></div>
+                        <div><?= $row["Subtitle2"] ?></div>
+                        <span>----</span>
+                        <div><?= $row["Description1"] ?></div>
+                        <div><?= $row["Company"] ?></div>
+                        <a href="<?= $row["ProductLink"] ?>" target="_blank"><span class="greenPrice"><?= $row["Price"] ?>€</span></a>
+                    </div>
+
+            <?php
+                    $lineNumber++;
+                    if ($lineNumber == 9) {
+                        print("</div>");
+                        $lineNumber = 0;
+                    }
+                }
+            }
+            ?>
+        </div>
 
 
     </section>
