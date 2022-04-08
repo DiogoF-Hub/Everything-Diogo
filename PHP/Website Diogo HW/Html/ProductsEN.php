@@ -59,53 +59,52 @@ session_start();
         $Productsorder = "";
 
         if ($_GET["pricerange"] == "price_asc") {
-            $Productsorder = "ORDER BY Price ASC";
+            $Productsorder = " ORDER BY Price ASC";
             //asort($PricesIds); //ascending 1-10
         } else {
             if ($_GET["pricerange"] == "price_desc") {
-                $Productsorder = "ORDER BY Price DESC";
+                $Productsorder = " ORDER BY Price DESC";
                 //arsort($PricesIds); //descending 10-1
             }
         }
 
 
-        $sqlStatement = $connection->prepare("SELECT * from products natural join description where IDLang=1 " . $Productsorder);
+        $sqlStatement = $connection->prepare("SELECT * from products natural join description where IDLang=1" . $Productsorder);
         $sqlStatement->execute();
         $result = $sqlStatement->get_result();
         $numberofproducts = $result->num_rows;
 
         $lineNumber = 0;
         ?>
-        <div id="ProductsCleaner">
-            <?php
-            if ($numberofproducts == 0) {
-                print("No Products were found :(");
-            } else {
-                while ($row = $result->fetch_assoc()) {
-                    if ($lineNumber == 0)
-                        print("<div class='oneLineOfProduct'>");
-            ?>
-                    <div class="product">
-                        <a href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>&lang=EN#slider-image-1"><img src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductName"] ?>" class="productimage"></a>
-                        <div><?= $row["ProductName"] ?></div>
-                        <div><?= $row["Subtitle1"] ?></div>
-                        <div><?= $row["Subtitle2"] ?></div>
-                        <span>----</span>
-                        <div><?= $row["Description1"] ?></div>
-                        <div><?= $row["Company"] ?></div>
-                        <a href="<?= $row["ProductLink"] ?>" target="_blank"><span class="greenPrice"><?= $row["Price"] ?>€</span></a>
-                    </div>
+        <?php
+        if ($numberofproducts == 0) {
+            print("<h1>No Products were found :(</h1>");
+        } else {
 
-            <?php
-                    $lineNumber++;
-                    if ($lineNumber == 9) {
-                        print("</div>");
-                        $lineNumber = 0;
-                    }
+            while ($row = $result->fetch_assoc()) {
+                if ($lineNumber == 0)
+                    print("<div class='oneLineOfProduct'>");
+        ?>
+                <div class="product">
+                    <a href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>&lang=EN#slider-image-1"><img src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductName"] ?>" class="productimage"></a>
+                    <div><?= $row["ProductName"] ?></div>
+                    <div><?= $row["Subtitle1"] ?></div>
+                    <div><?= $row["Subtitle2"] ?></div>
+                    <span>----</span>
+                    <div><?= $row["Description1"] ?></div>
+                    <div><?= $row["Company"] ?></div>
+                    <a href="<?= $row["ProductLink"] ?>" target="_blank"><span class="greenPrice"><?= $row["Price"] ?>€</span></a>
+                </div>
+
+        <?php
+                $lineNumber++;
+                if ($lineNumber == 9) {
+                    print("</div>");
+                    $lineNumber = 0;
                 }
             }
-            ?>
-        </div>
+        }
+        ?>
 
 
     </section>
