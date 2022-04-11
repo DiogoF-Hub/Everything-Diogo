@@ -85,7 +85,7 @@ session_start();
           print("<div class='oneLineOfProduct'>");
     ?>
         <div class="product">
-          <a href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>&lang=EN#slider-image-1"><img src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductName"] ?>" class="productimage"></a>
+          <a href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>&lang=PT#slider-image-1"><img src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductName"] ?>" class="productimage"></a>
           <div><?= $row["ProductName"] ?></div>
           <div><?= $row["Subtitle1"] ?></div>
           <div><?= $row["Subtitle2"] ?></div>

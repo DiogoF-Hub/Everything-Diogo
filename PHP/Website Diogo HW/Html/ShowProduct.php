@@ -3,9 +3,9 @@ session_start();
 
 if (isset($_GET["ProductID"])) {
 
-    $toggle = 0;
     $navbarlanguage = 0;
     $OtherLanguage = "PT";
+    $sqlLang = 1;
 
 
     if (empty($_GET["lang"])) {
@@ -16,33 +16,33 @@ if (isset($_GET["ProductID"])) {
             die("Wrong Page");
         }
         if ($_GET["lang"] == "PT") {
-            $toggle = 9;
             $navbarlanguage = 5;
             $OtherLanguage = "EN";
+            $sqlLang = 2;
         }
     }
 
-    $filename = '../database/database.txt';
-    if (file_exists($filename)) {
-        $handle = fopen($filename, "r");
-        $ProductFound = false;
-        while (($line = fgets($handle)) !== false) {
-            $arraytest = explode(";", $line);
-            if ($_GET["ProductID"] == $arraytest[0]) {
-                $ProductFound = true;
-                break;
-            }
-        }
+    $host = "localhost";
+    $user = "root";
+    $psw = "";
+    $database = "productsdatabase";
+    $portNo = 3306;
 
-        if ($ProductFound == false) {
-            die("This product is not in my data base");
-        }
-    } else {
-        die("The file was not found");
+    $connection = new mysqli($host, $user, $psw, $database, $portNo);
+
+    if (!is_numeric($_GET["ProductID"])) {
+        die();
     }
-} else {
-    die("Page not found");
+
+    $sqlStatement = $connection->prepare("SELECT * from products natural join description where IDLang=" . $sqlLang . " AND ProductsID=" . $_GET["ProductID"]);
+    $sqlStatement->execute();
+    $result = $sqlStatement->get_result();
+    $numberofproducts = $result->num_rows;
+
+    $row = $result->fetch_assoc();
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +53,7 @@ if (isset($_GET["ProductID"])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" media="screen" href="../Styling/MyStylesEN.css?t<?= time(); ?>" />
-    <title><?= $arraytest[12] ?></title>
+    <title><?= $row["ProductNameFull"] ?></title>
 
 </head>
 
@@ -63,8 +63,6 @@ if (isset($_GET["ProductID"])) {
     navbar("ShowProduct.php?ProductID=" . $_GET["ProductID"] . "&lang=" . $OtherLanguage . "#slider-image-1", "products", $navbarlanguage, $_GET["lang"]);
     ?>
 
-    <?php echo count($arraytest); ?>
-
     <section class="section1">
 
         <div class="slider-holder">
@@ -72,9 +70,9 @@ if (isset($_GET["ProductID"])) {
             <span id="slider-image-2"></span>
             <span id="slider-image-3"></span>
             <div class="image-holder">
-                <img src="<?= $arraytest[1] ?>.jpg" class="slider-image" />
-                <img src="<?= $arraytest[1] ?>2.jpg" class="slider-image" />
-                <img src="<?= $arraytest[1] ?>3.jpg" class="slider-image" />
+                <img src="../images/<?= $row["ImageLink"] ?>.jpg" class="slider-image" />
+                <img src="../images/<?= $row["ImageLink"] ?>2.jpg" class="slider-image" />
+                <img src="../images/<?= $row["ImageLink"] ?>3.jpg" class="slider-image" />
             </div>
             <div class="button-holder">
                 <a href="#slider-image-1" class="slider-change"></a>
@@ -86,7 +84,7 @@ if (isset($_GET["ProductID"])) {
         <br>
 
         <div class="CenterBox">
-            <div id="testDiv"><?= $arraytest[11 + $toggle] ?></div>
+            <div id="testDiv"><?= $row["Description2"] ?></div>
 
             <table class="styled-table">
                 <tr>
@@ -95,38 +93,22 @@ if (isset($_GET["ProductID"])) {
                         } else {
                             print "Nome do produto:";
                         } ?></th>
-                    <th><?= $arraytest[12] ?></th>
+                    <th><?= $row["ProductNameFull"] ?></th>
                 </tr>
 
                 <tr>
-                    <th><?php if ($_GET["lang"] == "PT") {
-                            print $arraytest[13 + $toggle - 1];
-                        } else {
-                            print $arraytest[13];
-                        }  ?></th>
-                    <td><?= $arraytest[14] ?></td>
+                    <th><?= $row["TableDescription1"] ?></th>
+                    <td><?= $row["DetailedTable1"] ?></td>
                 </tr>
 
                 <tr>
-                    <th><?php if ($_GET["lang"] == "PT") {
-                            print $arraytest[15 + $toggle - 2];
-                        } else {
-                            print $arraytest[15];
-                        }  ?></th>
-                    <td><?= $arraytest[16] ?></td>
+                    <th><?= $row["TableDescription2"] ?></th>
+                    <td><?= $row["DetailedTable2"] ?></td>
                 </tr>
 
                 <tr>
-                    <th><?php if ($_GET["lang"] == "PT") {
-                            print $arraytest[17 + $toggle - 3];
-                        } else {
-                            print $arraytest[17];
-                        }  ?></th>
-                    <td><?php if ($arraytest[18] == "Yes" && $_GET["lang"] == "PT") {
-                            print "Sim";
-                        } else {
-                            print $arraytest[18];
-                        } ?></td>
+                    <th><?= $row["TableDescription3"] ?></th>
+                    <td><?= $row["DetailedTable3"] ?></td>
                 </tr>
 
             </table>
