@@ -46,7 +46,7 @@ if (isset($_GET["ProductID"])) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="<?= $_GET["lang"] ?>">
 
 <head>
     <meta charset="UTF-8">

@@ -11,8 +11,9 @@ function navbar($URL, $ActivePage, $toggle, $language)
             }
         }
     } else {
-        die("File not found");
+        die("Nav bar file not found");
     }
+
 ?>
     <nav id="nav">
 

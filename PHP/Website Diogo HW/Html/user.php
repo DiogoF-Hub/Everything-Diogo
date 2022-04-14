@@ -224,7 +224,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                     $_SESSION["username"] = $_POST["usernamereg"];
                     $_SESSION["firstname"] = $_POST["firstnamereg"];
                     $_SESSION["lastname"] = $_POST["lastnamereg"];
-                    echo '<script>window.location.href="HomeEN.php"</script>';
+                    echo '<script>window.location.href="Home' . $_GET["lang"] . '.php"</script>';
                 } else {
                     die();
                 }

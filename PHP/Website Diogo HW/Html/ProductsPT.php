@@ -29,6 +29,16 @@ session_start();
     $_GET["pricerange"] = "normal";
   }
 
+
+  $host = "localhost";
+  $user = "root";
+  $psw = "";
+  $database = "productsdatabase";
+  $portNo = 3306;
+
+  $connection = new mysqli($host, $user, $psw, $database, $portNo);
+
+
   include_once("nav.php");
   navbar("ProductsEN.php?pricerange=" . $_GET["pricerange"], "products", 5, "PT");
   ?>
@@ -46,14 +56,6 @@ session_start();
     </form>
 
     <?php
-
-    $host = "localhost";
-    $user = "root";
-    $psw = "";
-    $database = "productsdatabase";
-    $portNo = 3306;
-
-    $connection = new mysqli($host, $user, $psw, $database, $portNo);
 
     $Productsorder = "";
 

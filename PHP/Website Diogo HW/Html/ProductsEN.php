@@ -30,6 +30,23 @@ session_start();
     }
 
 
+    $host = "localhost";
+    $user = "root";
+    $psw = "";
+    $database = "productsdatabase";
+    $portNo = 3306;
+
+    $connection = new mysqli($host, $user, $psw, $database, $portNo);
+
+
+
+
+    /*$sqlStatementNav = $connection->prepare("SELECT * from navbar WHERE IDLang=1");
+    $sqlStatementNav->execute();
+    $resultNav = $sqlStatementNav->get_result();
+
+    $rowNav = $resultNav->fetch_assoc();*/
+
     include_once("nav.php");
     navbar("ProductsPT.php?pricerange=" . $_GET["pricerange"], "products", 0, "EN");
     ?>
@@ -47,14 +64,6 @@ session_start();
         </form>
 
         <?php
-
-        $host = "localhost";
-        $user = "root";
-        $psw = "";
-        $database = "productsdatabase";
-        $portNo = 3306;
-
-        $connection = new mysqli($host, $user, $psw, $database, $portNo);
 
         $Productsorder = "";
 
