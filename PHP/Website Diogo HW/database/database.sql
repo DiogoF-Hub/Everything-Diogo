@@ -71,6 +71,7 @@ INSERT INTO ButtonsNav(Button) VALUES("About");
 /*INSERT INTO ButtonsNav(Button) VALUES("Login");*/
 
 
+/*Nav bar text in diff langs*/
 INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(1, 1, "HOME");
 INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(1, 2, "HOME");
 
