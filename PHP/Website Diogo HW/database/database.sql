@@ -22,6 +22,7 @@ CREATE TABLE Products (
 CREATE TABLE LANGUAGE (
     IDLang int not null AUTO_INCREMENT,
     NameLang VARCHAR(50),
+    imgsrc VARCHAR(50),
     PRIMARY KEY(IDLang)
 );
 
@@ -49,11 +50,11 @@ CREATE TABLE ButtonsNav (
 
 CREATE TABLE DescriptionNav (
     DescriptionNavID INT NOT NULL AUTO_INCREMENT,
-    Button VARCHAR(25),
+    ButtonsID INT NOT NULL,
     IDlang INT NOT NULL,
     textDescription VARCHAR(20),
     PRIMARY KEY(DescriptionNavID),
-    FOREIGN KEY(Button) REFERENCES ButtonsNav(Button),
+    FOREIGN KEY(ButtonsID) REFERENCES ButtonsNav(ButtonsID),
     FOREIGN KEY(IDlang) REFERENCES LANGUAGE(IDLang)
 );
 
@@ -67,7 +68,24 @@ INSERT INTO ButtonsNav(Button) VALUES("Contact");
 INSERT INTO ButtonsNav(Button) VALUES("Products");
 INSERT INTO ButtonsNav(Button) VALUES("Form");
 INSERT INTO ButtonsNav(Button) VALUES("About");
-INSERT INTO ButtonsNav(Button) VALUES("Login");
+/*INSERT INTO ButtonsNav(Button) VALUES("Login");*/
+
+
+INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(1, 1, "HOME");
+INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(1, 2, "HOME");
+
+INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(2, 1, "CONTACT");
+INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(2, 2, "CONTACTO");
+
+INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(3, 1, "PRODUCTS");
+INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(3, 2, "PRODUTOS");
+
+INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(4, 1, "FORM");
+INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(4, 2, "FORM");
+
+INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(2, 1, "ABOUT");
+INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(2, 2, "ACERCA DE");
+
 
 
 /*Products*/

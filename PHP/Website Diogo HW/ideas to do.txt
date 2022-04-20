@@ -1,0 +1,10 @@
+-login page from database, and able to create admin users
+
+-Every page unique with 1 file and get for lang
+
+-1 page to add products and upload pictures
+
+-products page:
+	selection: brand, prices from x to x, type (CPU, SSD .. etc), 
+
+-nav bar with more langs from database and a page to add more in admin mode
