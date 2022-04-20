@@ -88,7 +88,6 @@ INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(2, 1, "ABO
 INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(2, 2, "ACERCA DE");
 
 
-
 /*Products*/
 INSERT INTO Products (ImageLink, ProductName, ProductNameFull, Subtitle1, Subtitle2, Company, ProductLink, Price, DetailedTable1, DetailedTable2, DetailedTable3) VALUES ('AMD%203800X', '     AMD Ryzen 7 3800X     ', 'AMD Ryzen 7 3800X', '       8-Core 16-Threads       ', '       (3.9 GHz / 4.5 GHz)     ', '       AMD      ', '       https://www.ldlc.com/fr-lu/fiche/PB00273568.html        ', '429', '3.9 GHz', '8', '16');
 INSERT INTO Products (ImageLink, ProductName, ProductNameFull, Subtitle1, Subtitle2, Company, ProductLink, Price, DetailedTable1, DetailedTable2, DetailedTable3) VALUES ('MSI%202080S', '       MSI GeForce RTX 2080S       ', 'MSI GeForce RTX 2080 SUPER GAMING X TRIO', '       GAMING X TRIO       ', '       8 Go GDDR6      ', '       MSI & NVIDIA      ', '       https://www.ldlc.com/fr-lu/fiche/PB00275069.html        ', '959', '8GB', '1650 MHz', '250 W');
