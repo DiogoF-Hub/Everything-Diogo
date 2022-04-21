@@ -1,7 +1,6 @@
 <?php
-session_start();
+include_once("start.php");
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,25 +23,6 @@ session_start();
 
     <?php
 
-    $langs = ["EN", "PT"];
-    $otherlang = "PT";
-    $togle = 0;
-    $IDlang = 1;
-
-    if (isset($_GET["lang"])) {
-        if (!in_array($_GET["lang"], $langs)) {
-            $_GET["lang"] = "EN";
-        }
-
-        if ($_GET["lang"] == "PT") {
-            $otherlang = "EN";
-            $togle = 5;
-            $IDlang = 2;
-        }
-    } else {
-        $_GET["lang"] = "EN";
-    }
-
 
     if (isset($_GET["pricerange"])) {
         if (!in_array($_GET["pricerange"], array("normal", "price_asc", "price_desc"))) {
@@ -63,7 +43,7 @@ session_start();
 
 
     include_once("nav.php");
-    navbar("Products.php?pricerange=" . $_GET["pricerange"] . "&lang=" . $otherlang, "products", $togle, $_GET["lang"]);
+    navbar("Products.php?lang=" . $otherlang . "&pricerange=" . $_GET["pricerange"], "products", $togle);
 
     ?>
 
@@ -75,7 +55,7 @@ session_start();
 
         ?>
 
-        <form method="get" id="pricerange">
+        <form method="get" id="pricerange" action="Products.php">
 
             <select name="pricerange" onchange="pricerangefunc();">
                 <option <?php if (isset($_GET["pricerange"]) && $_GET["pricerange"] == "normal") echo "selected"; ?> value="normal">Normal</option>
@@ -117,7 +97,7 @@ session_start();
                     print("<div class='oneLineOfProduct'>");
         ?>
                 <div class="product">
-                    <a href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>&lang=<?= $_GET["lang"] ?>#slider-image-1"><img src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductName"] ?>" class="productimage"></a>
+                    <a href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1"><img src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductName"] ?>" class="productimage"></a>
                     <div><?= $row["ProductName"] ?></div>
                     <div><?= $row["Subtitle1"] ?></div>
                     <div><?= $row["Subtitle2"] ?></div>

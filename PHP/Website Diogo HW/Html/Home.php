@@ -1,8 +1,8 @@
 <?php
-session_start();
+include_once("start.php");
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $_SESSION["lang"] ?>">
 
 <head>
     <meta charset="utf-8" />
@@ -15,25 +15,8 @@ session_start();
 <body>
     <?php
 
-    $langs = ["EN", "PT"];
-    $otherlang = "PT";
-    $togle = 0;
-
-    if (isset($_GET["lang"])) {
-        if (!in_array($_GET["lang"], $langs)) {
-            $_GET["lang"] = "EN";
-        }
-
-        if ($_GET["lang"] == "PT") {
-            $otherlang = "EN";
-            $togle = 5;
-        }
-    } else {
-        $_GET["lang"] = "EN";
-    }
-
     include_once("nav.php");
-    navbar("Home.php?lang=" . $otherlang, "home", $togle, $_GET["lang"]);
+    navbar("Home.php?lang=" . $otherlang, "home", $togle);
     ?>
 
     <section class="section1">
@@ -54,7 +37,15 @@ session_start();
 
             <div class="iframeMaps">
                 <h3>My shop is located on <span><a class="texthoverhome" href="https://g.page/LDLC-Thionville?share" target="_blank">Thionville, France:</a></span></h3>
-                <iframe class="iframe1" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2598.681113527863!2d6.137442015692098!3d49.358183879339606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47952549a7427d4f%3A0x82339546d60d9b3e!2sLDLC%20Thionville!5e0!3m2!1spt-PT!2slu!4v1592378624242!5m2!1spt-PT!2slu" frameborder="0"></iframe>
+                <?php
+                if ($_SESSION["lang"] == "EN") {
+                ?>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2598.681113527863!2d6.1374420156921!3d49.35818387933961!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x82339546d60d9b3e!2sLDLC%20Thionville!5e0!3m2!1sen!2slu!4v1650558944794!5m2!1sen!2slu" width="300" height="200" frameborder="0"></iframe>
+                <?php
+                } else {
+                ?>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d10394.724428609095!2d6.139631!3d49.358184!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x82339546d60d9b3e!2sLDLC%20Thionville!5e0!3m2!1spt-PT!2slu!4v1650559093995!5m2!1spt-PT!2slu" width="300" height="200" frameborder="0"></iframe>
+                <?php } ?>
             </div>
 
             <div class="iframeMaps">
@@ -65,7 +56,7 @@ session_start();
 
             <div class="iframeMaps">
                 <h3>Here is one video about our shop:</h3>
-                <iframe class="iframe1" src="https://www.youtube.com/embed/508s1cz1phs" frameborder="0"></iframe>
+                <iframe class="iframe1" src="https://www.youtube.com/embed/508s1cz1phs?hl=<?= $_SESSION["lang"] ?>&persist_hl=1" frameborder="0"></iframe>
             </div>
         </div>
 

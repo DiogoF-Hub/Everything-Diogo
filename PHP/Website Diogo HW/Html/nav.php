@@ -1,5 +1,5 @@
 <?php
-function navbar($URL, $ActivePage, $toggle, $language)
+function navbar($URL, $ActivePage, $toggle)
 {
     $filename = '../database/database.txt';
     if (file_exists($filename)) {
@@ -18,7 +18,7 @@ function navbar($URL, $ActivePage, $toggle, $language)
     <nav id="nav">
 
         <div>
-            <a class="aclass <?php if ($ActivePage == "home") print "active" ?>" href="Home.php?lang=<?= $language ?>"><?= $arraytest[0 + $toggle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "home") print "active" ?>" href="Home.php"><?= $arraytest[0 + $toggle] ?></a>
 
             <div class="dropdown">
                 <div class="dropbtn"><?= $arraytest[1 + $toggle] ?></div>
@@ -29,24 +29,24 @@ function navbar($URL, $ActivePage, $toggle, $language)
                 </div>
             </div>
 
-            <a class="aclass <?php if ($ActivePage == "products") print "active" ?>" href="Products.php?lang=<?= $language ?>"><?= $arraytest[2 + $toggle] ?></a>
-            <a class="aclass <?php if ($ActivePage == "form") print "active" ?>" href="Form.php?lang=<?= $language ?>"><?= $arraytest[3 + $toggle] ?></a>
-            <a class="aclass <?php if ($ActivePage == "about") print "active" ?>" href="About.php?lang=<?= $language ?>"><?= $arraytest[4 + $toggle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "products") print "active" ?>" href="Products.php"><?= $arraytest[2 + $toggle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "form") print "active" ?>" href="Form.php"><?= $arraytest[3 + $toggle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "about") print "active" ?>" href="About.php"><?= $arraytest[4 + $toggle] ?></a>
         </div>
 
         <?php
         if (!isset($_SESSION["username"])) {
         ?>
-            <a class="aclass <?php if ($ActivePage == "logbutton") print "active" ?>" href="user.php?lang=<?= $language ?>"><?php if ($language == "EN") print "Login";
-                                                                                                                            else print "Entrar"; ?></a>
+            <a class="aclass <?php if ($ActivePage == "logbutton") print "active" ?>" href="user.php"><?php if ($_SESSION["lang"] == "EN") print "Login";
+                                                                                                        else print "Entrar"; ?></a>
         <?php
         } else {
         ?>
-            <div><?php if ($language == "EN") print "Hi,";
+            <div><?php if ($_SESSION["lang"] == "EN") print "Hi,";
                     else print "Ola," ?> <?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></div>
             <form method="POST" id="logoutform">
                 <input hidden type="text" name="logoutbutton">
-                <a name="logoutbutton" onclick="document.getElementById('logoutform').submit();" class="aclass <?php if ($ActivePage == "logbutton") print "active" ?>" href="#"><?php if ($language == "EN") print "Logout";
+                <a name="logoutbutton" onclick="document.getElementById('logoutform').submit();" class="aclass <?php if ($ActivePage == "logbutton") print "active" ?>" href="#"><?php if ($_SESSION["lang"] == "EN") print "Logout";
                                                                                                                                                                                     else print "Sair"; ?></a>
             </form>
         <?php
@@ -65,7 +65,7 @@ function navbar($URL, $ActivePage, $toggle, $language)
             <img src="../Images/Languages.jpg" alt="PT/EN" id="language1">
         </a>
 
-        <a href="Home.php?lang=<?= $language ?>">
+        <a href="Home.php">
             <img src="../Images/Logo.jpg" alt="Logo" width="150px" height="49px">
         </a>
     </nav>
