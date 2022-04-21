@@ -15,7 +15,7 @@
 
     <?php
 
-    if (isset($_POST["UserName"], $_POST["PSW"])) {
+    if (isset($_POST["Username"], $_POST["PSW"])) {
 
         $host = "localhost";
 
@@ -35,18 +35,22 @@
 
         $sqlInsert->bind_param("ss", $_POST["Username"], $_POST["PSW"]);
 
-        $sqlInsert->execute();
+        if ($sqlInsert->execute()) {
+            print("Welcome");
+        } else {
+            print("User already exists!");
+        }
 
-        print("Wellcome");
+        print("<h1>Welcome</h1>");
     }
 
     ?>
 
     <form method="POST">
 
-        <input type="text" name="Username">
+        <input type="text" name="Username" placeholder="USER">
 
-        <input type="Password" name="PSW">
+        <input type="Password" name="PSW" placeholder="PSW">
 
         <input type="submit" name="Go" value="Register">
 

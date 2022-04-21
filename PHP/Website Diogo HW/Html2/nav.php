@@ -18,7 +18,7 @@ function navbar($URL, $ActivePage, $toggle, $language)
     <nav id="nav">
 
         <div>
-            <a class="aclass <?php if ($ActivePage == "home") print "active" ?>" href="Home.php?lang=<?= $language ?>"><?= $arraytest[0 + $toggle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "home") print "active" ?>" href="Home<?= $language ?>.php"><?= $arraytest[0 + $toggle] ?></a>
 
             <div class="dropdown">
                 <div class="dropbtn"><?= $arraytest[1 + $toggle] ?></div>
@@ -29,9 +29,9 @@ function navbar($URL, $ActivePage, $toggle, $language)
                 </div>
             </div>
 
-            <a class="aclass <?php if ($ActivePage == "products") print "active" ?>" href="Products.php?lang=<?= $language ?>"><?= $arraytest[2 + $toggle] ?></a>
-            <a class="aclass <?php if ($ActivePage == "form") print "active" ?>" href="Form.php?lang=<?= $language ?>"><?= $arraytest[3 + $toggle] ?></a>
-            <a class="aclass <?php if ($ActivePage == "about") print "active" ?>" href="About.php?lang=<?= $language ?>"><?= $arraytest[4 + $toggle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "products") print "active" ?>" href="Products<?= $language ?>.php"><?= $arraytest[2 + $toggle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "form") print "active" ?>" href="Form<?= $language ?>.php"><?= $arraytest[3 + $toggle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "about") print "active" ?>" href="About<?= $language ?>.php"><?= $arraytest[4 + $toggle] ?></a>
         </div>
 
         <?php
@@ -65,7 +65,7 @@ function navbar($URL, $ActivePage, $toggle, $language)
             <img src="../Images/Languages.jpg" alt="PT/EN" id="language1">
         </a>
 
-        <a href="Home.php?lang=<?= $language ?>">
+        <a href="Home<?= $language ?>.php">
             <img src="../Images/Logo.jpg" alt="Logo" width="150px" height="49px">
         </a>
     </nav>
