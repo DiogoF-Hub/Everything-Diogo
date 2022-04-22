@@ -15,42 +15,53 @@
 
     <?php
 
-    if (isset($_POST["Username"], $_POST["PSW"])) {
+    if (isset($_POST["Username"], $_POST["PSW"], $_POST["ConfirmPSW"])) {
 
-        $host = "localhost";
+        if ($_POST["PSW"] == $_POST["ConfirmPSW"]) {
 
-        $user = "root";
+            $host = "localhost";
 
-        $psw = "";
+            $user = "root";
 
-        $portnu = 3306;
+            $psw = "";
 
-        $database = "shop";
+            $portnu = 3306;
+
+            $database = "shop";
 
 
 
-        $connection = new mysqli($host, $user, $psw, $database, $portnu);
+            $pswSignup = $_POST["PSW"];
+            $hashPSW = password_hash($pswSignup, PASSWORD_DEFAULT);
 
-        $sqlInsert = $connection->prepare("INSERT INTO Users(UserName,UserPassword) Values(?,?)");
+            $connection = new mysqli($host, $user, $psw, $database, $portnu);
 
-        $sqlInsert->bind_param("ss", $_POST["Username"], $_POST["PSW"]);
+            $sqlInsert = $connection->prepare("INSERT INTO Users(UserName,UserPassword) Values(?,?)");
 
-        if ($sqlInsert->execute()) {
-            print("Welcome");
+            $sqlInsert->bind_param("ss", $_POST["Username"], $hashPSW);
+
+            if (!$sqlInsert->execute()) {
+
+                print("User already exists!");
+            } else {
+
+                print("Welcome");
+            }
         } else {
-            print("User already exists!");
-        }
 
-        print("<h1>Welcome</h1>");
+            print("Password don`t match");
+        }
     }
 
     ?>
 
     <form method="POST">
 
-        <input type="text" name="Username" placeholder="USER">
+        <input type="text" name="Username" placeholder="Username">
 
-        <input type="Password" name="PSW" placeholder="PSW">
+        <input type="Password" name="PSW" placeholder="Password">
+
+        <input type="Password" name="ConfirmPSW" placeholder="Confirm Password">
 
         <input type="submit" name="Go" value="Register">
 
