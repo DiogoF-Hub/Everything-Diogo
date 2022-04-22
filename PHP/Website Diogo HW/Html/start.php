@@ -4,11 +4,7 @@ if (!isset($_SESSION["lang"])) {
     $_SESSION["lang"] = "EN";
 }
 
-
 $langs = ["EN", "PT"];
-$otherlang = "PT";
-$togle = 0;
-$IDlang = 1;
 
 if (isset($_GET["lang"])) {
     if (!in_array($_GET["lang"], $langs)) {
@@ -16,12 +12,18 @@ if (isset($_GET["lang"])) {
     }
 
     $_SESSION["lang"] = $_GET["lang"];
-
-    if ($_GET["lang"] == "PT") {
-        $otherlang = "EN";
-        $togle = 5;
-        $IDlang = 2;
-    }
 }
 
-print($_SESSION["lang"]);
+
+
+if ($_SESSION["lang"] == "EN") {
+    $otherlang = "PT";
+    $togle = 0;
+    $IDlang = 1;
+} else {
+    $otherlang = "EN";
+    $togle = 5;
+    $IDlang = 2;
+}
+
+//print($_SESSION["lang"]);

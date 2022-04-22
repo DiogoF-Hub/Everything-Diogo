@@ -58,13 +58,9 @@ CREATE TABLE DescriptionNav (
     FOREIGN KEY(IDlang) REFERENCES LANGUAGE(IDLang)
 );
 
-CREATE TABLE  (
-
-);
-
-
 INSERT INTO LANGUAGE(NameLang) VALUES("English");
 INSERT INTO LANGUAGE(NameLang) VALUES("Portuguese");
+
 
 
 INSERT INTO ButtonsNav(Button) VALUES("Home");
