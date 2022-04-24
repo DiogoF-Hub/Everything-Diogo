@@ -25,5 +25,3 @@ if ($_SESSION["lang"] == "EN") {
     $togle = 5;
     $IDlang = 2;
 }
-
-//print($_SESSION["lang"]);

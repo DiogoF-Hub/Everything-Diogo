@@ -1,5 +1,5 @@
 <?php
-session_start();
+include_once("start.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,26 +14,8 @@ session_start();
 
 <body>
     <?php
-
-    $langs = ["EN", "PT"];
-    $otherlang = "PT";
-    $togle = 0;
-
-    if (isset($_GET["lang"])) {
-        if (!in_array($_GET["lang"], $langs)) {
-            $_GET["lang"] = "EN";
-        }
-
-        if ($_GET["lang"] == "PT") {
-            $otherlang = "EN";
-            $togle = 5;
-        }
-    } else {
-        $_GET["lang"] = "EN";
-    }
-
     include_once("nav.php");
-    navbar("Form.php?lang=" . $otherlang, "form", $togle, $_GET["lang"]);
+    navbar("Form.php?lang=" . $otherlang, "form", $togle);
     ?>
 
 

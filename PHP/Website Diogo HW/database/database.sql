@@ -2,6 +2,15 @@ DROP DATABASE ProductsDatabase;
 create database ProductsDatabase;
 use ProductsDatabase;
 
+create TABLE Users(
+    UserID INT NOT NULL AUTO_INCREMENT,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    UserName VARCHAR(30) UNIQUE,
+    UserPassword VARCHAR(255),
+    Primary Key(UserID)
+);
+
 CREATE TABLE Products (
     ProductsID int not null AUTO_INCREMENT,
     ImageLink VARCHAR(255),
@@ -81,11 +90,9 @@ INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(2, 2, "CON
 INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(3, 1, "PRODUCTS");
 INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(3, 2, "PRODUTOS");
 
-INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(4, 1, "FORM");
-INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(4, 2, "FORM");
 
-INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(2, 1, "ABOUT");
-INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(2, 2, "ACERCA DE");
+INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(4, 1, "ABOUT");
+INSERT INTO DescriptionNav(ButtonsID, IDlang, textDescription) VALUES(4, 2, "ACERCA DE");
 
 
 /*Products*/

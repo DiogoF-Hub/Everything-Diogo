@@ -1,5 +1,5 @@
 <?php
-function navbar($URL, $ActivePage, $toggle)
+function navbar($URL, $ActivePage, $togle)
 {
     $filename = '../database/database.txt';
     if (file_exists($filename)) {
@@ -14,14 +14,27 @@ function navbar($URL, $ActivePage, $toggle)
         die("Nav bar file not found");
     }
 
+    /*$host = "localhost";
+    $user = "root";
+    $psw = "";
+    $database = "productsdatabase";
+    $portNo = 3306;
+
+    $connection = new mysqli($host, $user, $psw, $database, $portNo);
+
+    $sqlStatement = $connection->prepare("SELECT * from ButtonsNav natural join DescriptionNav where IDLang=" . $IDlang . $Productsorder);
+    $sqlStatement->execute();
+    $result = $sqlStatement->get_result();*/
+
+
 ?>
     <nav id="nav">
 
         <div>
-            <a class="aclass <?php if ($ActivePage == "home") print "active" ?>" href="Home.php"><?= $arraytest[0 + $toggle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "home") print "active" ?>" href="Home.php"><?= $arraytest[0 + $togle] ?></a>
 
             <div class="dropdown">
-                <div class="dropbtn"><?= $arraytest[1 + $toggle] ?></div>
+                <div class="dropbtn"><?= $arraytest[1 + $togle] ?></div>
                 <div class="dropdown-content">
                     <a href="tel: +33372520234">+33 3 72 52 02 34</a>
                     <a href="mailto: boutiquethionville@ldlc.com">boutiquethionville@ldlc.com</a>
@@ -29,9 +42,8 @@ function navbar($URL, $ActivePage, $toggle)
                 </div>
             </div>
 
-            <a class="aclass <?php if ($ActivePage == "products") print "active" ?>" href="Products.php"><?= $arraytest[2 + $toggle] ?></a>
-            <a class="aclass <?php if ($ActivePage == "form") print "active" ?>" href="Form.php"><?= $arraytest[3 + $toggle] ?></a>
-            <a class="aclass <?php if ($ActivePage == "about") print "active" ?>" href="About.php"><?= $arraytest[4 + $toggle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "products") print "active" ?>" href="Products.php"><?= $arraytest[2 + $togle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "about") print "active" ?>" href="About.php"><?= $arraytest[4 + $togle] ?></a>
         </div>
 
         <?php
