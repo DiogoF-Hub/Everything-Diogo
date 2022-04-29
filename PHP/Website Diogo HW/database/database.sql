@@ -24,6 +24,7 @@ CREATE TABLE Products (
     DetailedTable1 VARCHAR(255),
     DetailedTable2 VARCHAR(255),
     DetailedTable3 VARCHAR(255),
+    TypeProduct VARCHAR(50),
     PRIMARY KEY(ProductsID)
 );
 

@@ -137,7 +137,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                     if (lang == "EN") {
                         document.getElementById("passwordregErrRepeat").innerHTML = "* Passwords dont match";
                     } else {
-                        document.getElementById("passwordregErrRepeat").innerHTML = "* As Palavra passes não correspondem ";
+                        document.getElementById("passwordregErrRepeat").innerHTML = "* As Palavra passes não correspondem";
                     }
                 }
             }
