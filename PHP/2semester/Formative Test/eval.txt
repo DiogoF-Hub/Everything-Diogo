@@ -1,0 +1,67 @@
+WSERS 2 Formative evaluation
+
+Story
+
+You are given the startup SQL code for a promotional campaign. 
+It creates two tables for people accessing the promotion and the promotions themselves. 
+
+Create a login form for the website.
+The user should ONLY type a username and click on login. 
+If this is a first-time login, your user must be created in the PPL table, with his given username 
+and the Money field equal to 0. 
+If this is NOT a first-time login, you should read the Money field corresponding to the given username.
+
+When logged in, the login form must disappear, and the following should be presented:
+-	A welcome message stating how much money does the user have in his account. 
+-	One form asking for a “promotional code”. 
+-	One logout form (one button)
+
+
+A logged in user, can type a promotional code and if that “KeyWord” exists in the promotions table 
+your PHP code should:
+-	Check if the field Available in the “Promotions” table is not 0 and if its 0 – tell the user 
+                "You just missed our promotion”. 
+
+-	When this field (Available) is not 0, decrease it by 1 and credit your user’s account with the 
+“Amount” from the Promotions table.
+
+When a logged in user clicks on logout, you should SAVE the amount that the user has gathered 
+through promotions into the PPL table, in the Money field corresponding to his username. 
+As well the entire session must be destroyed, and the process can restart 
+(with the login button being presented again). 
+
+
+
+
+Detailed instructions: (YOU CAN SKIP THESE if you know what you must do)
+-	Create one startup HTML file (containing an html template)
+-	Rename this file to “YourName.php” where you replace YourName with your actual name.
+-	Create one html POST form with one input for a username and a submit/login button.
+
+
+-	In the beginning of your page, start a PHP session and create a MySql database connection. 
+-	Check if an index named “UserLoggedIn” in the SESSION array exists and if it does not, create it by assigning it a false value.
+-	Check if the user has pressed on the Login button and if he/she did:
+    o	Set the session of UserLoggedIn to be true.
+    o	Store in the session under “CurrentUser” index the name that the user has typed for username.
+    o	Search in the ppl table for a user with the given username (select and check the number of returned rows)
+    o	IF this number of rows is 0:
+        	Create a new entry into the PPL table with the given username and Money equal to 0.
+    o	If you found already an existing person with the given username:
+        	Read the Money column and store it into a Money index in the SESSION array.
+-	Check in the session if the user is logged in (using the “UserLoggedIn” index):
+    o	If this is true:
+        	Write a welcome message and display the amount of money the user has (using the “Money” index from the session)
+        	Create a form with an input (promoCode) and a submit button.
+        	Create another form with just one single button – Logout.
+        	When the user submitted a promoCode:
+            •	Check if this code exists in the PromoTable and if it does:
+                o	Check if the “Available” field for the accessed promotion is 0 and if is – display message “You just missed our promotion”.
+                o	If the “Available” field is NOT 0, decrease it by one and increase the “Money” in the session with the obtained “Amount” from the promoTable.
+            •	If the code does NOT exist in the promo table: display message “This is NOT a valid promotional code.”
+        	When the Logout button is pressed:
+            •	Update the Money field from the database for the “CurrentUser” to be equal with what you have stored under “Money” index in the session.
+            •	Destroy the session.
+            •	Reload the page.
+    o	If this is NOT true (the user is NOT logged in):
+        	Cut and paste the POST form that you have created in the beginning here. 

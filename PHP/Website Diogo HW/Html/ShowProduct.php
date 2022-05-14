@@ -34,7 +34,8 @@ if (isset($_GET["ProductID"])) {
         die();
     }
 
-    $sqlStatement = $connection->prepare("SELECT * from products natural join description where IDLang=" . $sqlLang . " AND ProductsID=" . $_GET["ProductID"]);
+    $sqlStatement = $connection->prepare("SELECT * from products natural join description where IDLang=" . $sqlLang . " AND ProductsID=?");
+    $sqlStatement->bind_param("s", $_GET["ProductID"]);
     $sqlStatement->execute();
     $result = $sqlStatement->get_result();
     $numberofproducts = $result->num_rows;

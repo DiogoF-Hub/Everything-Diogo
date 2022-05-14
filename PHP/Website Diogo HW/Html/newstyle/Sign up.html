@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src='../../bootstrap/js/bootstrap.bundle.min.js'></script>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+        }
+
+        .form-signup {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: auto;
+        }
+
+        .form-signup {
+            font-weight: 400;
+        }
+
+        .form-signup .form-floating:focus-within {
+            z-index: 2;
+        }
+
+
+        input,
+        button {
+            margin-bottom: 15px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+
+        }
+
+        #LoginaccA {
+            background-color: yellowgreen;
+        }
+    </style>
+    <script>
+
+        function passwordCheck() {
+            Password = document.getElementById("Password");
+            PasswordRepeat = document.getElementById("PasswordRepeat");
+
+            if (Password.value != PasswordRepeat.value) {
+                PasswordRepeat.setCustomValidity("Both Passwords must match");
+                PasswordRepeat.reportValidity();
+            } else {
+                PasswordRepeat.setCustomValidity("");
+            }
+        }
+
+    </script>
+</head>
+
+<body class="text-center">
+    <main class="form-signup">
+        <form>
+            <img class="mb-4" src="../../Images/Logo.jpg" alt="Logo" width="208.5px" height="60.5px">
+            <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+
+            <div class="form-floating">
+                <input name="firstname" type="text" class="form-control" id="firstname" placeholder="First name"
+                    required pattern="[/\p{L}+/u ]+" title="First name must contain only letters"
+                    oninput="reportValidity();" minlength="1" maxlength="50">
+                <label for="floatingInput">First name</label>
+            </div>
+
+
+            <div class="form-floating">
+                <input name="lastname" type="text" class="form-control" id="lastname" placeholder="Last name" required
+                    pattern="[/\p{L}+/u ]+" title="Last name must contain only letters" oninput="reportValidity()"
+                    minlength="1" maxlength="50">
+                <label for="floatingInput">Last name</label>
+            </div>
+
+
+            <div class="form-floating">
+                <input name="username" type="text" class="form-control" id="username" placeholder="User name" required
+                    pattern="[a-zA-Z0-9-_-]+" title="User Name must only contain 'A-Z', 'a-z', '0-9', '-', or '_'"
+                    oninput="reportValidity();" minlength="1" maxlength="25">
+                <label for="floatingInput">User name</label>
+            </div>
+
+
+            <div class="form-floating">
+                <input name="email" type="email" class="form-control" id="email" placeholder="Email" required
+                    pattern="[^@\s]+@[^@\s]+" title="Invalid email address" oninput="reportValidity();">
+                <label for="floatingInput">Email</label>
+            </div>
+
+
+            <div class="form-floating">
+                <input name="password" type="password" class="form-control" id="Password" placeholder="Password"
+                    oninput="reportValidity();" required minlength="7">
+                <label for="floatingInput">Password</label>
+            </div>
+
+
+            <div class="form-floating">
+                <input name="passwordRepeat" type="password" class="form-control" id="PasswordRepeat"
+                    placeholder="Password Repeat" oninput="passwordCheck();" required minlength="7">
+                <label for="floatingPassword">Password Repeat</label>
+            </div>
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+
+            <a id="LoginaccA" class="w-75 btn btn" href='login.html'>Login to existing Account</a>
+
+            <p class="mt-5 mb-3 text-muted">&copy; 2019–2022</p>
+        </form>
+    </main>
+</body>
+
+</html>

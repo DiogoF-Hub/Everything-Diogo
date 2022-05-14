@@ -52,13 +52,11 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' type='text/css' media='screen' href='../Styling/MyStylesEN.css?t<?= time(); ?>'>
-    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src='../bootstrap/js/bootstrap.bundle.min.js'></script>
     <title>Acount page</title>
     <script>
         lang = "<?= $_SESSION["lang"] ?>";
         //js validation for login
-        /*function checkLogin() {
+        function checkLogin() {
             err = 0;
             username = document.getElementById("usernamelogin").value;
             password = document.getElementById("passwordlogin").value;
@@ -148,18 +146,6 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                 document.getElementById("formSignUp").submit();
             }
 
-        }*/
-
-        function passwordCheck() {
-            Password = document.getElementById("Password");
-            PasswordRepeat = document.getElementById("PasswordRepeat");
-
-            if (Password.value != PasswordRepeat.value) {
-                PasswordRepeat.setCustomValidity("Both Passwords must match");
-                PasswordRepeat.reportValidity();
-            } else {
-                PasswordRepeat.setCustomValidity("");
-            }
         }
     </script>
 </head>
@@ -174,58 +160,37 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
     <section class="section1">
 
 
-        <form class="form-signup">
-            <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+        <div class="BoxDiv">
+            <form method="POST" id="formLogin">
 
-            <div class="form-floating">
-                <input name="firstname" type="text" class="form-control" id="firstname" placeholder="First name" required pattern="[/\p{L}+/u ]+" title="First name must contain only letters" oninput="reportValidity();" minlength="1" maxlength="50">
-                <label for="floatingInput">First name</label>
-            </div>
+                <h3><?php if ($_SESSION["lang"] == "EN") print "Sign In";
+                    else print "Entrar" ?></h3>
+                <div><?php if ($_SESSION["lang"] == "EN") print "Username";
+                        else print "Nome do usuário" ?>:<input type="text" name="usernamelogin" id="usernamelogin"></div>
+                <div id="usernameloginErr"></div>
+                <br>
+                <div><?php if ($_SESSION["lang"] == "EN") print "Password";
+                        else print "Palavra de passe" ?>:<input type="password" name="passwordlogin" id="passwordlogin"></div>
+                <div id="passwordloginErr"></div>
 
+
+            </form>
             <br>
-
-            <div class="form-floating">
-                <input name="lastname" type="text" class="form-control" id="lastname" placeholder="Last name" required pattern="[/\p{L}+/u ]+" title="Last name must contain only letters" oninput="reportValidity()" minlength="1" maxlength="50">
-                <label for="floatingInput">Last name</label>
-            </div>
-
+            <div><?php if ($wrongUser > 0) {
+                        if ($_SESSION["lang"] == "EN") {
+                            print "* Wrong User or Password";
+                        } else {
+                            print "* Usuário ou senha incorretos";
+                        }
+                    } ?></div>
             <br>
+            <button onclick="checkLogin();"><?php if ($_SESSION["lang"] == "EN") print "Sign In";
+                                            else print "Entrar" ?></button>
+        </div>
 
-            <div class="form-floating">
-                <input name="username" type="text" class="form-control" id="username" placeholder="User name" required pattern="[a-zA-Z0-9-_-]+" title="User Name must only contain 'A-Z', 'a-z', '0-9', '-', or '_'" oninput="reportValidity();" minlength="1" maxlength="25">
-                <label for="floatingInput">User name</label>
-            </div>
 
-            <br>
 
-            <div class="form-floating">
-                <input name="email" type="email" class="form-control" id="email" placeholder="Email" required pattern="[^@\s]+@[^@\s]+" title="Invalid email address" oninput="reportValidity();">
-                <label for="floatingInput">Email</label>
-            </div>
-
-            <br>
-
-            <div class="form-floating">
-                <input name="password" type="password" class="form-control" id="Password" placeholder="Password" oninput="reportValidity();" required minlength="7">
-                <label for="floatingInput">Password</label>
-            </div>
-
-            <br>
-
-            <div class="form-floating">
-                <input name="passwordRepeat" type="password" class="form-control" id="PasswordRepeat" placeholder="Password Repeat" oninput="passwordCheck();" required minlength="7">
-                <label for="floatingPassword">Password Repeat</label>
-            </div>
-
-            <br>
-
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-
-            <a id="LoginaccA" class="w-75 btn btn" href='login.html'>Login to existing Account</a>
-
-            <p class="mt-5 mb-3 text-muted">&copy; 2019–2022</p>
-        </form>
-
+        <br><br>
 
         <?php
         if (isset($_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $_POST["passwordreg"], $_POST["passwordregRepeat"])) {
@@ -259,6 +224,50 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
         }
 
         ?>
+
+        <div class="BoxDiv">
+            <form method="POST" id="formSignUp">
+
+                <h3><?php if ($_SESSION["lang"] == "EN") print "Sign Up";
+                    else print "Inscrever-se" ?></h3>
+                <div><?php if ($_SESSION["lang"] == "EN") print "First Name";
+                        else print "Primeiro nome" ?>:<input type="text" name="firstnamereg" id="firstnamereg"></div>
+                <div id="firstnameregErr"></div>
+                <br>
+                <div><?php if ($_SESSION["lang"] == "EN") print "Last Name";
+                        else print "Último nome" ?>:<input type="text" name="lastnamereg" id="lastnamereg"></div>
+                <div id="lastnameregErr"></div>
+                <br>
+                <div><?php if ($_SESSION["lang"] == "EN") print "Username";
+                        else print "Nome do usuário" ?>:<input type="text" name="usernamereg" id="usernamereg"></div>
+                <div id="usernameregErr"></div>
+                <br>
+                <div><?php if ($_SESSION["lang"] == "EN") print "Password";
+                        else print "Palavra de passe" ?>:<input type="password" name="passwordreg" id="passwordreg"></div>
+                <div id="passwordregErr"></div>
+                <br>
+                <div><?php if ($_SESSION["lang"] == "EN") print "Repeat Password";
+                        else print "Repita a Palavra de passe" ?>:<input type="password" name="passwordregRepeat" id="passwordregRepeat"></div>
+                <div id="passwordregErrRepeat"></div>
+
+            </form>
+
+            <br>
+
+            <div><?php if ($userexists > 0) {
+                        if ($_SESSION["lang"] == "EN") {
+                            print "* User already exist";
+                        } else {
+                            print "* O utilizador já existe";
+                        }
+                    } ?></div>
+            <br>
+            <button onclick="checkSignUp();"><?php if ($_SESSION["lang"] == "EN") print "Sign Up";
+                                                else print "Inscrever-se" ?></button>
+        </div>
+
+
+
 
     </section>
 

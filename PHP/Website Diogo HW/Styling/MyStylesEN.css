@@ -365,3 +365,43 @@ td {
     flex-direction: column;
     align-items: center;
 }
+
+
+
+
+/*user*/
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
+
+.form-signup {
+    text-align: center;
+    max-width: 330px;
+    padding: 1px;
+    margin: auto;
+}
+
+.form-signup {
+    font-weight: 400;
+}
+
+.form-signup .form-floating:focus-within {
+    z-index: 2;
+}
+
+
+input,
+button {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+
+}
+
+#LoginaccA {
+    background-color: yellowgreen;
+}
