@@ -7,6 +7,7 @@ create TABLE Users(
     FirstName VARCHAR(50),
     LastName VARCHAR(50),
     UserName VARCHAR(30) UNIQUE,
+    Email VARCHAR(50),
     UserPassword VARCHAR(255),
     Primary Key(UserID)
 );

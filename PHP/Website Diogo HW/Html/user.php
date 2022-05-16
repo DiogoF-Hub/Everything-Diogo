@@ -13,9 +13,18 @@ $connection = new mysqli($host, $user, $psw, $database, $portNo);
 $wrongUser = 0;
 $userexists = 0;
 
+//regex
+$regexUserName = "[a-zA-Z0-9-_-]+";
+$regexFirstANDLastname = "/[\p{L}+ ]+/";
+$regexEmail = "[^@\s]+@[^@\s]";
+
 
 
 if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
+
+    if (!preg_match($regexUserName, $_POST["usernamelogin"])) {
+        die();
+    }
 
     $sqlStatement2 = $connection->prepare("SELECT * from Users WHERE UserName=?");
     $sqlStatement2->bind_param("s", $_POST["usernamelogin"]);
@@ -161,6 +170,16 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                 PasswordRepeat.setCustomValidity("");
             }
         }
+
+        function changeform(form) {
+            if (form == "SignUp") {
+                document.getElementById("SignIn").setAttribute("hidden", "hidden");
+                document.getElementById("SignUp").removeAttribute("hidden");
+            } else {
+                document.getElementById("SignUp").setAttribute("hidden", "hidden");
+                document.getElementById("SignIn").removeAttribute("hidden");
+            }
+        }
     </script>
 </head>
 
@@ -173,88 +192,126 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
 
     <section class="section1">
 
-
-        <form class="form-signup">
-            <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
-
-            <div class="form-floating">
-                <input name="firstname" type="text" class="form-control" id="firstname" placeholder="First name" required pattern="[/\p{L}+/u ]+" title="First name must contain only letters" oninput="reportValidity();" minlength="1" maxlength="50">
-                <label for="floatingInput">First name</label>
-            </div>
-
-            <br>
+        <form class="form-signin" method="POST" id="SignIn">
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
             <div class="form-floating">
-                <input name="lastname" type="text" class="form-control" id="lastname" placeholder="Last name" required pattern="[/\p{L}+/u ]+" title="Last name must contain only letters" oninput="reportValidity()" minlength="1" maxlength="50">
-                <label for="floatingInput">Last name</label>
-            </div>
-
-            <br>
-
-            <div class="form-floating">
-                <input name="username" type="text" class="form-control" id="username" placeholder="User name" required pattern="[a-zA-Z0-9-_-]+" title="User Name must only contain 'A-Z', 'a-z', '0-9', '-', or '_'" oninput="reportValidity();" minlength="1" maxlength="25">
+                <input name="usernamelogin" type="text" class="form-control" id="floatingInput" placeholder="User name" required pattern="[a-zA-Z0-9-_-]+" title="User Name must only contain 'A-Z', 'a-z', '0-9', '-', or '_'" oninput="reportValidity();" minlength="1" maxlength="25">
                 <label for="floatingInput">User name</label>
             </div>
-
-            <br>
-
             <div class="form-floating">
-                <input name="email" type="email" class="form-control" id="email" placeholder="Email" required pattern="[^@\s]+@[^@\s]+" title="Invalid email address" oninput="reportValidity();">
-                <label for="floatingInput">Email</label>
+                <input name="passwordlogin" type="password" class="form-control" id="floatingPassword" placeholder="Password" oninput="reportValidity();" required minlength="7">
+                <label for="floatingPassword">Password</label>
             </div>
-
-            <br>
-
-            <div class="form-floating">
-                <input name="password" type="password" class="form-control" id="Password" placeholder="Password" oninput="reportValidity();" required minlength="7">
-                <label for="floatingInput">Password</label>
-            </div>
-
-            <br>
-
-            <div class="form-floating">
-                <input name="passwordRepeat" type="password" class="form-control" id="PasswordRepeat" placeholder="Password Repeat" oninput="passwordCheck();" required minlength="7">
-                <label for="floatingPassword">Password Repeat</label>
-            </div>
-
-            <br>
 
             <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
 
-            <a id="LoginaccA" class="w-75 btn btn" href='login.html'>Login to existing Account</a>
+            <a id="createaccA" class="w-75 btn btn changeform" href='#' onclick="changeform('SignUp');">Create Account</a>
+
+            <p class="mt-5 mb-3 text-muted">&copy; 2019–2022</p>
+        </form>
+
+
+
+
+
+        <form class="form-signup" method="POST" id="SignUp" hidden>
+            <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+
+            <div class="form-floating">
+                <input name="firstnamereg" type="text" class="form-control" id="firstname" placeholder="First name" required pattern="[/\p{L}+/u ]+" title="First name must contain only letters" oninput="reportValidity();" minlength="1" maxlength="50">
+                <label for="floatingInput">First name</label>
+            </div>
+
+
+            <div class="form-floating">
+                <input name="lastnamereg" type="text" class="form-control" id="lastname" placeholder="Last name" required pattern="[/\p{L}+/u ]+" title="Last name must contain only letters" oninput="reportValidity()" minlength="1" maxlength="50">
+                <label for="floatingInput">Last name</label>
+            </div>
+
+
+
+            <div class="form-floating">
+                <input name="usernamereg" type="text" class="form-control" id="username" placeholder="User name" required pattern="[a-zA-Z0-9-_-]+" title="User Name must only contain 'A-Z', 'a-z', '0-9', '-', or '_'" oninput="reportValidity();" minlength="1" maxlength="25">
+                <label for="floatingInput">User name</label>
+            </div>
+
+
+
+            <div class="form-floating">
+                <input name="emailreg" type="email" class="form-control" id="email" placeholder="Email" required pattern="[^@\s]+@[^@\s]+" title="Invalid email address" oninput="reportValidity();">
+                <label for="floatingInput">Email</label>
+            </div>
+
+
+
+            <div class="form-floating">
+                <input name="passwordreg" type="password" class="form-control" id="Password" placeholder="Password" oninput="reportValidity();" required minlength="7">
+                <label for="floatingInput">Password</label>
+            </div>
+
+
+
+            <div class="form-floating">
+                <input name="passwordregRepeat" type="password" class="form-control" id="PasswordRepeat" placeholder="Password Repeat" oninput="passwordCheck();" required minlength="7">
+                <label for="floatingPassword">Password Repeat</label>
+            </div>
+
+
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+
+            <a id="LoginaccA" class="w-75 btn btn changeform" href='#' onclick="changeform('SignIn');">Login to existing Account</a>
 
             <p class="mt-5 mb-3 text-muted">&copy; 2019–2022</p>
         </form>
 
 
         <?php
-        if (isset($_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $_POST["passwordreg"], $_POST["passwordregRepeat"])) {
+        if (isset($_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $_POST["emailreg"], $_POST["passwordreg"], $_POST["passwordregRepeat"])) {
 
-            if ($_POST["passwordreg"] === $_POST["passwordregRepeat"]) {
-
-                $sqlStatement = $connection->prepare("SELECT * from Users WHERE UserName=?");
-                $sqlStatement->bind_param("s", $_POST["usernamereg"]);
-                $sqlStatement->execute();
-                $result = $sqlStatement->get_result();
-                $userexists = $result->num_rows;
-
-
-                if ($userexists == 0) {
-                    $pswSignup = $_POST["passwordreg"];
-                    $hashPSW = password_hash($pswSignup, PASSWORD_DEFAULT);
-
-                    $sqlInsert = $connection->prepare("INSERT INTO Users (FirstName, LastName, UserName, UserPassword) VALUES (?, ?, ?, ?)");
-                    $sqlInsert->bind_param("ssss", $_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $hashPSW);
-
-                    if ($sqlInsert->execute()) {
-                        $_SESSION["username"] = $_POST["usernamereg"];
-                        $_SESSION["firstname"] = $_POST["firstnamereg"];
-                        $_SESSION["lastname"] = $_POST["lastnamereg"];
-                        echo '<script>window.location.href="Home.php"</script>';
-                    }
-                }
-            } else {
+            print $regexFirstANDLastname;
+            print $_POST["firstnamereg"];
+            if (!preg_match($regexFirstANDLastname, $_POST["firstnamereg"])) {
                 die();
+            }
+
+
+            if (!preg_match($regexUserName, $_POST["usernamereg"])) {
+                die();
+            }
+
+
+            if (!preg_match($regexEmail, $_POST["emailreg"])) {
+                die();
+            }
+
+
+            if ($_POST["passwordreg"] !== $_POST["passwordregRepeat"]) {
+                die();
+            }
+
+
+            $sqlStatement = $connection->prepare("SELECT * from Users WHERE UserName=?");
+            $sqlStatement->bind_param("s", $_POST["usernamereg"]);
+            $sqlStatement->execute();
+            $result = $sqlStatement->get_result();
+            $userexists = $result->num_rows;
+
+
+            if ($userexists == 0) {
+                $pswSignup = $_POST["passwordreg"];
+                $hashPSW = password_hash($pswSignup, PASSWORD_DEFAULT);
+
+                $sqlInsert = $connection->prepare("INSERT INTO Users (FirstName, LastName, UserName, Email, UserPassword) VALUES (?, ?, ?, ?, ?)");
+                $sqlInsert->bind_param("ssss", $_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $_POST["emailreg"], $hashPSW);
+
+                if ($sqlInsert->execute()) {
+                    $_SESSION["username"] = $_POST["usernamereg"];
+                    $_SESSION["firstname"] = $_POST["firstnamereg"];
+                    $_SESSION["lastname"] = $_POST["lastnamereg"];
+                    echo '<script>window.location.href="Home.php"</script>';
+                }
             }
         }
 
