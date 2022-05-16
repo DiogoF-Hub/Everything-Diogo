@@ -181,6 +181,12 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
             }
         }
 
+        function emailCheck() {
+            Email = document.getElementById("email");
+
+            Email.value.split("@");
+        }
+
         function changeform(form) {
             if (form == "SignUp") {
                 document.getElementById("SignIn").setAttribute("hidden", "hidden");
@@ -250,7 +256,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
 
 
                 <div class="form-floating">
-                    <input name="emailreg" type="email" class="form-control" id="email" placeholder="Email" required pattern="[^@\s]+@[^@\s]+" title="Invalid email address" oninput="reportValidity();" minlength="1" maxlength="320">
+                    <input name="emailreg" type="email" class="form-control" id="email" placeholder="Email" required pattern="[^@\s]+@[^@\s]+" oninput="emailCheck();" minlength="1" maxlength="320">
                     <label for="floatingInput">Email</label>
                 </div>
 
@@ -302,7 +308,8 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
             if (!preg_match($regexEmail, $_POST["emailreg"])) {
                 die();
             }
-            if (strlen($_POST["emailreg"]) < 1 || strlen($_POST["emailreg"]) > 320) {
+            $emailExploded = explode("@", $_POST["emailreg"]);
+            if (strlen($emailExploded[0]) > 64 || strlen($emailExploded[1]) > 255) {
                 die();
             }
 
