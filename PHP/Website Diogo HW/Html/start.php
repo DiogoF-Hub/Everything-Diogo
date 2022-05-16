@@ -25,3 +25,7 @@ if ($_SESSION["lang"] == "EN") {
     $togle = 5;
     $IDlang = 2;
 }
+
+if (!isset($_SESSION["userloggedIn"])) {
+    $_SESSION["userloggedIn"] = false;
+}

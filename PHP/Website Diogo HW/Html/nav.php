@@ -70,6 +70,7 @@ function navbar($URL, $ActivePage, $togle)
             session_unset();
             session_destroy();
             header("Refresh:0");
+            die();
         }
         ?>
 
