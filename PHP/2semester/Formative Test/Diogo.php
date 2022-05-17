@@ -22,6 +22,7 @@ if (isset($_POST["username"])) {
     $sqlStatement2->bind_param("s", $_POST["username"]);
     $sqlStatement2->execute();
     $result2 = $sqlStatement2->get_result();
+
     $userexists2 = $result2->num_rows;
 
     if ($userexists2 == 0) {
@@ -53,6 +54,7 @@ if (isset($_POST["promoCode"])) {
         } else {
             $_SESSION["Money"] = $_SESSION["Money"] + $row["Amount"];
             $row["Available"]--;
+
             $sqlStatement5 = $connection->prepare("UPDATE promoTable SET Available=? WHERE KeyWord=?");
             $sqlStatement5->bind_param("ss", $row["Available"], $_POST["promoCode"]);
             $sqlStatement5->execute();
