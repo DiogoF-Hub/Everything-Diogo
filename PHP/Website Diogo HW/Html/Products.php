@@ -1,5 +1,37 @@
 <?php
 include_once("start.php");
+
+
+if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
+    if ($_SESSION["userloggedIn"] == false) {
+        echo "<script> alert('You are not logged In'); </script>";
+        echo "<script> window.location.href='user.php' </script>";
+    } else {
+        if (is_numeric($_POST["productBuyTimes"])) {
+            if ($_POST["productBuyTimes"] < 1) {
+                die();
+            }
+
+            $sqlStatement2 = $connection->prepare("SELECT * from products WHERE ProductsID=?");
+            $sqlStatement2->bind_param("s", $_POST["productBuyId"]);
+            $sqlStatement2->execute();
+            $result2 = $sqlStatement2->get_result();
+
+
+            if ($result2->num_rows == 0) {
+                die();
+            } else {
+                if (isset($_SESSION["Chart"][$_POST["productBuyId"]])) {
+                    $_SESSION["Chart"][$_POST["productBuyId"]] = $_SESSION["Chart"][$_POST["productBuyId"]] + $_POST["productBuyTimes"];
+                } else {
+                    $_SESSION["Chart"] += [$_POST["productBuyId"] => $_POST["productBuyTimes"]];
+                }
+            }
+        } else {
+            die();
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,15 +65,6 @@ include_once("start.php");
     }
 
 
-    $host = "localhost";
-    $user = "root";
-    $psw = "";
-    $database = "productsdatabase";
-    $portNo = 3306;
-
-    $connection = new mysqli($host, $user, $psw, $database, $portNo);
-
-
     include_once("nav.php");
     navbar("Products.php?lang=" . $otherlang . "&pricerange=" . $_GET["pricerange"], "products", $togle);
 
@@ -54,7 +77,6 @@ include_once("start.php");
         $Ascending = "Price ascending";
 
         ?>
-
         <form method="get" id="pricerange" action="Products.php">
 
             <select name="pricerange" onchange="pricerangefunc();">
@@ -105,6 +127,12 @@ include_once("start.php");
                     <div><?= $row["Description1"] ?></div>
                     <div><?= $row["Company"] ?></div>
                     <a href="<?= $row["ProductLink"] ?>" target="_blank"><span class="greenPrice"><?= $row["Price"] ?>€</span></a>
+                    <form method="POST">
+                        <input name="productBuyId" value="<?= $row["ProductsID"] ?>" type="text" hidden>
+                        <input name="productBuyTimes" type="number" id="inputNumber" min="1" value="1">
+                        <button type="submit">Buy</button>
+                    </form>
+
                 </div>
 
         <?php

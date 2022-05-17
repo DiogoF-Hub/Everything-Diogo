@@ -20,6 +20,12 @@ include_once("start.php");
     navbar("chart.php?lang=" . $otherlang, "chart", $togle);
     ?>
 
+    <section class="section1">
+        <?php
+        print_r($_SESSION["Chart"]);
+        ?>
+    </section>
+
 </body>
 
 </html>

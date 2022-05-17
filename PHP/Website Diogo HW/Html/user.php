@@ -40,6 +40,8 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
             $_SESSION["username"] = $row["UserName"];
             $_SESSION["firstname"] = $row["FirstName"];
             $_SESSION["lastname"] = $row["LastName"];
+            //$_SESSION["Chart"] = $row["Chart"];
+            $_SESSION["Chart"] = [];
             $_SESSION["userloggedIn"] = true;
             echo '<script>window.location.href="Home.php"</script>'; //This will redirect me to home to whatever language im in
 
@@ -332,6 +334,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                     $_SESSION["username"] = $_POST["usernamereg"];
                     $_SESSION["firstname"] = $_POST["firstnamereg"];
                     $_SESSION["lastname"] = $_POST["lastnamereg"];
+                    $_SESSION["Chart"] = [];
                     $_SESSION["userloggedIn"] = true;
                     echo '<script>window.location.href="Home.php"</script>';
                 }

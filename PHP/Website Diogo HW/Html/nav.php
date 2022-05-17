@@ -14,7 +14,7 @@ function navbar($URL, $ActivePage, $togle)
         die("Nav bar file not found");
     }
 
-    /*$host = "localhost";
+    $host = "localhost";
     $user = "root";
     $psw = "";
     $database = "productsdatabase";
@@ -22,7 +22,7 @@ function navbar($URL, $ActivePage, $togle)
 
     $connection = new mysqli($host, $user, $psw, $database, $portNo);
 
-    $sqlStatement = $connection->prepare("SELECT * from ButtonsNav natural join DescriptionNav where IDLang=" . $IDlang . $Productsorder);
+    /*$sqlStatement = $connection->prepare("SELECT * from ButtonsNav natural join DescriptionNav where IDLang=" . $IDlang . $Productsorder);
     $sqlStatement->execute();
     $result = $sqlStatement->get_result();*/
 
@@ -70,6 +70,10 @@ function navbar($URL, $ActivePage, $togle)
 
         <?php
         if (isset($_POST["logoutbutton"])) {
+            $sqlInsert3 = $connection->prepare("UPDATE Users SET Chart=? WHERE UserName=?");
+            $sqlInsert3->bind_param("ss", $chartArrayserialized, $_SESSION["username"]);
+            $sqlInsert3->execute();
+
             session_unset();
             session_destroy();
             header("Refresh:0");

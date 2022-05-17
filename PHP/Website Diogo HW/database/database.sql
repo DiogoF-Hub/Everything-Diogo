@@ -9,6 +9,7 @@ create TABLE Users(
     UserName VARCHAR(30) UNIQUE,
     Email VARCHAR(50),
     UserPassword VARCHAR(255),
+    Chart VARCHAR(255),
     Primary Key(UserID)
 );
 
