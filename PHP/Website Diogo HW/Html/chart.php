@@ -21,9 +21,16 @@ include_once("start.php");
     ?>
 
     <section class="section1">
-        <?php
-        print_r($_SESSION["Chart"]);
-        ?>
+        <div>
+            <div class="productBasket">
+                <img class="productimage basketdiv" src="../Images/AMD%203800X.jpg" alt="">
+                <div class="basketdiv">AMD Ryzen 7 3800X </div>
+                <div class="basketdiv"> 8-Core 16-Threads</div>
+                <div class="basketdiv">(3.9 GHz / 4.5 GHz)</div>
+            </div>
+        </div>
+
+        <?php print_r($_SESSION["Chart"]); ?>
     </section>
 
 </body>

@@ -311,6 +311,16 @@ body {
     width: 50%;
 }
 
+.productBasket {
+    width: 100%;
+    text-align: center;
+}
+
+.basketdiv {
+    width: 100px;
+    display: inline-block;
+}
+
 
 /* Table */
 table,
