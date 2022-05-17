@@ -1,5 +1,16 @@
 <?php
 session_start();
+
+
+$host = "localhost";
+$user = "root";
+$psw = "";
+$database = "productsdatabase";
+$portNo = 3306;
+
+$connection = new mysqli($host, $user, $psw, $database, $portNo);
+
+
 if (!isset($_SESSION["lang"])) {
     $_SESSION["lang"] = "EN";
 }

@@ -1,14 +1,6 @@
 <?php
 include_once("start.php");
 
-$host = "localhost";
-$user = "root";
-$psw = "";
-$database = "productsdatabase";
-$portNo = 3306;
-
-$connection = new mysqli($host, $user, $psw, $database, $portNo);
-
 
 $wrongUser = 0;
 $userexists = 0;
@@ -181,11 +173,11 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
             }
         }
 
-        function emailCheck() {
+        /*function emailCheck() {
             Email = document.getElementById("email");
 
             Email.value.split("@");
-        }
+        }*/
 
         function changeform(form) {
             if (form == "SignUp") {

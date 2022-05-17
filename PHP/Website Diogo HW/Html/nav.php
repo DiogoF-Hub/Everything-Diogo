@@ -65,6 +65,9 @@ function navbar($URL, $ActivePage, $togle)
         }
         ?>
 
+        <a class="aclass <?php if ($ActivePage == "chart") print "active" ?>" href="chart.php"><?php if ($_SESSION["lang"] == "EN") print("Chart");
+                                                                                                else print("Carrinho"); ?></a>
+
         <?php
         if (isset($_POST["logoutbutton"])) {
             session_unset();
