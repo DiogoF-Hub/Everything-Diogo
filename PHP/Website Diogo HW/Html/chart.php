@@ -33,6 +33,9 @@ include_once("start.php");
 
         <?php
         if (isset($_SESSION["Chart"])) {
+            foreach ($_SESSION["Chart"] as $productID => $quantity) {
+                $totalQuantity = $totalQuantity + $quantity;
+            }
         ?>
             <div class="container h-50">
                 <div class="row d-flex justify-content-center align-items-center h-50">
@@ -52,7 +55,6 @@ include_once("start.php");
                             $row = $result2->fetch_assoc();
 
                             $totalOrder = $totalOrder + ($row["Price"] * $quantity);
-                            $totalQuantity = $totalQuantity + $quantity;
                         ?>
 
 
