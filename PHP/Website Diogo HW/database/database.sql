@@ -190,3 +190,10 @@ INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDe
 INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDescription1, TableDescription2, TableDescription3) VALUES ('25', 2, 'Isto é um HDD da', 'Escolha uma solução robusta, escalável e de alto desempenho com o disco rígido Seagate IronWolf Pro de 16 TB. Projetada para NAS de negócios de 1 a 24 baias, esta unidade de 3,5 "é capaz de suportar uma carga de trabalho de ambientes multiusuário. até 300 TB/ano.', 'Rotação:', 'Interface do Computador:', 'Formato:');
 INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDescription1, TableDescription2, TableDescription3) VALUES ('26', 2, 'Isto é uma Fonte da', 'O Corsair AX1600i garante uma fonte de alimentação eficiente, contínua e ultra estável de 1600W 80 PLUS Titanium. Com sua operação silenciosa e componentes de ponta, você experimentará uma fonte de alimentação totalmente modular com desempenho elétrico de classe mundial.', 'Capacidade:', 'Certificação:', 'Modular:');
 INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDescription1, TableDescription2, TableDescription3) VALUES ('27', 2, 'Isto é um Gabinete da', 'Excepcional em todos os sentidos, o case "super tour" Corsair Obsidian 1000D se beneficia de um design sublime e recursos ultra-avançados. Tem a incrível capacidade de hospedar dois sistemas simultaneamente e possui iluminação RGB totalmente controlável.', 'Descrição das Baías:', 'Painel Frontal:', 'Ventoinhas pré-instaladas:');
+
+
+
+
+
+
+INSERT INTO  Users (FirstName, LastName, UserName, Email, UserPassword, Chart) VALUES("Diogo", "Fernandes", "DFER7", "diogo_carvalhofer@hotmail.com", "$2y$10$GJgXPCnkyHucmEkXAonILuyjhixgxprvNJAp0v.gRQevgXphqIUny", "");

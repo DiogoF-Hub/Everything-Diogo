@@ -71,13 +71,14 @@ function navbar($URL, $ActivePage, $togle)
 
         <?php
         if (isset($_POST["logoutbutton"])) {
+            $chartArrayserialized = serialize($_SESSION["Chart"]);
             $sqlInsert3 = $connection->prepare("UPDATE Users SET Chart=? WHERE UserName=?");
             $sqlInsert3->bind_param("ss", $chartArrayserialized, $_SESSION["username"]);
             $sqlInsert3->execute();
 
             session_unset();
             session_destroy();
-            header("Refresh:0");
+            echo "<script> window.location.href='Home.php' </script>";
             die();
         }
         ?>

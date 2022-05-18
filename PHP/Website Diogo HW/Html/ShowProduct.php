@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+include_once("start.php");
+
 if (isset($_GET["ProductID"])) {
 
     $navbarlanguage = 0;
@@ -8,14 +10,14 @@ if (isset($_GET["ProductID"])) {
     $sqlLang = 1;
 
 
-    if (empty($_GET["lang"])) {
+    if (empty($_SESSION["lang"])) {
         header('Location: ' . "ShowProduct.php?ProductID=" . $_GET["ProductID"] . "&lang=EN#slider-image-1");
         exit();
     } else {
-        if (!in_array($_GET["lang"], array('EN', 'PT'), true)) {
+        if (!in_array($_SESSION["lang"], array('EN', 'PT'), true)) {
             die("Wrong Page");
         }
-        if ($_GET["lang"] == "PT") {
+        if ($_SESSION["lang"] == "PT") {
             $navbarlanguage = 5;
             $OtherLanguage = "EN";
             $sqlLang = 2;
@@ -47,7 +49,7 @@ if (isset($_GET["ProductID"])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="<?= $_GET["lang"] ?>">
+<html lang="<?= $_SESSION["lang"] ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -61,7 +63,7 @@ if (isset($_GET["ProductID"])) {
 <body>
     <?php
     include_once("nav.php");
-    navbar("ShowProduct.php?ProductID=" . $_GET["ProductID"] . "&lang=" . $OtherLanguage . "#slider-image-1", "products", $navbarlanguage, $_GET["lang"]);
+    navbar("ShowProduct.php?ProductID=" . $_GET["ProductID"] . "&lang=" . $OtherLanguage . "#slider-image-1", "products", $navbarlanguage, $_SESSION["lang"]);
     ?>
 
     <section class="section1">
@@ -89,7 +91,7 @@ if (isset($_GET["ProductID"])) {
 
             <table class="styled-table">
                 <tr>
-                    <th><?php if ($_GET["lang"] == "EN") {
+                    <th><?php if ($_SESSION["lang"] == "EN") {
                             print "Product Name:";
                         } else {
                             print "Nome do produto:";
