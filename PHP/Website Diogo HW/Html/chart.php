@@ -26,6 +26,7 @@ include_once("start.php");
     $result = $sqlStatement->get_result();
 
     $totalOrder = 0;
+    $totalQuantity = 0;
     ?>
 
     <section class="section1">
@@ -36,7 +37,7 @@ include_once("start.php");
             <div class="container h-50">
                 <div class="row d-flex justify-content-center align-items-center h-50">
                     <div class="col">
-                        <p><span class="h3">Shopping Cart </span><span class="h5">(<?= count($_SESSION["Chart"]) ?> item(s) in your Shopping-Cart)</span></p>
+                        <p><span class="h3">Shopping Cart </span><span class="h5">(<?= $totalQuantity ?> item(s) in your Shopping-Cart)</span></p>
 
 
 
@@ -51,6 +52,7 @@ include_once("start.php");
                             $row = $result2->fetch_assoc();
 
                             $totalOrder = $totalOrder + ($row["Price"] * $quantity);
+                            $totalQuantity = $totalQuantity + $quantity;
                         ?>
 
 
