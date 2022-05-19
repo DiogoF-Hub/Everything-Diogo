@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 include_once("start.php");
 
 if (isset($_GET["ProductID"])) {

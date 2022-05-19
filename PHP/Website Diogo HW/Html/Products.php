@@ -8,7 +8,7 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
         echo "<script> window.location.href='user.php' </script>";
     } else {
         if (is_numeric($_POST["productBuyTimes"])) {
-            if ($_POST["productBuyTimes"] < 1) {
+            if ($_POST["productBuyTimes"] < 1 || $_POST["productBuyTimes"] > 10) {
                 die();
             }
 
@@ -130,7 +130,15 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
                     <a href="<?= $row["ProductLink"] ?>" target="_blank"><span class="greenPrice"><?= $row["Price"] ?>€</span></a>
                     <form method="POST">
                         <input name="productBuyId" value="<?= $row["ProductsID"] ?>" type="text" hidden>
-                        <input name="productBuyTimes" type="number" id="inputNumber" min="1" value="1">
+                        <select name="productBuyTimes">
+                            <?php
+                            for ($i = 1; $i <= 10; $i++) {
+                            ?>
+                                <option value="<?= $i ?>"><?= $i ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
                         <button type="submit">Buy</button>
                     </form>
 

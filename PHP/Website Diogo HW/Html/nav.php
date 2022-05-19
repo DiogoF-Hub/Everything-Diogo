@@ -58,8 +58,8 @@ function navbar($URL, $ActivePage, $togle)
                     else print "Ola," ?> <?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></div>
             <form method="POST" id="logoutform">
                 <input hidden type="text" name="logoutbutton">
-                <a name="logoutbutton" onclick="document.getElementById('logoutform').submit();" class="aclass <?php if ($ActivePage == "logbutton") print "active" ?>" href="#"><?php if ($_SESSION["lang"] == "EN") print "Logout";
-                                                                                                                                                                                    else print "Sair"; ?></a>
+                <a name="logoutbutton" onclick="document.getElementById('logoutform').submit();" class="aclass <?php if ($ActivePage == "logbutton") print "active" ?>" href="javascript:{}"><?php if ($_SESSION["lang"] == "EN") print "Logout";
+                                                                                                                                                                                                else print "Sair"; ?></a>
             </form>
         <?php
         }

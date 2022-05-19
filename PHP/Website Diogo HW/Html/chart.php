@@ -8,6 +8,27 @@ if (isset($_POST["deleteProductChart"])) {
         die();
     }
 }
+
+if (isset($_POST["quantityProduct"], $_POST["quantityProductChartId"])) {
+    if (!is_numeric($_POST["quantityProduct"])) {
+        die();
+    }
+
+    if ($_POST["quantityProduct"] < 1 || $_POST["quantityProduct"] > 10) {
+        die();
+    }
+
+    if (!isset($_SESSION["Chart"][$_POST["quantityProductChartId"]])) {
+        die();
+    } else {
+        $_SESSION["Chart"][$_POST["quantityProductChartId"]] = $_POST["quantityProduct"];
+    }
+}
+
+if (isset($_POST["deletechart"])) {
+    unset($_SESSION["Chart"]);
+    $_SESSION["Chart"] = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,8 +70,17 @@ if (isset($_POST["deleteProductChart"])) {
             <div class="container h-50">
                 <div class="row d-flex justify-content-center align-items-center h-50">
                     <div class="col">
-                        <p><span class="h3">Shopping Cart </span><span class="h5">(<?= $totalQuantity ?> item(s) in your Shopping-Cart)</span></p>
 
+                        <div class="col d-flex">
+                            <p><span class="h3">Shopping Cart </span><span class="h5">(<?= $totalQuantity ?> item(s) in your Shopping-Cart)</span></p>
+                            <form method="POST" id="deletechartId">
+                                <a href="javascript:{}" onclick="document.getElementById('deletechartId').submit();">
+                                    <img src="../Images/trash.png" alt="trash" width="7%">
+                                </a>
+                                <input name="deletechart" type="text" hidden>
+                            </form>
+
+                        </div>
 
 
 
@@ -105,8 +135,9 @@ if (isset($_POST["deleteProductChart"])) {
                                             <div>
                                                 <div class="small text-muted mb-2 ">Quantity</div>
                                                 <div class="fw-normal mb-2">
-                                                    <form method="POST">
-                                                        <select name="" id="">
+                                                    <form method="POST" id="quantityProductId<?= $productID ?>">
+                                                        <input name="quantityProductChartId" value="<?= $productID ?>" type="text" hidden>
+                                                        <select name="quantityProduct" onchange="document.getElementById('quantityProductId<?= $productID ?>').submit();">
                                                             <?php
                                                             for ($i = 1; $i <= 10; $i++) {
                                                             ?>
