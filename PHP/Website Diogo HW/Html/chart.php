@@ -1,5 +1,13 @@
 <?php
 include_once("start.php");
+
+if (isset($_POST["deleteProductChart"])) {
+    if (isset($_SESSION["Chart"][$_POST["deleteProductChart"]])) {
+        unset($_SESSION["Chart"][$_POST["deleteProductChart"]]);
+    } else {
+        die();
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,6 +33,7 @@ include_once("start.php");
     $sqlStatement->execute();
     $result = $sqlStatement->get_result();
 
+    $totalMulti = 0;
     $totalOrder = 0;
     $totalQuantity = 0;
     ?>
@@ -54,43 +63,79 @@ include_once("start.php");
 
                             $row = $result2->fetch_assoc();
 
-                            $totalOrder = $totalOrder + ($row["Price"] * $quantity);
+                            $totalMulti = $row["Price"] * $quantity;
+                            $totalOrder = $totalOrder + $totalMulti;
                         ?>
 
 
                             <div class="card mb-3">
                                 <div class="card-body p-3">
-                                    <a style="text-decoration: none; color: inherit;" href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1">
-                                        <div class="row align-items-center">
-                                            <div class="col-md-2">
+
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <a style="text-decoration: none; color: inherit;" href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1">
                                                 <img src="../Images/<?= $row["ImageLink"] ?>.jpg" style="height: 50%; width: 50%;" alt="<?= $row["ProductName"] ?>">
-                                            </div>
-                                            <div class="col-md-2 justify-content-center">
-                                                <div>
+                                            </a>
+                                        </div>
+                                        <div class="col justify-content-center">
+                                            <div>
+                                                <a style="text-decoration: none; color: inherit;" href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1">
                                                     <div class="small text-muted mb-2 ">Name</div>
                                                     <div class="fw-normal mb-2"><?= $row["ProductName"] ?></div>
-                                                </div>
+                                                </a>
                                             </div>
-                                            <div class="col-md-2 d-flex justify-content-center">
-                                                <div>
+                                        </div>
+                                        <div class="col d-flex justify-content-center">
+                                            <div>
+                                                <a style="text-decoration: none; color: inherit;" href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1">
                                                     <div class="small text-muted mb-2 ">Type</div>
                                                     <div class="fw-normal mb-2"><?= $row["Subtitle1"] ?></div>
-                                                </div>
+                                                </a>
                                             </div>
-                                            <div class="col-md-2 d-flex justify-content-center">
-                                                <div>
-                                                    <div class="small text-muted mb-2 ">Quantity</div>
-                                                    <div class="fw-normal mb-2"><?= $quantity ?></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 d-flex justify-content-center">
-                                                <div>
+                                        </div>
+                                        <div class="col d-flex justify-content-center">
+                                            <div>
+                                                <a style="text-decoration: none; color: inherit;" href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1">
                                                     <div class="small text-muted mb-2 ">Price</div>
                                                     <div class="fw-normal mb-2"><?= $row["Price"] ?>€</div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex justify-content-center">
+                                            <div>
+                                                <div class="small text-muted mb-2 ">Quantity</div>
+                                                <div class="fw-normal mb-2">
+                                                    <form method="POST">
+                                                        <select name="" id="">
+                                                            <?php
+                                                            for ($i = 1; $i <= 10; $i++) {
+                                                            ?>
+                                                                <option <?php if ($i == $quantity) print "selected"; ?> value="<?= $i ?>"><?= $i ?></option>
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
-                                    </a>
+                                        <div class="col d-flex justify-content-center">
+                                            <div>
+                                                <a style="text-decoration: none; color: inherit;" href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1">
+                                                    <div class="small text-muted mb-2 ">Total</div>
+                                                    <div class="fw-normal mb-2"><?= $totalMulti ?>€</div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex justify-content-center">
+                                            <div>
+                                                <form method="POST">
+                                                    <input name="deleteProductChart" value="<?= $productID ?>" type="text" hidden>
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

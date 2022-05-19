@@ -23,6 +23,7 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
             } else {
                 if (isset($_SESSION["Chart"][$_POST["productBuyId"]])) {
                     $_SESSION["Chart"][$_POST["productBuyId"]] = $_SESSION["Chart"][$_POST["productBuyId"]] + $_POST["productBuyTimes"];
+                    //unset($_SESSION["Chart"][$_POST["productBuyId"]]);
                 } else {
                     $_SESSION["Chart"] += [$_POST["productBuyId"] => $_POST["productBuyTimes"]];
                 }
