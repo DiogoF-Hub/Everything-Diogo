@@ -13,6 +13,14 @@ create TABLE Users(
     Primary Key(UserID)
 );
 
+CREATE TABLE Orders(
+    OrderID INT NOT NULL AUTO_INCREMENT,
+    UserName VARCHAR(250),
+    OrderList VARCHAR(250),
+    PRIMARY KEY(OrderID),
+    FOREIGN KEY(UserName) REFERENCES Users(UserName)
+);
+
 CREATE TABLE Products (
     ProductsID int not null AUTO_INCREMENT,
     ImageLink VARCHAR(255),

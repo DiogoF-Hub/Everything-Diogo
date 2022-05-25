@@ -29,6 +29,18 @@ if (isset($_POST["deletechart"])) {
     unset($_SESSION["Chart"]);
     $_SESSION["Chart"] = [];
 }
+
+if (isset($_POST["orderSave"])) {
+    if (count($_SESSION["Chart"]) > 0) {
+        $orderSerialize = serialize($_SESSION["Chart"]);
+        $sqlInsert = $connection->prepare("INSERT INTO Orders (UserName, OrderList) VALUES (?, ?)");
+        $sqlInsert->bind_param("ss", $_SESSION["username"], $orderSerialize);
+        $sqlInsert->execute();
+        $_SESSION["Chart"] = [];
+    } else {
+        echo "<script> alert('Your Shopping-cart is empty'); </script>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -191,7 +203,7 @@ if (isset($_POST["deletechart"])) {
 
                         <div class="d-flex justify-content-end">
                             <form method="POST">
-                                <button name="order" type="submit" class="btn btn-primary btn-lg">Procede to checkout</button>
+                                <button name="orderSave" type="submit" class="btn btn-primary btn-lg">Procede to checkout</button>
                             </form>
                         </div>
 

@@ -180,11 +180,25 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
             }
         }
 
-        /*function emailCheck() {
+        function emailCheck() {
             Email = document.getElementById("email");
 
-            Email.value.split("@");
-        }*/
+            if (Email.value.includes("@") == 1) {
+                alert("There is a problem with email format");
+                EmailSplited = Email.value.split("@");
+                if (EmailSplited[0] > 64 || EmailSplited[1] > 255) {
+                    Email.setCustomValidity("There is a problem with email format");
+                    Email.reportValidity();
+                } else {
+                    Email.setCustomValidity("");
+                }
+            } else {
+                //there is more than 1 @
+                Email.setCustomValidity("Email should contain at least one @");
+                Email.reportValidity();
+            }
+
+        }
 
         function changeform(form) {
             if (form == "SignUp") {
