@@ -203,7 +203,7 @@ if (isset($_POST["orderSave"])) {
 
                         <div class="d-flex justify-content-end">
                             <form method="POST">
-                                <button name="orderSave" type="submit" class="btn btn-primary btn-lg">Procede to checkout</button>
+                                <button name="orderSave" type="submit" class="btn btn-primary btn-lg">Proceed to checkout</button>
                             </form>
                         </div>
 

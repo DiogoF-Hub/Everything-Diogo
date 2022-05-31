@@ -10,7 +10,22 @@ create TABLE Users(
     Email VARCHAR(50),
     UserPassword VARCHAR(255),
     Chart VARCHAR(255),
+    UserType VARCHAR(50),
+    ProfilePic VARCHAR(255),
+    JoinDate VARCHAR(255),
+    DateOfBirth VARCHAR(255),
     Primary Key(UserID)
+);
+
+CREATE TABLE Address (
+    UserName VARCHAR(255),
+    AddressID INT NOT NULL AUTO_INCREMENT,
+    FirstLineAddress VARCHAR(255),
+    SecondLineAddress VARCHAR(255),
+    PostalCode VARCHAR(50),
+    City VARCHAR(255),
+    PRIMARY KEY(AddressID),
+    FOREIGN KEY(UserName) REFERENCES Users(UserName)
 );
 
 CREATE TABLE Orders(
@@ -204,4 +219,4 @@ INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDe
 
 
 
-INSERT INTO  Users (FirstName, LastName, UserName, Email, UserPassword, Chart) VALUES("Diogo", "Fernandes", "DFER7", "diogo_carvalhofer@hotmail.com", "$2y$10$GJgXPCnkyHucmEkXAonILuyjhixgxprvNJAp0v.gRQevgXphqIUny", "");
+INSERT INTO  Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType) VALUES("Diogo", "Fernandes", "DFER7", "diogo_carvalhofer@hotmail.com", "$2y$10$GJgXPCnkyHucmEkXAonILuyjhixgxprvNJAp0v.gRQevgXphqIUny", "", "Admin");

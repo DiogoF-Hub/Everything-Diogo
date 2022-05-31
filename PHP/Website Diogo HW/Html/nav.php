@@ -31,7 +31,7 @@ function navbar($URL, $ActivePage, $togle)
     <nav id="nav">
 
         <div>
-            <a class="aclass <?php if ($ActivePage == "home") print "active" ?>" href="Home.php"><?= $arraytest[0 + $togle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "home") print "active1" ?>" href="Home.php"><?= $arraytest[0 + $togle] ?></a>
 
             <div class="dropdown">
                 <div class="dropbtn"><?= $arraytest[1 + $togle] ?></div>
@@ -42,30 +42,30 @@ function navbar($URL, $ActivePage, $togle)
                 </div>
             </div>
 
-            <a class="aclass <?php if ($ActivePage == "products") print "active" ?>" href="Products.php"><?= $arraytest[2 + $togle] ?></a>
-            <a class="aclass <?php if ($ActivePage == "about") print "active" ?>" href="About.php"><?= $arraytest[4 + $togle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "products") print "active1" ?>" href="Products.php"><?= $arraytest[2 + $togle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "about") print "active1" ?>" href="About.php"><?= $arraytest[4 + $togle] ?></a>
         </div>
 
         <?php
         if (!isset($_SESSION["username"])) {
         ?>
-            <a class="aclass <?php if ($ActivePage == "logbutton") print "active" ?>" href="user.php"><?php if ($_SESSION["lang"] == "EN") print "Login";
+            <a class="aclass <?php if ($ActivePage == "logbutton") print "active1" ?>" href="user.php"><?php if ($_SESSION["lang"] == "EN") print "Login";
                                                                                                         else print "Entrar"; ?></a>
         <?php
         } else {
         ?>
-            <div><?php if ($_SESSION["lang"] == "EN") print "Hi,";
-                    else print "Ola," ?> <?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></div>
+            <div> <a style="color: inherit;" href="user.php"><?php if ($_SESSION["lang"] == "EN") print "Hi,";
+                                                                else print "Ola," ?> <?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></a> </div>
             <form method="POST" id="logoutform">
                 <input hidden type="text" name="logoutbutton">
-                <a name="logoutbutton" onclick="document.getElementById('logoutform').submit();" class="aclass <?php if ($ActivePage == "logbutton") print "active" ?>" href="javascript:{}"><?php if ($_SESSION["lang"] == "EN") print "Logout";
+                <a name="logoutbutton" onclick="document.getElementById('logoutform').submit();" class="aclass <?php if ($ActivePage == "logbutton") print "active1" ?>" href="javascript:{}"><?php if ($_SESSION["lang"] == "EN") print "Logout";
                                                                                                                                                                                                 else print "Sair"; ?></a>
             </form>
         <?php
         }
         ?>
 
-        <a class="aclass <?php if ($ActivePage == "chart") print "active" ?>" href="chart.php">
+        <a class="aclass <?php if ($ActivePage == "chart") print "active1" ?>" href="chart.php">
             <img src="../Images/Shopping-basket.png" alt="" width="45px" height="40px">
         </a>
 
