@@ -172,6 +172,20 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
             Password = document.getElementById("Password");
             PasswordRepeat = document.getElementById("PasswordRepeat");
 
+            if (Password.value.length > 249) {
+                Password.setCustomValidity("Passwords lenght must be less than 250 characters");
+                Password.reportValidity();
+            } else {
+                Password.setCustomValidity("");
+            }
+
+            if (PasswordRepeat.value.length > 249) {
+                PasswordRepeat.setCustomValidity("Passwords lenght must be less than 250 characters");
+                PasswordRepeat.reportValidity();
+            } else {
+                PasswordRepeat.setCustomValidity("");
+            }
+
             if (Password.value != PasswordRepeat.value) {
                 PasswordRepeat.setCustomValidity("Both Passwords must match");
                 PasswordRepeat.reportValidity();
@@ -349,7 +363,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                             <div class="tab-content pt-3">
                                                 <div class="tab-pane active">
                                                     <div class="row">
-                                                        <div class="col">
+                                                        <div class="col mb-3">
 
                                                             <div class="row">
                                                                 <div class="col">
@@ -382,7 +396,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="row">
+                                                            <div class="row mb-3">
                                                                 <div class="col">
                                                                     <div class="form-group">
                                                                         <script>
@@ -405,7 +419,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                     </div>
                                                                 </div>
                                                             </div>
-
+                                                            <div class="mb-2"><b>Address</b></div>
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group">
@@ -423,7 +437,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
 
                                                             <div class="row">
                                                                 <div class="col">
-                                                                    <div class="form-group" style="width: 379px;">
+                                                                    <div class="form-group" style="width: 48.467%;">
                                                                         <label>Address line 2</label>
                                                                         <input class="form-control" type="text" name="Addressline2" placeholder="Address line 2" value="">
                                                                     </div>
@@ -440,7 +454,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                 <div class="col">
                                                                     <div class="form-group w-50">
                                                                         <label>Postal Code</label>
-                                                                        <input class="form-control" type="text" name="Postal Code" placeholder="Postal Code" value="">
+                                                                        <input class="form-control" type="text" name="PostalCode" placeholder="Postal Code" value="">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -454,7 +468,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                 <div class="col">
                                                                     <div class="form-group">
                                                                         <label>Current Password</label>
-                                                                        <input class="form-control" type="password" placeholder="••••••">
+                                                                        <input class="form-control" type="password" placeholder="••••••" name="CurrentPassword">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -462,7 +476,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                 <div class="col">
                                                                     <div class="form-group">
                                                                         <label>New Password</label>
-                                                                        <input class="form-control" type="password" placeholder="••••••">
+                                                                        <input class="form-control" type="password" placeholder="••••••" name="PasswordEdit" id="Password" oninput="reportValidity();" required minlength="7" maxlength="249">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -470,7 +484,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                 <div class="col">
                                                                     <div class="form-group">
                                                                         <label>Confirm <span class="d-none d-xl-inline">Password</span></label>
-                                                                        <input class="form-control" type="password" placeholder="••••••">
+                                                                        <input class="form-control" type="password" placeholder="••••••" name="PasswordRepeatEdit" id="PasswordRepeat" oninput="passwordCheck();" required minlength="7" maxlength="249">
                                                                     </div>
                                                                 </div>
                                                             </div>
