@@ -350,6 +350,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                 <div class="tab-pane active">
                                                     <div class="row">
                                                         <div class="col">
+
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group">
@@ -364,6 +365,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                     </div>
                                                                 </div>
                                                             </div>
+
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group">
@@ -383,19 +385,66 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group">
+                                                                        <script>
+                                                                            function changeDateFocus() {
+                                                                                DateOfBirth = document.getElementById("DateOfBirth");
+                                                                                DateOfBirth.type = 'date';
+                                                                                DateOfBirth.placeholder = " ";
+                                                                                DateOfBirth.value = '2022-05-12'; //print date from database
+                                                                            }
+
+                                                                            function changeDateBlur() {
+                                                                                DateOfBirth1 = document.getElementById("DateOfBirth");
+                                                                                if (!DateOfBirth1.value) {
+                                                                                    DateOfBirth1.type = 'text'
+                                                                                }
+                                                                            }
+                                                                        </script>
                                                                         <label>Date of Birth</label>
-                                                                        <input id="DateOfBirth" class="form-control" type="text" placeholder="07/03/2004" value="" onfocus="(this.type= 'date')" onblur="checkdate();">
+                                                                        <input id="DateOfBirth" class="form-control" type="text" placeholder="12-May-2022" onfocus="changeDateFocus();" onblur="changeDateBlur();">
                                                                     </div>
                                                                 </div>
                                                             </div>
+
                                                             <div class="row">
-                                                                <div class="col mb-3">
+                                                                <div class="col">
                                                                     <div class="form-group">
-                                                                        <label>About</label>
-                                                                        <textarea class="form-control" rows="5" placeholder="My Bio"></textarea>
+                                                                        <label>Address line 1</label>
+                                                                        <input class="form-control" type="text" name="Addressline1" placeholder="Address line 1" value="">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="form-group w-50">
+                                                                        <label>Street Number</label>
+                                                                        <input class="form-control" type="number" name="streetNumber" placeholder="Street Number" value="">
                                                                     </div>
                                                                 </div>
                                                             </div>
+
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <div class="form-group" style="width: 379px;">
+                                                                        <label>Address line 2</label>
+                                                                        <input class="form-control" type="text" name="Addressline2" placeholder="Address line 2" value="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <div class="form-group">
+                                                                        <label>City</label>
+                                                                        <input class="form-control" type="text" name="City" placeholder="City" value="">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="form-group w-50">
+                                                                        <label>Postal Code</label>
+                                                                        <input class="form-control" type="text" name="Postal Code" placeholder="Postal Code" value="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -539,7 +588,11 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                 $pswSignup = $_POST["passwordreg"];
                 $hashPSW = password_hash($pswSignup, PASSWORD_DEFAULT);
 
-                $sqlInsert = $connection->prepare("INSERT INTO Users (FirstName, LastName, UserName, Email, UserPassword, Chart,UserType) VALUES (?, ?, ?, ?, ?, '','Normal')");
+                $todayDate = date("d-m-Y");
+
+                echo "<script>alert('" . $todayDate . "');</script>";
+
+                $sqlInsert = $connection->prepare("INSERT INTO Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth) VALUES (?, ?, ?, ?, ?, '','Normal', '" . $todayDate . "', '')");
                 $sqlInsert->bind_param("sssss", $_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $_POST["emailreg"], $hashPSW);
 
                 if ($sqlInsert->execute()) {
