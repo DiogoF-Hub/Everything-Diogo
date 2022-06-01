@@ -21,7 +21,39 @@
 
     <?php
     echo "<script>alert('" . date("d-m-Y") . "');</script>";
+
+    if (isset($_POST["mybutton"])) {
+        $alert = "";
+
+        if (!empty($_POST["1"])) {
+            $alert = $alert . " 1,";
+        }
+
+        if (!empty($_POST["2"])) {
+            $alert = $alert . " 2,";
+        }
+
+        if (!empty($_POST["3"])) {
+            $alert = $alert . " 3,";
+        }
+
+        if (!empty($_POST["4"])) {
+            $alert = $alert . " 4,";
+        }
+
+        echo "<script>alert('You wrote somethin on " . $alert . "');</script>";
+    }
     ?>
+
+    <br><br>
+
+    <form method="POST">
+        <input type="text" placeholder="1" name="1"><br>
+        <input type="text" placeholder="2" name="2"><br>
+        <input type="text" placeholder="3" name="3"><br>
+        <input type="text" placeholder="4" name="4"><br>
+        <button type="submit" name="mybutton">Go</button>
+    </form>
 </body>
 
 </html>

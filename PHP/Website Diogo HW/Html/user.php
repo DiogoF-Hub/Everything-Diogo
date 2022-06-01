@@ -192,6 +192,8 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
             } else {
                 PasswordRepeat.setCustomValidity("");
             }
+
+
         }
 
         function changeform(form) {
@@ -296,42 +298,46 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
 
         <?php } else {
         ?>
-            <link href="../Styling/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
-            <div class="container">
-                <div class="row flex-lg-nowrap">
-                    <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
-                        <div class="card p-3">
-                            <div class="e-navlist e-navlist--active-bg">
-                                <ul class="nav">
-                                    <li class="nav-item"><a class="nav-link px-2 active" href="#"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Overview</span></a></li>
-                                    <li class="nav-item"><a class="nav-link px-2" href="#" target="__blank"><i class="fa fa-fw fa-th mr-1"></i><span>CRUD</span></a></li>
-                                    <li class="nav-item"><a class="nav-link px-2" href="#" target="__blank"><i class="fa fa-fw fa-cog mr-1"></i><span>Settings</span></a></li>
-                                </ul>
+            <form method="POST">
+                <link href="../Styling/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+                <div class="container">
+                    <div class="row flex-lg-nowrap">
+
+                        <!-- php hide if not admin -->
+                        <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
+                            <div class="card p-3">
+                                <div class="e-navlist e-navlist--active-bg">
+                                    <ul class="nav">
+                                        <li class="nav-item"><a class="nav-link px-2 active" href="#"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Overview</span></a></li>
+                                        <li class="nav-item"><a class="nav-link px-2" href="#" target="__blank"><i class="fa fa-fw fa-th mr-1"></i><span>CRUD</span></a></li>
+                                        <li class="nav-item"><a class="nav-link px-2" href="#" target="__blank"><i class="fa fa-fw fa-cog mr-1"></i><span>Settings</span></a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="col">
-                        <div class="row">
-                            <div class="col mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="e-profile">
-                                            <div class="row">
-                                                <div class="col-12 col-sm-auto mb-3">
-                                                    <div class="mx-auto" style="width: 140px;">
-                                                        <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
-                                                            <!--<span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span>-->
-                                                            <img id="output" style="height: 140px; width: 140px;" src="" alt="">
+
+
+                        <div class="col">
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="e-profile">
+                                                <div class="row">
+                                                    <div class="col-12 col-sm-auto mb-3">
+                                                        <div class="mx-auto" style="width: 140px;">
+                                                            <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
+                                                                <!--<span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span>-->
+                                                                <img id="output" style="height: 140px; width: 140px;" src="" alt="">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
-                                                    <div class="text-center text-sm-left mb-2 mb-sm-0">
-                                                        <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">John Smith</h4>
-                                                        <p class="mb-0">@johnny.s</p>
-                                                        <div class="mt-2">
-                                                            <form method="POST" id="photoprofileEditForm">
+                                                    <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                                        <div class="text-center text-sm-left mb-2 mb-sm-0">
+                                                            <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">John Smith</h4>
+                                                            <p class="mb-0">@johnny.s</p>
+                                                            <div class="mt-2">
                                                                 <input id="photoprofileEdit" name="photoprofileEdit" type="file" hidden accept="image/*" onchange="loadFile(event)">
                                                                 <a href="javascript:{}" class="btn btn-primary" onclick="photoprofileEdit();">
                                                                     <i class="fa fa-fw fa-camera"></i>
@@ -346,209 +352,176 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                         }
                                                                     };
                                                                 </script>
-                                                            </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="text-center text-sm-right">
+                                                            <span class="badge badge-secondary">administrator</span>
+                                                            <div class="text-muted"><small>Joined 09 Dec 2017</small></div>
                                                         </div>
                                                     </div>
-                                                    <div class="text-center text-sm-right">
-                                                        <span class="badge badge-secondary">administrator</span>
-                                                        <div class="text-muted"><small>Joined 09 Dec 2017</small></div>
-                                                    </div>
                                                 </div>
-                                            </div>
-                                            <ul class="nav nav-tabs">
-                                                <li class="nav-item">
-                                                    <div class="active nav-link">Settings</div>
-                                                </li>
-                                            </ul>
-                                            <div class="tab-content pt-3">
-                                                <div class="tab-pane active">
-                                                    <div class="row">
-                                                        <div class="col mb-3">
+                                                <ul class="nav nav-tabs">
+                                                    <li class="nav-item"><a href="" class="active nav-link">Settings</a></li>
+                                                    <li class="nav-item"><a href="" class="active nav-link">Security</a></li>
+                                                </ul>
+                                                <div class="tab-content pt-3">
+                                                    <div class="tab-pane active">
+                                                        <div class="row">
+                                                            <div class="col mb-3">
 
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>First Name</label>
-                                                                        <input class="form-control" type="text" name="firstnameEdit" placeholder="John Smith" value="John Smith">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <div class="form-group">
+                                                                            <label>First Name</label>
+                                                                            <input class="form-control" type="text" name="firstnameEdit" placeholder="John Smith" value="John Smith">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <div class="form-group">
+                                                                            <label>Last Name</label>
+                                                                            <input class="form-control" type="text" name="lastnameEdit" placeholder="johnny.s" value="johnny.s">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Last Name</label>
-                                                                        <input class="form-control" type="text" name="lastnameEdit" placeholder="johnny.s" value="johnny.s">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
 
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Username</label>
-                                                                        <input class="form-control" type="text" name="usernameEdit" placeholder="DFER7" value="DFER7">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <div class="form-group">
+                                                                            <label>Username</label>
+                                                                            <input class="form-control" type="text" name="usernameEdit" placeholder="DFER7" value="DFER7">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Email</label>
-                                                                        <input class="form-control" type="text" placeholder="user@example.com">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <div class="form-group">
+                                                                            <label>Email</label>
+                                                                            <input class="form-control" type="text" placeholder="user@example.com">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="row mb-3">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <script>
-                                                                            function changeDateFocus() {
-                                                                                DateOfBirth = document.getElementById("DateOfBirth");
-                                                                                DateOfBirth.type = 'date';
-                                                                                DateOfBirth.placeholder = " ";
-                                                                                DateOfBirth.value = '2022-05-12'; //print date from database
-                                                                            }
-
-                                                                            function changeDateBlur() {
-                                                                                DateOfBirth1 = document.getElementById("DateOfBirth");
-                                                                                if (!DateOfBirth1.value) {
-                                                                                    DateOfBirth1.type = 'text'
+                                                                <div class="row mb-3">
+                                                                    <div class="col">
+                                                                        <div class="form-group">
+                                                                            <script>
+                                                                                function changeDateFocus() {
+                                                                                    DateOfBirth = document.getElementById("DateOfBirth");
+                                                                                    DateOfBirth.type = 'date';
+                                                                                    DateOfBirth.placeholder = " ";
+                                                                                    DateOfBirth.value = '2022-05-12'; //print date from database
                                                                                 }
-                                                                            }
-                                                                        </script>
-                                                                        <label>Date of Birth</label>
-                                                                        <input id="DateOfBirth" class="form-control" type="text" placeholder="12-May-2022" onfocus="changeDateFocus();" onblur="changeDateBlur();">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="mb-2"><b>Address</b></div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Address line 1</label>
-                                                                        <input class="form-control" type="text" name="Addressline1" placeholder="Address line 1" value="">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="form-group w-50">
-                                                                        <label>Street Number</label>
-                                                                        <input class="form-control" type="number" name="streetNumber" placeholder="Street Number" value="">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
 
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group" style="width: 48.467%;">
-                                                                        <label>Address line 2</label>
-                                                                        <input class="form-control" type="text" name="Addressline2" placeholder="Address line 2" value="">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>City</label>
-                                                                        <input class="form-control" type="text" name="City" placeholder="City" value="">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="form-group w-50">
-                                                                        <label>Postal Code</label>
-                                                                        <input class="form-control" type="text" name="PostalCode" placeholder="Postal Code" value="">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-12 col-sm-6 mb-3">
-                                                            <div class="mb-2"><b>Change Password</b></div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Current Password</label>
-                                                                        <input class="form-control" type="password" placeholder="••••••" name="CurrentPassword">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>New Password</label>
-                                                                        <input class="form-control" type="password" placeholder="••••••" name="PasswordEdit" id="Password" oninput="reportValidity();" required minlength="7" maxlength="249">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Confirm <span class="d-none d-xl-inline">Password</span></label>
-                                                                        <input class="form-control" type="password" placeholder="••••••" name="PasswordRepeatEdit" id="PasswordRepeat" oninput="passwordCheck();" required minlength="7" maxlength="249">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12 col-sm-5 offset-sm-1 mb-3">
-                                                            <div class="mb-2"><b>Keeping in Touch</b></div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <label>Email Notifications</label>
-                                                                    <div class="custom-controls-stacked px-2">
-                                                                        <div class="custom-control custom-checkbox">
-                                                                            <input type="checkbox" class="custom-control-input" id="notifications-blog" checked="">
-                                                                            <label class="custom-control-label" for="notifications-blog">Blog posts</label>
-                                                                        </div>
-                                                                        <div class="custom-control custom-checkbox">
-                                                                            <input type="checkbox" class="custom-control-input" id="notifications-news" checked="">
-                                                                            <label class="custom-control-label" for="notifications-news">Newsletter</label>
-                                                                        </div>
-                                                                        <div class="custom-control custom-checkbox">
-                                                                            <input type="checkbox" class="custom-control-input" id="notifications-offers" checked="">
-                                                                            <label class="custom-control-label" for="notifications-offers">Personal Offers</label>
+                                                                                function changeDateBlur() {
+                                                                                    DateOfBirth1 = document.getElementById("DateOfBirth");
+                                                                                    if (!DateOfBirth1.value) {
+                                                                                        DateOfBirth1.type = 'text'
+                                                                                    }
+                                                                                }
+                                                                            </script>
+                                                                            <label>Date of Birth</label>
+                                                                            <input id="DateOfBirth" class="form-control" type="text" placeholder="12-May-2022" onfocus="changeDateFocus();" onblur="changeDateBlur();">
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="mb-2"><b>Address</b></div>
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <div class="form-group">
+                                                                            <label>Address line 1</label>
+                                                                            <input class="form-control" type="text" name="Addressline1" placeholder="Address line 1" value="">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <div class="form-group w-50">
+                                                                            <label>Street Number</label>
+                                                                            <input class="form-control" type="number" name="streetNumber" placeholder="Street Number" value="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <div class="form-group" style="width: 48.467%;">
+                                                                            <label>Address line 2</label>
+                                                                            <input class="form-control" type="text" name="Addressline2" placeholder="Address line 2" value="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <div class="form-group">
+                                                                            <label>City</label>
+                                                                            <input class="form-control" type="text" name="City" placeholder="City" value="">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <div class="form-group w-50">
+                                                                            <label>Postal Code</label>
+                                                                            <input class="form-control" type="text" name="PostalCode" placeholder="Postal Code" value="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col d-flex justify-content-end">
-                                                            <button class="btn btn-primary" type="submit">Save Changes</button>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="mb-2"><b>Civility</b></div>
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <input id="mr" type="radio" name="Civility" value="mr">
+                                                                        <label for="mr">Mr.</label>
+                                                                        <input id="ms" type="radio" name="Civility" value="ms">
+                                                                        <label for="female">Ms.</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                        <div class="row">
+                                                            <div class="col d-flex justify-content-end">
+                                                                <button class="btn btn-primary" type="submit">Save Changes</button>
+                                                            </div>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3 mb-3">
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <div class="px-xl-3">
+                                                <a class="btn btn-info" onclick="document.getElementById('logoutform').submit();">
+                                                    <i class="fa fa-sign-out"></i>
+                                                    <span>Logout</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title font-weight-bold">Support</h6>
+                                            <p class="card-text">Get fast, free help from our friendly assistants.</p>
+
+                                            <div class="col">
+                                                <a class="btn btn-secondary mb-2" href="tel: +33372520234">+33 3 72 52 02 34</a>
+
+                                                <a class="btn btn-secondary mb-2" href="mailto: boutiquethionville@ldlc.com">boutiquethionville@ldlc.com</a>
+
+                                                <a class="btn btn-secondary mb-2" href="https://g.page/LDLC-Thionville?share" target="_blank">Adress</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-3 mb-3">
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <div class="px-xl-3">
-                                            <button class="btn btn-block btn-secondary">
-                                                <i class="fa fa-sign-out"></i>
-                                                <span>Logout</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h6 class="card-title font-weight-bold">Support</h6>
-                                        <p class="card-text">Get fast, free help from our friendly assistants.</p>
-                                        <button type="button" class="btn btn-primary">Contact Us</button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-
                     </div>
                 </div>
-            </div>
 
             </form>
         <?php

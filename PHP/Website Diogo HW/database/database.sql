@@ -14,6 +14,7 @@ create TABLE Users(
     ProfilePic VARCHAR(255),
     JoinDate VARCHAR(255),
     DateOfBirth VARCHAR(255),
+    Civility VARCHAR(3),
     Primary Key(UserID)
 );
 
