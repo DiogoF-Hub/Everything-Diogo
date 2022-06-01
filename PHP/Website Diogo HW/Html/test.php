@@ -47,12 +47,113 @@
 
     <br><br>
 
-    <form method="POST">
-        <input type="text" placeholder="1" name="1"><br>
-        <input type="text" placeholder="2" name="2"><br>
-        <input type="text" placeholder="3" name="3"><br>
-        <input type="text" placeholder="4" name="4"><br>
-        <button type="submit" name="mybutton">Go</button>
+    <style>
+        .container {
+            padding: 15px;
+        }
+
+        SELECT {
+            padding: 5px;
+        }
+
+        input.date {
+            width: 50px;
+            padding: 5px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        var Days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // index => month [0-11]
+        $(document).ready(function() {
+            var option = '<option selected disabled value="day">Day</option>';
+            var selectedDay = "day";
+            for (var i = 1; i <= Days[0]; i++) { //add option days
+                option += '<option value="' + i + '">' + i + '</option>';
+            }
+            $('#day').append(option);
+            $('#day').val(selectedDay);
+
+
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            var option = '<option selected disabled value="month">Month</option>';
+            var selectedMon = "month";
+            for (var i = 1; i <= 12; i++) {
+                option += '<option value="' + i + '">' + months[i - 1] + '</option>';
+            }
+            $('#month').append(option);
+            $('#month').val(selectedMon);
+
+            var d = new Date();
+            var option = '<option selected disabled value="year">Year</option>';
+            selectedYear = "year";
+            for (var i = 1930; i <= d.getFullYear(); i++) { // years start i
+                option += '<option value="' + i + '">' + i + '</option>';
+            }
+            $('#year').append(option);
+            $('#year').val(selectedYear);
+        });
+
+        function isLeapYear(year) {
+            year = parseInt(year);
+            if (year % 4 != 0) {
+                return false;
+            } else if (year % 400 == 0) {
+                return true;
+            } else if (year % 100 == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function change_year(select) {
+            if (isLeapYear($(select).val())) {
+                Days[1] = 29;
+
+            } else {
+                Days[1] = 28;
+            }
+            if ($("#month").val() == 2) {
+                var day = $('#day');
+                var val = $(day).val();
+                $(day).empty();
+                var option = '<option selected disabled value="day">Day</option>';
+                for (var i = 1; i <= Days[1]; i++) { //add option days
+                    option += '<option value="' + i + '">' + i + '</option>';
+                }
+                $(day).append(option);
+                if (val > Days[month]) {
+                    val = 1;
+                }
+                $(day).val(val);
+            }
+        }
+
+        function change_month(select) {
+            var day = $('#day');
+            var val = $(day).val();
+            $(day).empty();
+            var option = '<option selected disabled value="day">Day</option>';
+            var month = parseInt($(select).val()) - 1;
+            for (var i = 1; i <= Days[month]; i++) { //add option days
+                option += '<option value="' + i + '">' + i + '</option>';
+            }
+            $(day).append(option);
+            if (val > Days[month]) {
+                val = 1;
+            }
+            $(day).val(val);
+        }
+    </script>
+
+    <form class="container">
+        <label>birthday : <span>*</span></label>
+        <SELECT id="day" name="dd"></SELECT>
+        <SELECT id="month" name="mm" onchange="change_month(this)"></SELECT>
+        <SELECT id="year" name="yyyy" onchange="change_year(this)"></SELECT>
+    </form>
+
     </form>
 </body>
 

@@ -212,7 +212,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
     </script>
 </head>
 
-<body>
+<body onload="loadthis();">
 
     <?php
     include_once("nav.php");
@@ -249,13 +249,13 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                 <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
 
                 <div class="form-floating">
-                    <input name="firstnamereg" type="text" class="form-control" id="firstname" placeholder="First name" required pattern="[\p{L}\s]+" title="First name must contain only letters" oninput="reportValidity();" minlength="1" maxlength="50">
+                    <input name="firstnamereg" type="text" class="form-control" id="firstname" placeholder="First name" required pattern="[\p{L}\s]+" title="First name must contain only letters" oninput="reportValidity();" minlength="1" maxlength="100">
                     <label for="floatingInput">First name</label>
                 </div>
 
 
                 <div class="form-floating">
-                    <input name="lastnamereg" type="text" class="form-control" id="lastname" placeholder="Last name" required pattern="[\p{L}\s]+" title="Last name must contain only letters" oninput="reportValidity()" minlength="1" maxlength="50">
+                    <input name="lastnamereg" type="text" class="form-control" id="lastname" placeholder="Last name" required pattern="[\p{L}\s]+" title="Last name must contain only letters" oninput="reportValidity()" minlength="1" maxlength="100">
                     <label for="floatingInput">Last name</label>
                 </div>
 
@@ -298,74 +298,144 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
 
         <?php } else {
         ?>
-            <form method="POST">
-                <link href="../Styling/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
-                <div class="container">
-                    <div class="row flex-lg-nowrap">
+            <script>
+                function loadthis() {
+                    daySelect = document.getElementById("daySelect");
 
-                        <!-- php hide if not admin -->
-                        <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
-                            <div class="card p-3">
-                                <div class="e-navlist e-navlist--active-bg">
-                                    <ul class="nav">
-                                        <li class="nav-item"><a class="nav-link px-2 active" href="#"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Overview</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-2" href="#" target="__blank"><i class="fa fa-fw fa-th mr-1"></i><span>CRUD</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-2" href="#" target="__blank"><i class="fa fa-fw fa-cog mr-1"></i><span>Settings</span></a></li>
-                                    </ul>
-                                </div>
+                    if (daySelect) {
+
+                        for (let i = 1; i <= 31; i++) {
+                            var myoption = document.createElement("option");
+                            myoption.value = i;
+                            myoption.text = i;
+                            daySelect.appendChild(myoption);
+                        }
+                    }
+
+                    monthSelect = document.getElementById("monthSelect");
+
+                    if (monthSelect) {
+
+                        var months = {
+                            "January": 1,
+                            "February": 2,
+                            "March": 3,
+                            "April": 4,
+                            "May": 5,
+                            "June": 6,
+                            "July": 7,
+                            "August": 8,
+                            "September": 9,
+                            "October": 10,
+                            "November": 11,
+                            "December": 12,
+                        };
+
+                        for (const key in months) {
+                            const value = months[key];
+
+                            var myoption2 = document.createElement("option");
+                            myoption2.value = value;
+                            myoption2.text = key;
+                            monthSelect.appendChild(myoption2);
+                        }
+
+                        monthSelect.addEventListener('change', function() {
+
+                        });
+                    }
+
+                }
+            </script>
+            <link href="../Styling/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+            <div class="container">
+                <div class="row flex-lg-nowrap">
+
+                    <!-- php hide if not admin -->
+                    <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
+                        <div class="card p-3">
+                            <div class="e-navlist e-navlist--active-bg">
+                                <ul class="nav">
+                                    <li class="nav-item"><a class="nav-link px-2 active" href="javascript:{}"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Overview</span></a></li>
+                                    <li class="nav-item"><a class="nav-link px-2" href="javascript:{}" target="__blank"><i class="fa fa-fw fa-th mr-1"></i><span>CRUD</span></a></li>
+                                    <li class="nav-item"><a class="nav-link px-2" href="javascript:{}" target="__blank"><i class="fa fa-fw fa-cog mr-1"></i><span>Settings</span></a></li>
+                                </ul>
                             </div>
                         </div>
+                    </div>
 
 
 
-                        <div class="col">
-                            <div class="row">
-                                <div class="col mb-3">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="e-profile">
-                                                <div class="row">
-                                                    <div class="col-12 col-sm-auto mb-3">
-                                                        <div class="mx-auto" style="width: 140px;">
-                                                            <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
-                                                                <!--<span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span>-->
-                                                                <img id="output" style="height: 140px; width: 140px;" src="" alt="">
-                                                            </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="e-profile">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-auto mb-3">
+                                                    <div class="mx-auto" style="width: 140px;">
+                                                        <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
+                                                            <!--<span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span>-->
+                                                            <img id="output" style="height: 140px; width: 140px;" src="" alt="">
                                                         </div>
                                                     </div>
-                                                    <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
-                                                        <div class="text-center text-sm-left mb-2 mb-sm-0">
-                                                            <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">John Smith</h4>
-                                                            <p class="mb-0">@johnny.s</p>
-                                                            <div class="mt-2">
+                                                </div>
+                                                <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                                    <div class="text-center text-sm-left mb-2 mb-sm-0">
+                                                        <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">John Smith</h4>
+                                                        <p class="mb-0">@johnny.s</p>
+                                                        <div class="mt-2">
+                                                            <form method="POST" id="changephotoForm">
                                                                 <input id="photoprofileEdit" name="photoprofileEdit" type="file" hidden accept="image/*" onchange="loadFile(event)">
                                                                 <a href="javascript:{}" class="btn btn-primary" onclick="photoprofileEdit();">
                                                                     <i class="fa fa-fw fa-camera"></i>
                                                                     <span>Change Photo</span>
                                                                 </a>
-                                                                <script>
-                                                                    var loadFile = function(event) {
-                                                                        var output = document.getElementById('output');
-                                                                        output.src = URL.createObjectURL(event.target.files[0]);
-                                                                        output.onload = function() {
-                                                                            URL.revokeObjectURL(output.src) // free memory
-                                                                        }
-                                                                    };
-                                                                </script>
-                                                            </div>
-                                                        </div>
-                                                        <div class="text-center text-sm-right">
-                                                            <span class="badge badge-secondary">administrator</span>
-                                                            <div class="text-muted"><small>Joined 09 Dec 2017</small></div>
+                                                            </form>
+                                                            <script>
+                                                                var loadFile = function(event) {
+                                                                    var output = document.getElementById('output');
+                                                                    output.src = URL.createObjectURL(event.target.files[0]);
+                                                                    output.onload = function() {
+                                                                        URL.revokeObjectURL(output.src) // free memory
+                                                                    }
+                                                                };
+                                                            </script>
                                                         </div>
                                                     </div>
+                                                    <div class="text-center text-sm-right">
+                                                        <span class="badge badge-secondary">administrator</span>
+                                                        <div class="text-muted"><small>Joined 09 Dec 2017</small></div>
+                                                    </div>
                                                 </div>
-                                                <ul class="nav nav-tabs">
-                                                    <li class="nav-item"><a href="" class="active nav-link">Settings</a></li>
-                                                    <li class="nav-item"><a href="" class="active nav-link">Security</a></li>
-                                                </ul>
-                                                <div class="tab-content pt-3">
-                                                    <div class="tab-pane active">
+                                            </div>
+                                            <ul class="nav nav-tabs">
+                                                <script>
+                                                    function changeNavItem(tab) {
+                                                        if (tab == "settings") {
+                                                            document.getElementById("securityTab").setAttribute("hidden", "hidden");
+                                                            document.getElementById("settingsTab").removeAttribute("hidden", "hidden");
+
+                                                            document.getElementById("security-link").classList.remove('active');
+                                                            document.getElementById("settings-link").classList.add('active');
+                                                        }
+
+                                                        if (tab == "security") {
+                                                            document.getElementById("settingsTab").setAttribute("hidden", "hidden");
+                                                            document.getElementById("securityTab").removeAttribute("hidden", "hidden");
+
+                                                            document.getElementById("settings-link").classList.remove('active');
+                                                            document.getElementById("security-link").classList.add('active');
+                                                        }
+                                                    }
+                                                </script>
+                                                <li class="nav-item"><a id="settings-link" href="javascript:{}" class="active nav-link" onclick="changeNavItem('settings');">Settings</a></li>
+                                                <li class="nav-item"><a id="security-link" href="javascript:{}" class="nav-link" onclick="changeNavItem('security');">Security</a></li>
+                                            </ul>
+                                            <div class="tab-content pt-3">
+                                                <div id="settingsTab" class="tab-pane active">
+                                                    <form method="POST">
                                                         <div class="row">
                                                             <div class="col mb-3">
 
@@ -373,13 +443,13 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                     <div class="col">
                                                                         <div class="form-group">
                                                                             <label>First Name</label>
-                                                                            <input class="form-control" type="text" name="firstnameEdit" placeholder="John Smith" value="John Smith">
+                                                                            <input id="firstnameEdit" class="form-control" type="text" name="firstnameEdit" placeholder="John Smith" value="John Smith" pattern="[\p{L}\s]+" title="First name must contain only letters" oninput="reportValidity();" minlength="1" maxlength="100" required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col">
                                                                         <div class="form-group">
                                                                             <label>Last Name</label>
-                                                                            <input class="form-control" type="text" name="lastnameEdit" placeholder="johnny.s" value="johnny.s">
+                                                                            <input id="lastnameEdit" class="form-control" type="text" name="lastnameEdit" placeholder="johnny.s" value="johnny.s" pattern="[\p{L}\s]+" title="First name must contain only letters" oninput="reportValidity();" minlength="1" maxlength="100" required>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -388,7 +458,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                     <div class="col">
                                                                         <div class="form-group">
                                                                             <label>Username</label>
-                                                                            <input class="form-control" type="text" name="usernameEdit" placeholder="DFER7" value="DFER7">
+                                                                            <input disabled class="form-control" type="text" placeholder="DFER7">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -396,45 +466,57 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                     <div class="col">
                                                                         <div class="form-group">
                                                                             <label>Email</label>
-                                                                            <input class="form-control" type="text" placeholder="user@example.com">
+                                                                            <input id="emailEdit" class="form-control" type="text" name="emailEdit" placeholder="user@example.com" required pattern="[^@\s]+@[^@\s]+" title="Invalid email address" oninput="reportValidity();" minlength="1" maxlength="320">
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="row mb-3">
-                                                                    <div class="col">
-                                                                        <div class="form-group">
-                                                                            <script>
-                                                                                function changeDateFocus() {
-                                                                                    DateOfBirth = document.getElementById("DateOfBirth");
-                                                                                    DateOfBirth.type = 'date';
-                                                                                    DateOfBirth.placeholder = " ";
-                                                                                    DateOfBirth.value = '2022-05-12'; //print date from database
-                                                                                }
 
-                                                                                function changeDateBlur() {
-                                                                                    DateOfBirth1 = document.getElementById("DateOfBirth");
-                                                                                    if (!DateOfBirth1.value) {
-                                                                                        DateOfBirth1.type = 'text'
-                                                                                    }
-                                                                                }
-                                                                            </script>
-                                                                            <label>Date of Birth</label>
-                                                                            <input id="DateOfBirth" class="form-control" type="text" placeholder="12-May-2022" onfocus="changeDateFocus();" onblur="changeDateBlur();">
-                                                                        </div>
+
+                                                                <div class="mb-2"><b>Date of Birth</b></div>
+                                                                <div class="row">
+
+
+                                                                    <div class="col-md-3">
+
+                                                                        <select class="form-select" name="day" id="daySelect">
+                                                                            <option value="-1" disabled selected>Day</option>
+                                                                        </select>
+
                                                                     </div>
+
+                                                                    <div class="col-md-3">
+
+                                                                        <select class="form-select" name="month" id="monthSelect">
+                                                                            <option value="-1" disabled selected>Month</option>
+                                                                        </select>
+
+                                                                    </div>
+
+                                                                    <div class="col-md-3">
+
+                                                                        <select class="form-select" name="year" id="yearSelect">
+                                                                            <option value="-1" disabled selected>Year</option>
+                                                                            <option value="2022">2022</option>
+                                                                        </select>
+
+                                                                    </div>
+
+
                                                                 </div>
+
+
                                                                 <div class="mb-2"><b>Address</b></div>
                                                                 <div class="row">
                                                                     <div class="col">
                                                                         <div class="form-group">
                                                                             <label>Address line 1</label>
-                                                                            <input class="form-control" type="text" name="Addressline1" placeholder="Address line 1" value="">
+                                                                            <input id="Addressline1" class="form-control" type="text" name="Addressline1" placeholder="Address line 1" value="">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col">
                                                                         <div class="form-group w-50">
                                                                             <label>Street Number</label>
-                                                                            <input class="form-control" type="number" name="streetNumber" placeholder="Street Number" value="">
+                                                                            <input id="StreetNumber" class="form-control" type="number" name="StreetNumber" placeholder="Street Number" value="">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -443,7 +525,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                     <div class="col">
                                                                         <div class="form-group" style="width: 48.467%;">
                                                                             <label>Address line 2</label>
-                                                                            <input class="form-control" type="text" name="Addressline2" placeholder="Address line 2" value="">
+                                                                            <input id="Addressline2" class="form-control" type="text" name="Addressline2" placeholder="Address line 2" value="">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -452,13 +534,13 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                     <div class="col">
                                                                         <div class="form-group">
                                                                             <label>City</label>
-                                                                            <input class="form-control" type="text" name="City" placeholder="City" value="">
+                                                                            <input id="City" class="form-control" type="text" name="City" placeholder="City" value="">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col">
                                                                         <div class="form-group w-50">
                                                                             <label>Postal Code</label>
-                                                                            <input class="form-control" type="text" name="PostalCode" placeholder="Postal Code" value="">
+                                                                            <input id="PostalCode" class="form-control" type="text" name="PostalCode" placeholder="Postal Code" value="">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -478,52 +560,131 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                        <script>
+                                                            function submitSettings() {
+                                                                if (document.getElementById("photoprofileEdit").files.length != 0) {
+                                                                    document.getElementById("changephotoForm").submit();
+                                                                }
+
+                                                                firstnameEdit = document.getElementById("firstnameEdit");
+                                                                lastnameEdit = document.getElementById("lastnameEdit");
+                                                                emailEdit = document.getElementById("emailEdit");
+                                                                DateOfBirth = document.getElementById("DateOfBirth");
+                                                                Addressline1 = document.getElementById("Addressline1");
+                                                                StreetNumber = document.getElementById("StreetNumber");
+                                                                Addressline2 = document.getElementById("Addressline2");
+                                                                City = document.getElementById("City");
+                                                                PostalCode = document.getElementById("PostalCode");
+                                                                Civility = document.getElementsByName("Civility");
+
+
+
+                                                                if (firstnameEdit.value.length < 1 || lastnameEdit.value.length < 1) {
+
+                                                                }
+
+
+
+                                                                var CivilityValid = false;
+
+                                                                var i = 0;
+                                                                while (!CivilityValid && i < Civility.length) {
+                                                                    if (Civility[i].checked) CivilityValid = true;
+                                                                    i++;
+                                                                }
+                                                            }
+                                                        </script>
                                                         <div class="row">
                                                             <div class="col d-flex justify-content-end">
-                                                                <button class="btn btn-primary" type="submit">Save Changes</button>
+                                                                <a href="javascript:{}" class="btn btn-primary" onclick="submitSettings();">Save Changes</a>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+
+
+
+                                                <div id="securityTab" class="tab-pane active" hidden>
+                                                    <form method="POST">
+                                                        <div class="col-12 col-sm-6 mb-3">
+                                                            <div class="mb-2"><b>Change Password</b></div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <div class="form-group">
+                                                                        <label>Current Password</label>
+                                                                        <input class="form-control" type="password" placeholder="••••••" required name="CurrentPassword" id="CurretPassword" minlength="7" maxlength="249">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <div class="form-group">
+                                                                        <label>New Password</label>
+                                                                        <input class="form-control" type="password" placeholder="••••••" name="PasswordEdit" id="Password" oninput="reportValidity();" required minlength="7" maxlength="249">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <div class="form-group">
+                                                                        <label>Confirm <span class="d-none d-xl-inline">Password</span></label>
+                                                                        <input class="form-control" type="password" placeholder="••••••" name="PasswordRepeatEdit" id="PasswordRepeat" oninput="passwordCheck();" required minlength="7" maxlength="249">
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
 
-                                                    </div>
+                                                        <div class="row">
+                                                            <div class="col d-flex justify-content-end">
+                                                                <button class="btn btn-primary" type="submit">Update password</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="col-12 col-md-3 mb-3">
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="px-xl-3">
-                                                <a class="btn btn-info" onclick="document.getElementById('logoutform').submit();">
-                                                    <i class="fa fa-sign-out"></i>
-                                                    <span>Logout</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h6 class="card-title font-weight-bold">Support</h6>
-                                            <p class="card-text">Get fast, free help from our friendly assistants.</p>
 
-                                            <div class="col">
-                                                <a class="btn btn-secondary mb-2" href="tel: +33372520234">+33 3 72 52 02 34</a>
 
-                                                <a class="btn btn-secondary mb-2" href="mailto: boutiquethionville@ldlc.com">boutiquethionville@ldlc.com</a>
 
-                                                <a class="btn btn-secondary mb-2" href="https://g.page/LDLC-Thionville?share" target="_blank">Adress</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
+                            <div class="col-12 col-md-3 mb-3">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="px-xl-3">
+                                            <a class="btn btn-info" onclick="document.getElementById('logoutform').submit();">
+                                                <i class="fa fa-sign-out"></i>
+                                                <span>Logout</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="card-title font-weight-bold">Support</h6>
+                                        <p class="card-text">Get fast, free help from our friendly assistants.</p>
+
+                                        <div class="col">
+                                            <a class="btn btn-secondary mb-2" href="tel: +33372520234">+33 3 72 52 02 34</a>
+
+                                            <a class="btn btn-secondary mb-2" href="mailto: boutiquethionville@ldlc.com">boutiquethionville@ldlc.com</a>
+
+                                            <a class="btn btn-secondary mb-2" href="https://g.page/LDLC-Thionville?share" target="_blank">Adress</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
+            </div>
 
-            </form>
         <?php
         } ?>
 
@@ -575,11 +736,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
                 $pswSignup = $_POST["passwordreg"];
                 $hashPSW = password_hash($pswSignup, PASSWORD_DEFAULT);
 
-                $todayDate = date("d-m-Y");
-
-                echo "<script>alert('" . $todayDate . "');</script>";
-
-                $sqlInsert = $connection->prepare("INSERT INTO Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth) VALUES (?, ?, ?, ?, ?, '','Normal', '" . $todayDate . "', '')");
+                $sqlInsert = $connection->prepare("INSERT INTO Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility) VALUES (?, ?, ?, ?, ?, '','Normal', '" .  date("d-m-Y") . "', '', '', '')");
                 $sqlInsert->bind_param("sssss", $_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $_POST["emailreg"], $hashPSW);
 
                 if ($sqlInsert->execute()) {

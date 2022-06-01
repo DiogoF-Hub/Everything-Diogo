@@ -220,4 +220,4 @@ INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDe
 
 
 
-INSERT INTO  Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic) VALUES("Diogo", "Fernandes", "DFER7", "diogo_carvalhofer@hotmail.com", "$2y$10$GJgXPCnkyHucmEkXAonILuyjhixgxprvNJAp0v.gRQevgXphqIUny", "", "Admin", "19-09-2021", "", "");
+INSERT INTO  Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility) VALUES("Diogo", "Fernandes", "DFER7", "diogo_carvalhofer@hotmail.com", "$2y$10$GJgXPCnkyHucmEkXAonILuyjhixgxprvNJAp0v.gRQevgXphqIUny", "", "Admin", "19-09-2021", "", "", "");
