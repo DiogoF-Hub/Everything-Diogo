@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+mysqli_report(MYSQLI_REPORT_OFF);
+//error_reporting(E_ERROR);
 
 $host = "localhost";
 $user = "root";

@@ -12,22 +12,28 @@ create TABLE Users(
     Chart VARCHAR(255),
     UserType VARCHAR(50),
     ProfilePic VARCHAR(255),
-    JoinDate VARCHAR(255),
-    DateOfBirth VARCHAR(255),
+    JoinDate DATE,
+    DateOfBirth DATE,
     Civility VARCHAR(3),
-    Primary Key(UserID)
-);
-
-CREATE TABLE Address (
-    UserName VARCHAR(255),
-    AddressID INT NOT NULL AUTO_INCREMENT,
     FirstLineAddress VARCHAR(255),
+    HouseNumber INT,
     SecondLineAddress VARCHAR(255),
     PostalCode VARCHAR(50),
     City VARCHAR(255),
-    PRIMARY KEY(AddressID),
-    FOREIGN KEY(UserName) REFERENCES Users(UserName)
+    Country VARCHAR(255),
+    Primary Key(UserID)
 );
+
+
+CREATE TABLE AvailableCountries (
+    countryId int NOT NULL AUTO_INCREMENT,
+    Country VARCHAR(255),
+    PRIMARY KEY(countryId)
+);
+
+INSERT INTO AvailableCountries (Country) VALUES("France");
+INSERT INTO AvailableCountries (Country) VALUES("Luxembourg");
+INSERT INTO AvailableCountries (Country) VALUES("Germany");
 
 CREATE TABLE Orders(
     OrderID INT NOT NULL AUTO_INCREMENT,
@@ -220,4 +226,4 @@ INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDe
 
 
 
-INSERT INTO  Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility) VALUES("Diogo", "Fernandes", "DFER7", "diogo_carvalhofer@hotmail.com", "$2y$10$GJgXPCnkyHucmEkXAonILuyjhixgxprvNJAp0v.gRQevgXphqIUny", "", "Admin", "19-09-2021", "", "", "");
+INSERT INTO  Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country) VALUES("Diogo", "Fernandes", "DFER7", "diogo_carvalhofer@hotmail.com", "$2y$10$GJgXPCnkyHucmEkXAonILuyjhixgxprvNJAp0v.gRQevgXphqIUny", "", "Admin", STR_TO_DATE('19, 9, 2021', '%d, %m, %Y'), STR_TO_DATE('07, 3, 2004', '%d, %m, %Y'), "", "mr", "", "", "", "", "", "");

@@ -5,47 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' type='text/css' media='screen' href='../Styling/MyStylesEN.css?t<?= time(); ?>'>
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src='../bootstrap/js/bootstrap.bundle.min.js'></script>
     <title>Document</title>
-    <script>
-        function alert2() {
-            DateOfBirth = document.getElementById("DateOfBirth").value;
-            alert(DateOfBirth);
-        }
-    </script>
-    <script></script>
 </head>
 
 <body>
-    <input id="DateOfBirth" class="form-control" type="date" value="">
-    <button onclick="alert2();">go</button>
-
-    <?php
-    //echo "<script>alert('" . date("d-m-Y") . "');</script>";
-
-    if (isset($_POST["mybutton"])) {
-        $alert = "";
-
-        if (!empty($_POST["1"])) {
-            $alert = $alert . " 1,";
-        }
-
-        if (!empty($_POST["2"])) {
-            $alert = $alert . " 2,";
-        }
-
-        if (!empty($_POST["3"])) {
-            $alert = $alert . " 3,";
-        }
-
-        if (!empty($_POST["4"])) {
-            $alert = $alert . " 4,";
-        }
-
-        echo "<script>alert('You wrote somethin on " . $alert . "');</script>";
-    }
-    ?>
-
-    <br><br>
 
     <style>
         .container {
@@ -65,7 +31,7 @@
 
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../jquery/jquery-3.6.0.min.js"></script>
     <script>
         var Days = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // index => month [0-11]
         $(document).ready(function() {
@@ -134,17 +100,13 @@
             $(day).append(option);
             if (val > Days[month]) {
                 dayOption = $('#dayOption');
-                dayOption.removeAttr("disabled", false);
-                dayOption.removeAttr("selected", false);
+                dayOption.removeAttr("disabled");
+                dayOption.removeAttr("selected");
 
-                dayOption.attr("selected", true);
-                dayOption.attr("disabled", true);
+                dayOption.attr("selected", "selected");
+                dayOption.attr("disabled", "selected");
 
-                day.get(0).setCustomValidity("Wrong day");
-                day.get(0).reportValidity();
-            } else {
-                day.get(0).setCustomValidity("");
-                day.get(0).reportValidity();
+                alert("Wrong day");
             }
         }
 
@@ -173,52 +135,75 @@
                 $(day2).append(option);
 
                 if (val > Days[1]) {
-                    day2.get(0).setCustomValidity("Wrong day");
-                    day2.get(0).reportValidity();
-
                     dayOption = $('#dayOption');
-                    dayOption.removeAttr("disabled", false);
-                    dayOption.removeAttr("selected", false);
+                    dayOption.removeAttr("disabled");
+                    dayOption.removeAttr("selected");
 
-                    dayOption.attr("selected", true);
-                    dayOption.attr("disabled", true);
+                    dayOption.attr("selected", "selected");
+                    dayOption.attr("disabled", "selected");
 
-                } else {
-                    day2.get(0).setCustomValidity("");
-                    day2.get(0).reportValidity();
+                    alert("Wrong day");
                 }
 
 
             }
         }
     </script>
-
     <form class="container">
-        <SELECT id="day" name="dd"></SELECT>
-        <SELECT id="month" name="mm" onchange="change_month(this)"></SELECT>
-        <SELECT id="year" name="yyyy" onchange="change_year(this)"></SELECT>
+        <div class="row">
+            <div class="col">
+                <span class="form-group">
+                    <select class="select2" id="day" name="dd"></select>
+                </span>
+            </div>
+
+            <div class="col">
+                <span class="form-group">
+                    <select class="select2" id="month" name="mm" onchange="change_month(this)"></select>
+                </span>
+            </div>
+
+            <div class="col">
+                <span class="form-group">
+                    <select class="select2" id="year" name="yyyy" onchange="change_year(this)"></select>
+                </span>
+            </div>
+        </div>
     </form>
 
     <br><br>
-
     <script>
-        function testselectReport() {
-            testselect = document.getElementById("testselect");
+        function submitSettings() {
+            document.getElementById('myform').submit()
 
-            if (testselect.value == "3") {
-                testselect.setCustomValidity("Wrong awnser");
-                testselect.reportValidity();
-            } else {
-                testselect.setCustomValidity("");
+            input1 = document.getElementById("input1").value;
+            if (input1.length == 0) {
+                alert("input1 is empty");
             }
         }
     </script>
-    <select name="" id="testselect" onchange="testselectReport();">
-        <option selected disabled value="-1">Choose</option>
-        <option value="1">good awnser</option>
-        <option value="2">good awnser</option>
-        <option value="3">wrong</option>
-    </select>
+
+    <form method="POST" id="myform">
+        <div>myInput1 <input type="text" name="input1" id="input1"></div>
+        <div>myInput2 <input type="text" name="input2"></div>
+        <div>myInput3 <input type="text" name="input3"></div>
+        <div>myInput4 <input type="text" name="input4"></div>
+        <a href="javascript:{}" onclick="submitSettings();">Save Changes</a>
+        <input type="hidden" name="myA" value="form">
+    </form>
+
+    <?php
+    (int)$ThisYear = date("Y");
+    print "<script>alert('" . $ThisYear . "');</script>";
+    if (isset($_POST["myA"])) {
+        print "nice";
+        print "<script>alert('" . $_POST["input1"] . "');</script>";
+        print "<script>alert('" . $_POST["input2"] . "');</script>";
+        print "<script>alert('" . $_POST["input3"] . "');</script>";
+        print "<script>alert('" . $_POST["input4"] . "');</script>";
+    }
+    ?>
+
 </body>
 
 </html>
