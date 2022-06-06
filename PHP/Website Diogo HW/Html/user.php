@@ -511,7 +511,6 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
             </form>
 
         <?php } else {
-
             $sqlStatement2 = $connection->prepare("SELECT FirstName, LastName, UserName, Email, UserType, ProfilePic, DATE_FORMAT(JoinDate, '%e %b %Y') AS DateJoin, DATE_FORMAT(DateOfBirth, '%e') AS DayBirth, DATE_FORMAT(DateOfBirth, '%c') AS MonthBirth, DATE_FORMAT(DateOfBirth, '%Y') AS YearBirth, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country from Users WHERE UserName=?");
             $sqlStatement2->bind_param("s", $_SESSION["username"]);
             $sqlStatement2->execute();
@@ -834,7 +833,7 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                                 <div class="col">
                                                                     <div class="form-group">
                                                                         <label>Current Password</label>
-                                                                        <input class="form-control" type="password" placeholder="••••••" required name="CurrentPassword" id="CurrentPassword" minlength="7" maxlength="249">
+                                                                        <input class="form-control" type="password" placeholder="••••••" required name="CurrentPassword" oninput="reportValidity();" required id="CurrentPassword" minlength="7" maxlength="249">
                                                                     </div>
                                                                 </div>
                                                             </div>
