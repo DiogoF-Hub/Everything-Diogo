@@ -122,6 +122,7 @@ if (isset($_POST["firstnameEdit"]) && $_SESSION["userloggedIn"] == true) {
         $sqlUpdate = $connection->prepare("UPDATE Users SET FirstName=? WHERE UserName=?");
         $sqlUpdate->bind_param("ss", $_POST["firstnameEdit"], $_SESSION["username"]);
         $sqlUpdate->execute();
+        $_SESSION["firstname"] = $_POST["firstnameEdit"];
     }
 
 
@@ -130,6 +131,7 @@ if (isset($_POST["firstnameEdit"]) && $_SESSION["userloggedIn"] == true) {
         $sqlUpdate1 = $connection->prepare("UPDATE Users SET LastName=? WHERE UserName=?");
         $sqlUpdate1->bind_param("ss", $_POST["lastnameEdit"], $_SESSION["username"]);
         $sqlUpdate1->execute();
+        $_SESSION["lastname"] = $_POST["lastnameEdit"];
     }
 
 
