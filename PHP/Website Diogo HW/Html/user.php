@@ -14,14 +14,17 @@ $regexEmail = "/[^@\s]+@[^@\s]/";
 if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
 
     if (!preg_match($regexUserName, $_POST["usernamelogin"])) {
+        header("Refresh:0");
         die();
     }
     if (strlen($_POST["usernamelogin"]) < 1 || strlen($_POST["usernamelogin"]) > 50) {
+        header("Refresh:0");
         die();
     }
 
 
     if (strlen($_POST["passwordlogin"]) < 7 || strlen($_POST["passwordlogin"]) > 249) {
+        header("Refresh:0");
         die();
     }
 
@@ -47,13 +50,81 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
             }
 
             $_SESSION["userloggedIn"] = true;
-            echo '<script>window.location.href="Home.php"</script>'; //This will redirect me to home to whatever language im in
+            header("Location: Home.php");
+            die();
+            //echo '<script>window.location.href="Home.php"</script>'; //This will redirect me to home to whatever language im in
 
         } else {
             $wrongUser = 1;
+            //print "<script>alert('User already exists');</script>";
         }
     } else {
         $wrongUser = 1;
+    }
+}
+
+
+
+if (isset($_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $_POST["emailreg"], $_POST["passwordreg"], $_POST["passwordregRepeat"])) {
+
+    if (!preg_match($regexFirstANDLastname, $_POST["firstnamereg"])) {
+        die();
+    }
+    if (strlen($_POST["firstnamereg"]) < 1 || strlen($_POST["firstnamereg"]) > 50) {
+        die();
+    }
+
+
+    if (!preg_match($regexUserName, $_POST["usernamereg"])) {
+        die();
+    }
+    if (strlen($_POST["usernamereg"]) < 1 || strlen($_POST["usernamereg"]) > 25) {
+        die();
+    }
+
+
+    if (!preg_match($regexEmail, $_POST["emailreg"])) {
+        die();
+    }
+    $emailExploded = explode("@", $_POST["emailreg"]);
+    if (strlen($emailExploded[0]) > 64 || strlen($emailExploded[1]) > 255) {
+        die();
+    }
+
+
+    if ($_POST["passwordreg"] !== $_POST["passwordregRepeat"]) {
+        die();
+    }
+    if (strlen($_POST["passwordreg"]) < 7 || strlen($_POST["passwordreg"]) > 249) {
+        die();
+    }
+
+
+    $sqlStatement = $connection->prepare("SELECT * from Users WHERE UserName=?");
+    $sqlStatement->bind_param("s", $_POST["usernamereg"]);
+    $sqlStatement->execute();
+    $result = $sqlStatement->get_result();
+    $userexists = $result->num_rows;
+
+
+    if ($userexists == 0) {
+        $pswSignup = $_POST["passwordreg"];
+        $hashPSW = password_hash($pswSignup, PASSWORD_DEFAULT);
+
+        $sqlInsert = $connection->prepare("INSERT INTO Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country) VALUES (?, ?, ?, ?, ?, '','Normal', current_date(), '', '', '', '', '', '', '', '', '')");
+        $sqlInsert->bind_param("sssss", $_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $_POST["emailreg"], $hashPSW);
+
+        if ($sqlInsert->execute()) {
+            $_SESSION["username"] = $_POST["usernamereg"];
+            $_SESSION["firstname"] = $_POST["firstnamereg"];
+            $_SESSION["lastname"] = $_POST["lastnamereg"];
+            $_SESSION["Chart"] = [];
+            $_SESSION["userloggedIn"] = true;
+
+            header("Location: Home.php");
+            die();
+            //echo '<script>window.location.href="Home.php"</script>';
+        }
     }
 }
 
@@ -284,8 +355,8 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' type='text/css' media='screen' href='../Styling/MyStylesEN.css?t<?= time(); ?>'>
-    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src='../bootstrap/js/bootstrap.bundle.min.js'></script>
+    <link href="../Styling/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src='../Styling/bootstrap/js/bootstrap.bundle.min.js'></script>
     <script src="../jquery/jquery-3.6.0.min.js"></script>
     <title>Acount page</title>
     <script>
@@ -440,23 +511,34 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                 <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
                 <div class="form-floating">
-                    <input name="usernamelogin" type="text" class="form-control" id="floatingInput" placeholder="User name" required pattern="[a-zA-Z0-9-_-]+" title="User Name must only contain 'A-Z', 'a-z', '0-9', '-', or '_'" oninput="reportValidity();" minlength="1" maxlength="25">
+                    <input name="usernamelogin" type="text" class="form-control" id="UserSignIn" placeholder="User name" required pattern="[a-zA-Z0-9-_-]+" title="User Name must only contain 'A-Z', 'a-z', '0-9', '-', or '_'" oninput="reportValidity();" minlength="1" maxlength="25">
                     <label for="floatingInput">User name</label>
                 </div>
                 <div class="form-floating">
-                    <input name="passwordlogin" type="password" class="form-control" id="floatingPassword" placeholder="Password" oninput="reportValidity();" required minlength="7">
+                    <input name="passwordlogin" type="password" class="form-control" id="pswSignIn" placeholder="Password" oninput="reportValidity();" required minlength="7">
                     <label for="floatingPassword">Password</label>
                 </div>
 
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+                <a class="w-100 btn btn-lg btn-primary" href="javascript:{}" onclick="checklogin();">Sign in</a>
 
-                <a id="createaccA" class="w-75 btn btn changeform" href='#' onclick="changeform('SignUp');">Create Account</a>
+                <a id="createaccA" class="w-75 btn btn changeform" href="javascript:{}" onclick="changeform('SignUp');">Create Account</a>
 
                 <p class="mt-5 mb-3 text-muted">&copy; 2019–2022</p>
             </form>
 
+            <script>
+                function checklogin() {
+                    UserSignIn = document.getElementById("UserSignIn");
+                    pswSignIn = document.getElementById("pswSignIn");
 
-
+                    if (UserSignIn.value.trim().length != 0 && pswSignIn.value.trim().length != 0) {
+                        SignIn = document.getElementById("SignIn").submit();
+                    } else {
+                        UserSignIn.reportValidity();
+                        pswSignIn.reportValidity
+                    }
+                }
+            </script>
 
 
             <form class="form-signup" method="POST" id="SignUp" hidden>
@@ -919,70 +1001,6 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
 
         <?php
         } ?>
-
-
-        <?php
-        if (isset($_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $_POST["emailreg"], $_POST["passwordreg"], $_POST["passwordregRepeat"])) {
-
-            if (!preg_match($regexFirstANDLastname, $_POST["firstnamereg"])) {
-                die();
-            }
-            if (strlen($_POST["firstnamereg"]) < 1 || strlen($_POST["firstnamereg"]) > 50) {
-                die();
-            }
-
-
-            if (!preg_match($regexUserName, $_POST["usernamereg"])) {
-                die();
-            }
-            if (strlen($_POST["usernamereg"]) < 1 || strlen($_POST["usernamereg"]) > 25) {
-                die();
-            }
-
-
-            if (!preg_match($regexEmail, $_POST["emailreg"])) {
-                die();
-            }
-            $emailExploded = explode("@", $_POST["emailreg"]);
-            if (strlen($emailExploded[0]) > 64 || strlen($emailExploded[1]) > 255) {
-                die();
-            }
-
-
-            if ($_POST["passwordreg"] !== $_POST["passwordregRepeat"]) {
-                die();
-            }
-            if (strlen($_POST["passwordreg"]) < 7 || strlen($_POST["passwordreg"]) > 249) {
-                die();
-            }
-
-
-            $sqlStatement = $connection->prepare("SELECT * from Users WHERE UserName=?");
-            $sqlStatement->bind_param("s", $_POST["usernamereg"]);
-            $sqlStatement->execute();
-            $result = $sqlStatement->get_result();
-            $userexists = $result->num_rows;
-
-
-            if ($userexists == 0) {
-                $pswSignup = $_POST["passwordreg"];
-                $hashPSW = password_hash($pswSignup, PASSWORD_DEFAULT);
-
-                $sqlInsert = $connection->prepare("INSERT INTO Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country) VALUES (?, ?, ?, ?, ?, '','Normal', current_date(), '', '', '', '', '', '', '', '', '')");
-                $sqlInsert->bind_param("sssss", $_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $_POST["emailreg"], $hashPSW);
-
-                if ($sqlInsert->execute()) {
-                    $_SESSION["username"] = $_POST["usernamereg"];
-                    $_SESSION["firstname"] = $_POST["firstnamereg"];
-                    $_SESSION["lastname"] = $_POST["lastnamereg"];
-                    $_SESSION["Chart"] = [];
-                    $_SESSION["userloggedIn"] = true;
-                    echo '<script>window.location.href="Home.php"</script>';
-                }
-            }
-        }
-
-        ?>
 
     </section>
 

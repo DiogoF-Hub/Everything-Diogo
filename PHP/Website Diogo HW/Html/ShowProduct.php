@@ -22,14 +22,6 @@ if (isset($_GET["ProductID"])) {
         }
     }
 
-    $host = "localhost";
-    $user = "root";
-    $psw = "";
-    $database = "productsdatabase";
-    $portNo = 3306;
-
-    $connection = new mysqli($host, $user, $psw, $database, $portNo);
-
     if (!is_numeric($_GET["ProductID"])) {
         die();
     }

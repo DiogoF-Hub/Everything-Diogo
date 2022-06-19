@@ -21,6 +21,7 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
             if ($result2->num_rows == 0) {
                 die();
             } else {
+
                 if (isset($_SESSION["Chart"][$_POST["productBuyId"]])) {
                     $_SESSION["Chart"][$_POST["productBuyId"]] = $_SESSION["Chart"][$_POST["productBuyId"]] + $_POST["productBuyTimes"];
                     //unset($_SESSION["Chart"][$_POST["productBuyId"]]);
