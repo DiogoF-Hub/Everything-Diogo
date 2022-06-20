@@ -1,40 +1,25 @@
 <?php
-function navbar($URL, $ActivePage, $togle)
+function navbar($URL, $ActivePage, $sqlLang, $connection)
 {
-    $filename = '../database/database.txt';
-    if (file_exists($filename)) {
-        $handle = fopen($filename, "r");
-        while (($line = fgets($handle)) !== false) {
-            $arraytest = explode(";", $line);
-            if (count($arraytest) == 10) {
-                break;
-            }
-        }
-    } else {
-        die("Nav bar file not found");
+
+    $navitems = [];
+    $sqlStatement = $connection->prepare("SELECT textDescription from ButtonsNav natural join DescriptionNav where IDLang=" . $sqlLang);
+    $sqlStatement->execute();
+    $resultnav = $sqlStatement->get_result();
+    while ($rownav = $resultnav->fetch_assoc()) {
+        array_push($navitems, $rownav["textDescription"]);
     }
 
-    $host = "localhost";
-    $user = "root";
-    $psw = "";
-    $database = "productsdatabase";
-    $portNo = 3306;
-
-    $connection = new mysqli($host, $user, $psw, $database, $portNo);
-
-    /*$sqlStatement = $connection->prepare("SELECT * from ButtonsNav natural join DescriptionNav where IDLang=" . $IDlang . $Productsorder);
-    $sqlStatement->execute();
-    $result = $sqlStatement->get_result();*/
 
 
 ?>
     <nav id="nav">
 
         <div>
-            <a class="aclass <?php if ($ActivePage == "home") print "active1" ?>" href="Home.php"><?= $arraytest[0 + $togle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "home") print "active1" ?>" href="Home.php"><?= $navitems[0] ?></a>
 
             <div class="dropdown">
-                <div class="dropbtn"><?= $arraytest[1 + $togle] ?></div>
+                <div class="dropbtn"><?= $navitems[1] ?></div>
                 <div class="dropdown-content">
                     <a href="tel: +33372520234">+33 3 72 52 02 34</a>
                     <a href="mailto: boutiquethionville@ldlc.com">boutiquethionville@ldlc.com</a>
@@ -42,15 +27,14 @@ function navbar($URL, $ActivePage, $togle)
                 </div>
             </div>
 
-            <a class="aclass <?php if ($ActivePage == "products") print "active1" ?>" href="Products.php"><?= $arraytest[2 + $togle] ?></a>
-            <a class="aclass <?php if ($ActivePage == "about") print "active1" ?>" href="About.php"><?= $arraytest[4 + $togle] ?></a>
+            <a class="aclass <?php if ($ActivePage == "products") print "active1" ?>" href="Products.php"><?= $navitems[2] ?></a>
+            <a class="aclass <?php if ($ActivePage == "about") print "active1" ?>" href="About.php"><?= $navitems[3] ?></a>
         </div>
 
         <?php
-        if (!isset($_SESSION["username"])) {
+        if ($_SESSION["userloggedIn"] == false) {
         ?>
-            <a class="aclass <?php if ($ActivePage == "logbutton") print "active1" ?>" href="user.php"><?php if ($_SESSION["lang"] == "EN") print "Login";
-                                                                                                        else print "Entrar"; ?></a>
+            <a class="aclass <?php if ($ActivePage == "logbutton") print "active1" ?>" href="user.php"><?= $navitems[4] ?></a>
         <?php
         } else {
         ?>
@@ -58,8 +42,7 @@ function navbar($URL, $ActivePage, $togle)
                                                                 else print "Ola," ?> <?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></a> </div>
             <form method="POST" id="logoutform">
                 <input hidden type="text" name="logoutbutton">
-                <a name="logoutbutton" onclick="document.getElementById('logoutform').submit();" class="aclass <?php if ($ActivePage == "logbutton") print "active1" ?>" href="javascript:{}"><?php if ($_SESSION["lang"] == "EN") print "Logout";
-                                                                                                                                                                                                else print "Sair"; ?></a>
+                <a name="logoutbutton" onclick="document.getElementById('logoutform').submit();" class="aclass <?php if ($ActivePage == "logbutton") print "active1" ?>" href="javascript:{}"><?= $navitems[5] ?></a>
             </form>
         <?php
         }
@@ -68,20 +51,6 @@ function navbar($URL, $ActivePage, $togle)
         <a class="aclass <?php if ($ActivePage == "chart") print "active1" ?>" href="chart.php">
             <img src="../Images/Shopping-basket.png" alt="" width="45px" height="40px">
         </a>
-
-        <?php
-        if (isset($_POST["logoutbutton"])) {
-            $chartArrayserialized = serialize($_SESSION["Chart"]);
-            $sqlInsert3 = $connection->prepare("UPDATE Users SET Chart=? WHERE UserName=?");
-            $sqlInsert3->bind_param("ss", $chartArrayserialized, $_SESSION["username"]);
-            $sqlInsert3->execute();
-
-            session_unset();
-            session_destroy();
-            header('Location: Home.php');
-            die();
-        }
-        ?>
 
         <a href="<?= $URL ?>">
             <img src="../Images/Languages.jpg" alt="PT/EN" id="language1">

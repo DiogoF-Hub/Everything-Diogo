@@ -1,10 +1,6 @@
 <?php
 include_once("start.php");
 
-
-$wrongUser = 0;
-$userexists = 0;
-
 //regex
 $regexUserName = "/[a-zA-Z0-9-_-]+/";
 $regexFirstANDLastname = "/[\p{L}+u ]+/";
@@ -30,7 +26,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
 
 
     $sqlStatement2 = $connection->prepare("SELECT * from Users WHERE UserName=?");
-    $sqlStatement2->bind_param("s", $_POST["usernamelogin"]);
+    $sqlStatement2->bind_param("s", trim($_POST["usernamelogin"]));
     $sqlStatement2->execute();
     $result2 = $sqlStatement2->get_result();
     $userexists2 = $result2->num_rows;
@@ -52,14 +48,15 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
             $_SESSION["userloggedIn"] = true;
             header("Location: Home.php");
             die();
-            //echo '<script>window.location.href="Home.php"</script>'; //This will redirect me to home to whatever language im in
-
         } else {
-            $wrongUser = 1;
-            //print "<script>alert('User already exists');</script>";
+            print "<script>alert('Password does not match');</script>";
+            header("Refresh:0");
+            die();
         }
     } else {
-        $wrongUser = 1;
+        print "<script>alert('User does not exist');</script>";
+        header("Refresh:0");
+        die();
     }
 }
 
@@ -67,41 +64,65 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
 
 if (isset($_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $_POST["emailreg"], $_POST["passwordreg"], $_POST["passwordregRepeat"])) {
 
-    if (!preg_match($regexFirstANDLastname, $_POST["firstnamereg"])) {
+    $firstnamereg = trim($_POST["firstnamereg"]);
+    $lastnamereg = trim($_POST["lastnamereg"]);
+    $usernamereg = trim($_POST["usernamereg"]);
+    $emailreg = trim($_POST["emailreg"]);
+
+
+    if (!preg_match($regexFirstANDLastname, $firstnamereg)) {
+        header("Refresh:0");
         die();
     }
-    if (strlen($_POST["firstnamereg"]) < 1 || strlen($_POST["firstnamereg"]) > 50) {
+    if (strlen($firstnamereg) < 1 || strlen($firstnamereg) > 100) {
+        header("Refresh:0");
         die();
     }
 
 
-    if (!preg_match($regexUserName, $_POST["usernamereg"])) {
+    if (!preg_match($regexFirstANDLastname, $lastnamereg)) {
+        header("Refresh:0");
         die();
     }
-    if (strlen($_POST["usernamereg"]) < 1 || strlen($_POST["usernamereg"]) > 25) {
+    if (strlen($lastnamereg) < 1 || strlen($lastnamereg) > 100) {
+        header("Refresh:0");
         die();
     }
 
 
-    if (!preg_match($regexEmail, $_POST["emailreg"])) {
+    if (!preg_match($regexUserName, $usernamereg)) {
+        header("Refresh:0");
         die();
     }
-    $emailExploded = explode("@", $_POST["emailreg"]);
+    if (strlen($usernamereg) < 1 || strlen($usernamereg) > 25) {
+        header("Refresh:0");
+        die();
+    }
+
+
+    if (!preg_match($regexEmail, $emailreg)) {
+        header("Refresh:0");
+        die();
+    }
+    $emailExploded = explode("@", $emailreg);
     if (strlen($emailExploded[0]) > 64 || strlen($emailExploded[1]) > 255) {
+        header("Refresh:0");
         die();
     }
 
 
     if ($_POST["passwordreg"] !== $_POST["passwordregRepeat"]) {
+        header("Refresh:0");
         die();
     }
     if (strlen($_POST["passwordreg"]) < 7 || strlen($_POST["passwordreg"]) > 249) {
+        header("Refresh:0");
         die();
     }
 
 
     $sqlStatement = $connection->prepare("SELECT * from Users WHERE UserName=?");
-    $sqlStatement->bind_param("s", $_POST["usernamereg"]);
+    $sqlStatement->bind_param("s", $usernamereg);
     $sqlStatement->execute();
     $result = $sqlStatement->get_result();
     $userexists = $result->num_rows;
@@ -112,19 +133,22 @@ if (isset($_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], 
         $hashPSW = password_hash($pswSignup, PASSWORD_DEFAULT);
 
         $sqlInsert = $connection->prepare("INSERT INTO Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country) VALUES (?, ?, ?, ?, ?, '','Normal', current_date(), '', '', '', '', '', '', '', '', '')");
-        $sqlInsert->bind_param("sssss", $_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], $_POST["emailreg"], $hashPSW);
+        $sqlInsert->bind_param("sssss", $firstnamereg, $lastnamereg, $usernamereg, $emailreg, $hashPSW);
 
         if ($sqlInsert->execute()) {
-            $_SESSION["username"] = $_POST["usernamereg"];
-            $_SESSION["firstname"] = $_POST["firstnamereg"];
-            $_SESSION["lastname"] = $_POST["lastnamereg"];
+            $_SESSION["username"] = $usernamereg;
+            $_SESSION["firstname"] = $firstnamereg;
+            $_SESSION["lastname"] = $lastnamereg;
             $_SESSION["Chart"] = [];
             $_SESSION["userloggedIn"] = true;
 
             header("Location: Home.php");
             die();
-            //echo '<script>window.location.href="Home.php"</script>';
         }
+    } else {
+        print "<script>alert('User already exists');</script>";
+        header("Refresh:0");
+        die();
     }
 }
 
@@ -152,21 +176,17 @@ if (isset($_FILES['photoprofileEditIMG']) && $_SESSION["userloggedIn"] == true) 
         unlink("../database/ProfilePics/" . $row["ProfilePic"]);
     }
 
-    /*for ($i = 0; $i < count($extensions); $i++) {
-        if (file_exists("../database/ProfilePics/" . $file_name . "." . $extensions[$i])) {
-            unlink("../database/ProfilePics/" . $file_name . "." . $extensions[$i]);
-        }
-    }*/
-
     $extensions = array("jpeg", "jpg", "png");
 
     if (in_array($file_ext, $extensions) === false) {
         print "<script>alert('Extension not allowed, please choose a JPEG or PNG file.')</script>";
+        header("Refresh:0");
         die();
     }
 
     if ($file_size > 26214400) {
         print "<script>alert('File size must be less than or 25 MB:')</script>";
+        header("Refresh:0");
         die();
     }
 
@@ -189,27 +209,40 @@ if (isset($_POST["firstnameEdit"]) && $_SESSION["userloggedIn"] == true) {
     $result4 = $sqlStatement4->get_result();
     $row3 = $result4->fetch_assoc();
 
-    if ($_POST["firstnameEdit"] != $row3["FirstName"]) {
+    $firstnameEdit = trim($_POST["firstnameEdit"]);
+    if ($firstnameEdit != $row3["FirstName"]) {
+        if (!preg_match($regexFirstANDLastname, $firstnameEdit)) {
+            header("Refresh:0");
+            die();
+        }
         $sqlUpdate = $connection->prepare("UPDATE Users SET FirstName=? WHERE UserName=?");
-        $sqlUpdate->bind_param("ss", $_POST["firstnameEdit"], $_SESSION["username"]);
+        $sqlUpdate->bind_param("ss", $firstnameEdit, $_SESSION["username"]);
         $sqlUpdate->execute();
-        $_SESSION["firstname"] = $_POST["firstnameEdit"];
+        $_SESSION["firstname"] = $firstnameEdit;
     }
 
 
-
-    if ($_POST["lastnameEdit"] != $row3["LastName"]) {
+    $lastnameEdit = trim($_POST["lastnameEdit"]);
+    if ($lastnameEdit != $row3["LastName"]) {
+        if (!preg_match($regexFirstANDLastname, $lastnameEdit)) {
+            header("Refresh:0");
+            die();
+        }
         $sqlUpdate1 = $connection->prepare("UPDATE Users SET LastName=? WHERE UserName=?");
-        $sqlUpdate1->bind_param("ss", $_POST["lastnameEdit"], $_SESSION["username"]);
+        $sqlUpdate1->bind_param("ss", $lastnameEdit, $_SESSION["username"]);
         $sqlUpdate1->execute();
-        $_SESSION["lastname"] = $_POST["lastnameEdit"];
+        $_SESSION["lastname"] = $lastnameEdit;
     }
 
 
-
-    if ($_POST["emailEdit"] != $row3["Email"]) {
+    $emailEdit = trim($_POST["emailEdit"]);
+    if ($emailEdit != $row3["Email"]) {
+        if (!preg_match($regexEmail, $emailEdit)) {
+            header("Refresh:0");
+            die();
+        }
         $sqlUpdate2 = $connection->prepare("UPDATE Users SET Email=? WHERE UserName=?");
-        $sqlUpdate2->bind_param("ss", $_POST["emailEdit"], $_SESSION["username"]);
+        $sqlUpdate2->bind_param("ss", $emailEdit, $_SESSION["username"]);
         $sqlUpdate2->execute();
     }
 
@@ -231,90 +264,98 @@ if (isset($_POST["firstnameEdit"]) && $_SESSION["userloggedIn"] == true) {
                     $sqlUpdate3->bind_param("ss", $daySTR, $_SESSION["username"]);
                     $sqlUpdate3->execute();
                 } else {
+                    header("Refresh:0");
                     die();
                 }
             } else {
+                header("Refresh:0");
                 die();
             }
         } else {
+            header("Refresh:0");
             die();
         }
     }
 
 
 
-
     if (!empty($_POST["Addressline1"])) {
-        if ($_POST["Addressline1"] != $row3["FirstLineAddress"]) {
+        $Addressline1 = trim($_POST["Addressline1"]);
+        if ($Addressline1 != $row3["FirstLineAddress"]) {
             $sqlUpdate4 = $connection->prepare("UPDATE Users SET FirstLineAddress=? WHERE UserName=?");
-            $sqlUpdate4->bind_param("ss", $_POST["Addressline1"], $_SESSION["username"]);
+            $sqlUpdate4->bind_param("ss", $Addressline1, $_SESSION["username"]);
             $sqlUpdate4->execute();
         }
     }
 
 
-
     if (!empty($_POST["StreetNumber"])) {
-        if ($_POST["StreetNumber"] != $row3["HouseNumber"]) {
+        $StreetNumber = trim($_POST["StreetNumber"]);
+        if ($StreetNumber != $row3["HouseNumber"]) {
             $sqlUpdate5 = $connection->prepare("UPDATE Users SET HouseNumber=? WHERE UserName=?");
-            $sqlUpdate5->bind_param("ss", $_POST["StreetNumber"], $_SESSION["username"]);
+            $sqlUpdate5->bind_param("ss", $StreetNumber, $_SESSION["username"]);
             $sqlUpdate5->execute();
         }
     }
 
 
-
-    if ($_POST["Addressline2"] != $row3["SecondLineAddress"]) {
-        $sqlUpdate6 = $connection->prepare("UPDATE Users SET SecondLineAddress=? WHERE UserName=?");
-        $sqlUpdate6->bind_param("ss", $_POST["Addressline2"], $_SESSION["username"]);
-        $sqlUpdate6->execute();
+    if (!empty($_POST["Addressline2"])) {
+        $Addressline2 = trim($_POST["Addressline2"]);
+        if ($Addressline2 != $row3["SecondLineAddress"]) {
+            $sqlUpdate6 = $connection->prepare("UPDATE Users SET SecondLineAddress=? WHERE UserName=?");
+            $sqlUpdate6->bind_param("ss", $Addressline2, $_SESSION["username"]);
+            $sqlUpdate6->execute();
+        }
     }
 
 
     if (!empty($_POST["City"])) {
-        if ($_POST["City"] != $row3["City"]) {
+        $City = trim($_POST["City"]);
+        if ($City != $row3["City"]) {
             $sqlUpdate7 = $connection->prepare("UPDATE Users SET City=? WHERE UserName=?");
-            $sqlUpdate7->bind_param("ss", $_POST["City"], $_SESSION["username"]);
+            $sqlUpdate7->bind_param("ss", $City, $_SESSION["username"]);
             $sqlUpdate7->execute();
         }
     }
 
 
-
     if (!empty($_POST["PostalCode"])) {
-        if ($_POST["PostalCode"] != $row3["PostalCode"]) {
+        $PostalCode = trim($_POST["PostalCode"]);
+        if ($PostalCode != $row3["PostalCode"]) {
             $sqlUpdate8 = $connection->prepare("UPDATE Users SET PostalCode=? WHERE UserName=?");
-            $sqlUpdate8->bind_param("ss", $_POST["PostalCode"], $_SESSION["username"]);
+            $sqlUpdate8->bind_param("ss", $PostalCode, $_SESSION["username"]);
             $sqlUpdate8->execute();
         }
     }
 
 
-
     if (!empty($_POST["Civility"])) {
+        $Civility = trim($_POST["Civility"]);
         $CivilityArr = ["mr", "ms"];
-        if (in_array($_POST["Civility"], $CivilityArr)) {
-            if ($_POST["Civility"] != $row3["Civility"]) {
+        if (in_array($Civility, $CivilityArr)) {
+            if ($Civility  != $row3["Civility"]) {
                 $sqlUpdate9 = $connection->prepare("UPDATE Users SET Civility=? WHERE UserName=?");
-                $sqlUpdate9->bind_param("ss", $_POST["Civility"], $_SESSION["username"]);
+                $sqlUpdate9->bind_param("ss", $Civility, $_SESSION["username"]);
                 $sqlUpdate9->execute();
             }
         } else {
+            header("Refresh:0");
             die();
         }
     }
 
 
-
     if (!empty($_POST["Country"])) {
+        $Country = trim($_POST["Country"]);
         $CountryArr = ["France", "Luxembourg", "Germany"];
-        if (in_array($_POST["Country"], $CountryArr)) {
-            if ($_POST["Country"] != $row3["Country"]) {
+        if (in_array($Country, $CountryArr)) {
+            if ($Country != $row3["Country"]) {
                 $sqlUpdate10 = $connection->prepare("UPDATE Users SET Country=? WHERE UserName=?");
-                $sqlUpdate10->bind_param("ss", $_POST["Country"], $_SESSION["username"]);
+                $sqlUpdate10->bind_param("ss", $Country, $_SESSION["username"]);
                 $sqlUpdate10->execute();
             }
         } else {
+            header("Refresh:0");
             die();
         }
     }
@@ -322,7 +363,12 @@ if (isset($_POST["firstnameEdit"]) && $_SESSION["userloggedIn"] == true) {
 
 
 if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRepeatEdit"]) && $_SESSION["userloggedIn"] == true) {
-    if (strlen($_POST["CurrentPassword"]) < 7 || strlen($_POST["PasswordEdit"]) < 7 || strlen($_POST["PasswordRepeatEdit"]) < 7) {
+    $CurrentPassword = trim($_POST["CurrentPassword"]);
+    $PasswordEdit = trim($_POST["PasswordEdit"]);
+    $PasswordRepeatEdit = trim($_POST["PasswordRepeatEdit"]);
+
+    if (strlen($CurrentPassword) < 7 || strlen($PasswordEdit) < 7 || strlen($PasswordRepeatEdit) < 7) {
+        header("Refresh:0");
         die();
     } else {
         $sqlStatement11 = $connection->prepare("SELECT UserPassword from Users WHERE UserName=?");
@@ -330,25 +376,28 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
         $sqlStatement11->execute();
         $result11 = $sqlStatement11->get_result();
         $row11 = $result11->fetch_assoc();
-        if (password_verify(trim($_POST["CurrentPassword"]), $row11["UserPassword"])) {
-            $hashPSWEdit = password_hash(trim($_POST["PasswordEdit"]), PASSWORD_DEFAULT);
+        if (password_verify($CurrentPassword, $row11["UserPassword"])) {
+            $hashPSWEdit = password_hash($PasswordEdit, PASSWORD_DEFAULT);
 
             $sqlUpdate12 = $connection->prepare("UPDATE Users SET UserPassword=? WHERE UserName=?");
             $sqlUpdate12->bind_param("ss", $hashPSWEdit, $_SESSION["username"]);
             $sqlUpdate12->execute();
 
             print "<script>alert('Your Current Password has been changed')</script>";
+            header("Refresh:0");
+            die();
         } else {
             print "<script>alert('Your Current Password does not match')</script>";
+            header("Refresh:0");
+            die();
         }
     }
 }
 ?>
 
 
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $_SESSION["lang"] ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -358,101 +407,10 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
     <link href="../Styling/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src='../Styling/bootstrap/js/bootstrap.bundle.min.js'></script>
     <script src="../jquery/jquery-3.6.0.min.js"></script>
+    <link href="../Styling/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <title>Acount page</title>
     <script>
         lang = "<?= $_SESSION["lang"] ?>";
-        //js validation for login
-        /*function checkLogin() {
-            err = 0;
-            username = document.getElementById("usernamelogin").value;
-            password = document.getElementById("passwordlogin").value;
-
-            if (username === "") {
-                err++;
-                if (lang == "EN") {
-                    document.getElementById("usernameloginErr").innerHTML = "* Username missing";
-                } else {
-                    document.getElementById("usernameloginErr").innerHTML = "* Nome de usuário ausente";
-                }
-
-            }
-
-            if (password === "") {
-                err++;
-                if (lang == "EN") {
-                    document.getElementById("passwordloginErr").innerHTML = "* Password missing";
-                } else {
-                    document.getElementById("passwordloginErr").innerHTML = "* Palavra passe ausente";
-                }
-            }
-
-            if (err == 0) { //only submit if I wrote something
-                document.getElementById("formLogin").submit();
-            }
-
-        }
-
-        //js validation for sign up
-        function checkSignUp() {
-            err2 = 0;
-            firstname = document.getElementById("firstnamereg").value;
-            lastname = document.getElementById("lastnamereg").value;
-            username2 = document.getElementById("usernamereg").value;
-            password2 = document.getElementById("passwordreg").value;
-            password2Repeat = document.getElementById("passwordregRepeat").value;
-
-            if (firstname === "") {
-                err2++;
-                if (lang == "EN") {
-                    document.getElementById("firstnameregErr").innerHTML = "* First name is missing";
-                } else {
-                    document.getElementById("firstnameregErr").innerHTML = "* Primeiro nome ausente";
-                }
-            }
-
-            if (lastname === "") {
-                err2++;
-                if (lang == "EN") {
-                    document.getElementById("lastnameregErr").innerHTML = "* Last name is missing";
-                } else {
-                    document.getElementById("lastnameregErr").innerHTML = "* Último nome ausente";
-                }
-            }
-
-            if (username2 === "") {
-                err2++;
-                if (lang == "EN") {
-                    document.getElementById("usernameregErr").innerHTML = "* Username is missing";
-                } else {
-                    document.getElementById("usernameregErr").innerHTML = "* Nome de usuário ausente";
-                }
-            }
-
-            if (password2 === "" || password2Repeat === "") {
-                err2++;
-                if (lang == "EN") {
-                    document.getElementById("passwordregErr").innerHTML = "* Password is missing";
-                    document.getElementById("passwordregErrRepeat").innerHTML = "* Password is missing";
-                } else {
-                    document.getElementById("passwordregErr").innerHTML = "* Palavra passe ausente";
-                    document.getElementById("passwordregErrRepeat").innerHTML = "* Palavra passe ausente";
-                }
-            } else {
-                if (password2 !== password2Repeat) {
-                    err2++;
-                    if (lang == "EN") {
-                        document.getElementById("passwordregErrRepeat").innerHTML = "* Passwords dont match";
-                    } else {
-                        document.getElementById("passwordregErrRepeat").innerHTML = "* As Palavra passes não correspondem";
-                    }
-                }
-            }
-
-            if (err2 == 0) { //only submit if no err
-                document.getElementById("formSignUp").submit();
-            }
-
-        }*/
 
         function passwordCheck() {
             Password = document.getElementById("Password");
@@ -494,6 +452,104 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
         function photoprofileEdit() {
             document.getElementById("photoprofileEdit").click();
         }
+
+        function submitSettings() {
+            photoprofileEdit = document.getElementById("photoprofileEdit");
+            if (photoprofileEdit.files.length == 0) {
+                photoprofileEdit.remove();
+            }
+            document.getElementById("infoForm").submit();
+        }
+
+        function passwordCheckEdit() {
+            Password = document.getElementById("PasswordEdit");
+            PasswordRepeat = document.getElementById("PasswordRepeatEdit");
+
+            if (Password.value.length > 249) {
+                Password.setCustomValidity("Passwords lenght must be less than 250 characters");
+                Password.reportValidity();
+            } else {
+                Password.setCustomValidity("");
+            }
+
+            if (PasswordRepeat.value.length > 249) {
+                PasswordRepeat.setCustomValidity("Passwords lenght must be less than 250 characters");
+                PasswordRepeat.reportValidity();
+            } else {
+                PasswordRepeat.setCustomValidity("");
+            }
+
+            if (Password.value != PasswordRepeat.value) {
+                PasswordRepeat.setCustomValidity("Both Passwords must match");
+                PasswordRepeat.reportValidity();
+            } else {
+                PasswordRepeat.setCustomValidity("");
+            }
+
+        }
+
+
+        function checklogin() {
+            UserSignIn = document.getElementById("UserSignIn");
+            pswSignIn = document.getElementById("pswSignIn");
+
+            if (UserSignIn.value.trim().length != 0 && pswSignIn.value.trim().length != 0) {
+                SignIn = document.getElementById("SignIn").submit();
+            } else {
+                UserSignIn.reportValidity();
+                pswSignIn.reportValidity
+            }
+        }
+
+
+        var loadFile = function(event) {
+            var spanIMG = document.getElementById("spanIMG");
+            var output = document.getElementById('output');
+
+            if (spanIMG.hasAttribute("hidden") == false) {
+                spanIMG.setAttribute("hidden", "hidden");
+            }
+
+            if (output.hasAttribute("hidden")) {
+                output.removeAttribute("hidden");
+            }
+
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function() {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+
+
+        function changeNavItem(tab) {
+            if (tab == "settings") {
+                document.getElementById("securityTab").setAttribute("hidden", "hidden");
+                document.getElementById("settingsTab").removeAttribute("hidden", "hidden");
+
+                document.getElementById("security-link").classList.remove('active');
+                document.getElementById("settings-link").classList.add('active');
+            }
+
+            if (tab == "security") {
+                document.getElementById("settingsTab").setAttribute("hidden", "hidden");
+                document.getElementById("securityTab").removeAttribute("hidden", "hidden");
+
+                document.getElementById("settings-link").classList.remove('active');
+                document.getElementById("security-link").classList.add('active');
+            }
+        }
+
+
+        function changePSW() {
+            CurrentPassword = document.getElementById("CurrentPassword").value;
+            PasswordEdit = document.getElementById("PasswordEdit").value;
+            PasswordRepeatEdit = document.getElementById("PasswordRepeatEdit").value;
+            if (CurrentPassword.length == 0 || PasswordEdit.length == 0 || PasswordRepeatEdit.length == 0) {
+                alert("All the fields must me fullfilled to change the Password");
+            } else {
+                document.getElementById("changePSWFform").submit();
+            }
+        }
     </script>
 </head>
 
@@ -501,7 +557,7 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
 
     <?php
     include_once("nav.php");
-    navbar("user.php?lang=" . $otherlang, "logbutton", $togle);
+    navbar("user.php?lang=" . $otherlang, "logbutton", $sqlLang, $connection);
     ?>
 
     <section class="section1">
@@ -526,19 +582,6 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                 <p class="mt-5 mb-3 text-muted">&copy; 2019–2022</p>
             </form>
 
-            <script>
-                function checklogin() {
-                    UserSignIn = document.getElementById("UserSignIn");
-                    pswSignIn = document.getElementById("pswSignIn");
-
-                    if (UserSignIn.value.trim().length != 0 && pswSignIn.value.trim().length != 0) {
-                        SignIn = document.getElementById("SignIn").submit();
-                    } else {
-                        UserSignIn.reportValidity();
-                        pswSignIn.reportValidity
-                    }
-                }
-            </script>
 
 
             <form class="form-signup" method="POST" id="SignUp" hidden>
@@ -592,6 +635,20 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                 <p class="mt-5 mb-3 text-muted">&copy; 2019–2022</p>
             </form>
 
+            <script>
+                function checklogin() {
+                    UserSignIn = document.getElementById("UserSignIn");
+                    pswSignIn = document.getElementById("pswSignIn");
+
+                    if (UserSignIn.value.trim().length != 0 && pswSignIn.value.trim().length != 0) {
+                        SignIn = document.getElementById("SignIn").submit();
+                    } else {
+                        UserSignIn.reportValidity();
+                        pswSignIn.reportValidity
+                    }
+                }
+            </script>
+
         <?php } else {
             $sqlStatement2 = $connection->prepare("SELECT FirstName, LastName, UserName, Email, UserType, ProfilePic, DATE_FORMAT(JoinDate, '%e %b %Y') AS DateJoin, DATE_FORMAT(DateOfBirth, '%e') AS DayBirth, DATE_FORMAT(DateOfBirth, '%c') AS MonthBirth, DATE_FORMAT(DateOfBirth, '%Y') AS YearBirth, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country from Users WHERE UserName=?");
             $sqlStatement2->bind_param("s", $_SESSION["username"]);
@@ -601,7 +658,6 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
 
         ?>
 
-            <link href="../Styling/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
             <div class="container">
                 <div class="row flex-lg-nowrap">
 
@@ -651,28 +707,6 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                                     <i class="fa fa-fw fa-camera"></i>
                                                                     <span>Change Photo</span>
                                                                 </a>
-
-
-
-                                                                <script>
-                                                                    var loadFile = function(event) {
-                                                                        var spanIMG = document.getElementById("spanIMG");
-                                                                        var output = document.getElementById('output');
-
-                                                                        if (spanIMG.hasAttribute("hidden") == false) {
-                                                                            spanIMG.setAttribute("hidden", "hidden");
-                                                                        }
-
-                                                                        if (output.hasAttribute("hidden")) {
-                                                                            output.removeAttribute("hidden");
-                                                                        }
-
-                                                                        output.src = URL.createObjectURL(event.target.files[0]);
-                                                                        output.onload = function() {
-                                                                            URL.revokeObjectURL(output.src) // free memory
-                                                                        }
-                                                                    };
-                                                                </script>
                                                         </div>
                                                     </div>
                                                     <div class="text-center text-sm-right">
@@ -681,25 +715,6 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                 </div>
                                             </div>
                                             <ul class="nav nav-tabs">
-                                                <script>
-                                                    function changeNavItem(tab) {
-                                                        if (tab == "settings") {
-                                                            document.getElementById("securityTab").setAttribute("hidden", "hidden");
-                                                            document.getElementById("settingsTab").removeAttribute("hidden", "hidden");
-
-                                                            document.getElementById("security-link").classList.remove('active');
-                                                            document.getElementById("settings-link").classList.add('active');
-                                                        }
-
-                                                        if (tab == "security") {
-                                                            document.getElementById("settingsTab").setAttribute("hidden", "hidden");
-                                                            document.getElementById("securityTab").removeAttribute("hidden", "hidden");
-
-                                                            document.getElementById("settings-link").classList.remove('active');
-                                                            document.getElementById("security-link").classList.add('active');
-                                                        }
-                                                    }
-                                                </script>
                                                 <li class="nav-item"><a id="settings-link" href="javascript:{}" class="active nav-link" onclick="changeNavItem('settings');">Settings</a></li>
                                                 <li class="nav-item"><a id="security-link" href="javascript:{}" class="nav-link" onclick="changeNavItem('security');">Security</a></li>
                                             </ul>
@@ -860,15 +875,6 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                         </div>
                                                     </div>
 
-                                                    <script>
-                                                        function submitSettings() {
-                                                            photoprofileEdit = document.getElementById("photoprofileEdit");
-                                                            if (photoprofileEdit.files.length == 0) {
-                                                                photoprofileEdit.remove();
-                                                            }
-                                                            document.getElementById("infoForm").submit();
-                                                        }
-                                                    </script>
                                                     <div class="row">
                                                         <div class="col d-flex justify-content-end">
                                                             <a href="javascript:{}" class="btn btn-primary" onclick="submitSettings();">Save Changes</a>
@@ -880,34 +886,6 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
 
 
                                                 <div id="securityTab" class="tab-pane active" hidden>
-                                                    <script>
-                                                        function passwordCheckEdit() {
-                                                            Password = document.getElementById("PasswordEdit");
-                                                            PasswordRepeat = document.getElementById("PasswordRepeatEdit");
-
-                                                            if (Password.value.length > 249) {
-                                                                Password.setCustomValidity("Passwords lenght must be less than 250 characters");
-                                                                Password.reportValidity();
-                                                            } else {
-                                                                Password.setCustomValidity("");
-                                                            }
-
-                                                            if (PasswordRepeat.value.length > 249) {
-                                                                PasswordRepeat.setCustomValidity("Passwords lenght must be less than 250 characters");
-                                                                PasswordRepeat.reportValidity();
-                                                            } else {
-                                                                PasswordRepeat.setCustomValidity("");
-                                                            }
-
-                                                            if (Password.value != PasswordRepeat.value) {
-                                                                PasswordRepeat.setCustomValidity("Both Passwords must match");
-                                                                PasswordRepeat.reportValidity();
-                                                            } else {
-                                                                PasswordRepeat.setCustomValidity("");
-                                                            }
-
-                                                        }
-                                                    </script>
                                                     <form method="POST" id="changePSWFform">
                                                         <div class="col-12 col-sm-6 mb-3">
                                                             <div class="mb-2"><b>Change Password</b></div>
@@ -936,19 +914,6 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                                 </div>
                                                             </div>
                                                         </div>
-
-                                                        <script>
-                                                            function changePSW() {
-                                                                CurrentPassword = document.getElementById("CurrentPassword").value;
-                                                                PasswordEdit = document.getElementById("PasswordEdit").value;
-                                                                PasswordRepeatEdit = document.getElementById("PasswordRepeatEdit").value;
-                                                                if (CurrentPassword.length == 0 || PasswordEdit.length == 0 || PasswordRepeatEdit.length == 0) {
-                                                                    alert("All the fields must me fullfilled to change the Password");
-                                                                } else {
-                                                                    document.getElementById("changePSWFform").submit();
-                                                                }
-                                                            }
-                                                        </script>
 
                                                         <div class="row">
                                                             <div class="col d-flex justify-content-end">

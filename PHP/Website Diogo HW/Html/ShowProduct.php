@@ -3,24 +3,23 @@ include_once("start.php");
 
 if (isset($_GET["ProductID"])) {
 
-    $navbarlanguage = 0;
+    /*$navbarlanguage = 0;
     $OtherLanguage = "PT";
     $sqlLang = 1;
 
 
     if (empty($_SESSION["lang"])) {
         header('Location: ' . "ShowProduct.php?ProductID=" . $_GET["ProductID"] . "&lang=EN#slider-image-1");
-        exit();
+        die();
     } else {
         if (!in_array($_SESSION["lang"], array('EN', 'PT'), true)) {
-            die("Wrong Page");
+            $_SESSION["lang"] = 'EN';
         }
         if ($_SESSION["lang"] == "PT") {
             $navbarlanguage = 5;
             $OtherLanguage = "EN";
-            $sqlLang = 2;
         }
-    }
+    }*/
 
     if (!is_numeric($_GET["ProductID"])) {
         die();
@@ -53,7 +52,7 @@ if (isset($_GET["ProductID"])) {
 <body>
     <?php
     include_once("nav.php");
-    navbar("ShowProduct.php?ProductID=" . $_GET["ProductID"] . "&lang=" . $OtherLanguage . "#slider-image-1", "products", $navbarlanguage, $_SESSION["lang"]);
+    navbar("ShowProduct.php?ProductID=" . $_GET["ProductID"] . "&lang=" . $otherlang  . "#slider-image-1", "products", $sqlLang, $connection);
     ?>
 
     <section class="section1">

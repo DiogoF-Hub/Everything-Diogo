@@ -16,7 +16,7 @@ include_once("start.php");
     <?php
 
     include_once("nav.php");
-    navbar("Home.php?lang=" . $otherlang, "home", $togle);
+    navbar("Home.php?lang=" . $otherlang, "home", $sqlLang, $connection);
     ?>
 
     <section class="section1">

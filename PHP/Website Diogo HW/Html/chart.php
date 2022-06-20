@@ -39,6 +39,8 @@ if (isset($_POST["orderSave"])) {
         $_SESSION["Chart"] = [];
     } else {
         echo "<script> alert('Your Shopping-cart is empty'); </script>";
+        header("Refresh:0");
+        die();
     }
 }
 ?>
@@ -58,11 +60,11 @@ if (isset($_POST["orderSave"])) {
 <body>
     <?php
     include_once("nav.php");
-    navbar("chart.php?lang=" . $otherlang, "chart", $togle);
+    navbar("chart.php?lang=" . $otherlang, "chart", $sqlLang, $connection);
 
 
 
-    $sqlStatement = $connection->prepare("SELECT * from products natural join description where IDLang=" . $IDlang);
+    $sqlStatement = $connection->prepare("SELECT * from products natural join description where IDLang=" . $sqlLang);
     $sqlStatement->execute();
     $result = $sqlStatement->get_result();
 
@@ -211,8 +213,9 @@ if (isset($_POST["orderSave"])) {
                 </div>
             </div>
         <?php } else {
-            echo "<script> alert('You are not logged In'); </script>";
-            echo "<script> window.location.href='user.php' </script>";
+            print "<script> alert('You are not logged In'); </script>";
+            header("Location: user.php");
+            die();
         }
         ?>
 

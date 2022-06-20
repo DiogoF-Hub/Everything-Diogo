@@ -68,7 +68,7 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
 
 
     include_once("nav.php");
-    navbar("Products.php?lang=" . $otherlang . "&pricerange=" . $_GET["pricerange"], "products", $togle);
+    navbar("Products.php?lang=" . $otherlang . "&pricerange=" . $_GET["pricerange"], "products", $sqlLang, $connection);
 
     ?>
 
@@ -104,7 +104,7 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
         }
 
 
-        $sqlStatement = $connection->prepare("SELECT * from products natural join description where IDLang=" . $IDlang . $Productsorder);
+        $sqlStatement = $connection->prepare("SELECT * from products natural join description where IDLang=" . $sqlLang . $Productsorder);
         $sqlStatement->execute();
         $result = $sqlStatement->get_result();
         $numberofproducts = $result->num_rows;
