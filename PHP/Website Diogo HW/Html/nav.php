@@ -1,7 +1,7 @@
 <?php
-function navbar($URL, $ActivePage, $sqlLang, $connection)
+function navbar($URL, $ActivePage, $sqlLang)
 {
-
+    global $connection;
     $navitems = [];
     $sqlStatement = $connection->prepare("SELECT textDescription from ButtonsNav natural join DescriptionNav where IDLang=" . $sqlLang);
     $sqlStatement->execute();

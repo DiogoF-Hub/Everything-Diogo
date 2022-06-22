@@ -38,6 +38,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
             $_SESSION["username"] = $row["UserName"];
             $_SESSION["firstname"] = $row["FirstName"];
             $_SESSION["lastname"] = $row["LastName"];
+            $_SESSION["UserType"] = $row["UserType"];
 
             if (!empty($row["Chart"])) {
                 $_SESSION["Chart"] = unserialize($row["Chart"]);
@@ -140,6 +141,7 @@ if (isset($_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], 
             $_SESSION["firstname"] = $firstnamereg;
             $_SESSION["lastname"] = $lastnamereg;
             $_SESSION["Chart"] = [];
+            $_SESSION["UserType"] = "Normal";
             $_SESSION["userloggedIn"] = true;
 
             header("Location: Home.php");
@@ -557,7 +559,7 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
 
     <?php
     include_once("nav.php");
-    navbar("user.php?lang=" . $otherlang, "logbutton", $sqlLang, $connection);
+    navbar("user.php?lang=" . $otherlang, "", $sqlLang);
     ?>
 
     <section class="section1">
@@ -662,18 +664,23 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                 <div class="row flex-lg-nowrap">
 
                     <!-- php hide if not admin -->
-                    <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
-                        <div class="card p-3">
-                            <div class="e-navlist e-navlist--active-bg">
-                                <ul class="nav">
-                                    <li class="nav-item"><a class="nav-link px-2 active" href="javascript:{}"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Overview</span></a></li>
-                                    <li class="nav-item"><a class="nav-link px-2" href="javascript:{}" target="__blank"><i class="fa fa-fw fa-th mr-1"></i><span>CRUD</span></a></li>
-                                    <li class="nav-item"><a class="nav-link px-2" href="javascript:{}" target="__blank"><i class="fa fa-fw fa-cog mr-1"></i><span>Settings</span></a></li>
-                                </ul>
+                    <?php
+                    if ($row["UserType"] == "Admin") {
+                    ?>
+                        <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
+                            <div class="card p-3">
+                                <div class="e-navlist e-navlist--active-bg">
+                                    <ul class="nav">
+                                        <!--<li class="nav-item"><a class="nav-link px-2 active" href="javascript:{}"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Overview</span></a></li>-->
+                                        <li class="nav-item"><a class="nav-link px-2" href="createProduct.php"><i class="fa fa-plus-square mr-1"></i><span> Create Product</span></a></li>
+                                        <li class="nav-item"><a class="nav-link px-2" href="javascript:{}"><i class="fa fa-fw fa-th mr-1"></i><span>Orders</span></a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
+                    <?php
+                    }
+                    ?>
 
 
                     <div class="col">

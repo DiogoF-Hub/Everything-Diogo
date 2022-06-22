@@ -38,15 +38,6 @@ INSERT INTO AvailableCountries (Country) VALUES("Luxembourg");
 INSERT INTO AvailableCountries (Country) VALUES("Germany");
 
 
-CREATE TABLE Orders(
-    OrderID INT NOT NULL AUTO_INCREMENT,
-    UserName VARCHAR(250),
-    OrderList VARCHAR(250),
-    PRIMARY KEY(OrderID),
-    FOREIGN KEY(UserName) REFERENCES Users(UserName)
-);
-
-
 CREATE TABLE Products (
     ProductsID int not null AUTO_INCREMENT,
     ImageLink VARCHAR(255),
@@ -64,6 +55,24 @@ CREATE TABLE Products (
     PRIMARY KEY(ProductsID)
 );
 
+
+CREATE TABLE Orders(
+    OrderID INT NOT NULL AUTO_INCREMENT,
+    UserName VARCHAR(250),
+    ListID VARCHAR(250),
+    PRIMARY KEY(OrderID),
+    FOREIGN KEY(UserName) REFERENCES Users(UserName)
+);
+
+
+CREATE TABLE ListOrder(
+    ListID INT NOT NULL AUTO_INCREMENT,
+    ProductsID INT,
+    QuantityProduct INT,
+    PRIMARY KEY(ListID),
+    FOREIGN KEY(ProductsID) REFERENCES Products(ProductsID)
+);
+---
 
 CREATE TABLE LANGUAGE (
     IDLang int not null AUTO_INCREMENT,
@@ -238,3 +247,4 @@ INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDe
 
 
 INSERT INTO  Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country) VALUES("Diogo", "Fernandes", "DFER7", "diogo_carvalhofer@hotmail.com", "$2y$10$GJgXPCnkyHucmEkXAonILuyjhixgxprvNJAp0v.gRQevgXphqIUny", "", "Admin", STR_TO_DATE('19, 9, 2021','%d, %m, %Y'), STR_TO_DATE('07, 3, 2004','%d, %m, %Y'), "", "mr", "", "", "", "", "", "");
+INSERT INTO  Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country) VALUES("Diogo", "Fernandes", "DFER72", "diogo_carvalhofer@hotmail.com", "$2y$10$GJgXPCnkyHucmEkXAonILuyjhixgxprvNJAp0v.gRQevgXphqIUny", "", "Normal", STR_TO_DATE('19, 9, 2021','%d, %m, %Y'), STR_TO_DATE('07, 3, 2004','%d, %m, %Y'), "", "mr", "", "", "", "", "", "");

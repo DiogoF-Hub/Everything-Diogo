@@ -68,7 +68,7 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
 
 
     include_once("nav.php");
-    navbar("Products.php?lang=" . $otherlang . "&pricerange=" . $_GET["pricerange"], "products", $sqlLang, $connection);
+    navbar("Products.php?lang=" . $otherlang . "&pricerange=" . $_GET["pricerange"], "products", $sqlLang);
 
     ?>
 
