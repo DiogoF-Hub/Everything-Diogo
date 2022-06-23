@@ -121,8 +121,8 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
                     print("<div class='oneLineOfProduct'>");
         ?>
                 <div class="product">
-                    <a href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1"><img src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductName"] ?>" class="productimage"></a>
-                    <div><?= $row["ProductName"] ?></div>
+                    <a href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1"><img src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductNameFull"] ?>" class="productimage"></a>
+                    <div><?= $row["ProductNameFull"] ?></div>
                     <div><?= $row["Subtitle1"] ?></div>
                     <div><?= $row["Subtitle2"] ?></div>
                     <span>----</span>
