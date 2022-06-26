@@ -22,7 +22,7 @@ if (isset($_POST["quantityProduct"], $_POST["quantityProductChartId"])) {
         die();
     }
 
-    if ($_POST["quantityProduct"] < 1 || $_POST["quantityProduct"] > 10) {
+    if ($_POST["quantityProduct"] < 1) {
         die();
     }
 
@@ -126,14 +126,14 @@ if (isset($_POST["orderSave"])) {
                                 <div class="row align-items-center">
                                     <div class="col">
                                         <a style="text-decoration: none; color: inherit;" href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1">
-                                            <img src="../Images/<?= $row["ImageLink"] ?>.jpg" style="height: 50%; width: 50%;" alt="<?= $row["ProductName"] ?>">
+                                            <img src="../Images/<?= $row["ImageLink"] ?>.jpg" style="height: 50%; width: 50%;" alt="<?= $row["ProductNameFull"] ?>">
                                         </a>
                                     </div>
                                     <div class="col justify-content-center">
                                         <div>
                                             <a style="text-decoration: none; color: inherit;" href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1">
                                                 <div class="small text-muted mb-2 ">Name</div>
-                                                <div class="fw-normal mb-2"><?= $row["ProductName"] ?></div>
+                                                <div class="fw-normal mb-2"><?= $row["ProductNameFull"] ?></div>
                                             </a>
                                         </div>
                                     </div>
