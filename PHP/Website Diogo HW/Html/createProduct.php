@@ -1,15 +1,63 @@
 <?php
 include_once("start.php");
 
+
 if ($_SESSION["userloggedIn"] == false) {
     print "<script>alert('You are not logged In');</script>";
     print '<script>window.location.href = "user.php";</script>';
     die();
 }
 
+
 if ($_SESSION["UserType"] != "Admin") {
     header("Location: Home.php");
     die();
+}
+
+
+if (isset($_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["link"], $_POST["price"], $_POST["Spec1"], $_POST["Spec2"], $_POST["Spec3"], $_FILES['ProductPic1'], $_FILES['ProductPic2'], $_FILES['ProductPic3']) && $_SESSION["UserType"] = "Admin") {
+    print "<script>alert('nice');</script>";
+    /*$sqlInsert = $connection->prepare("INSERT INTO Products (ImageLink, ProductNameFull, Subtitle1, Subtitle2, Company, ProductLink, Price, DetailedTable1, DetailedTable2, DetailedTable3) VALUES (?,?,?,?,?,?,?,?,?,?)");
+    $imgNameFile = preg_replace('/\s+/', '', $_POST["ProductName"]);
+    $sqlInsert->bind_param("ssssssssss", $imgNameFile, $_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["link"], $_POST["price"], $_POST["Spec1"], $_POST["Spec2"], $_POST["Spec3"]);
+
+
+    $imgARR = [$_FILES['ProductPic1'], $_FILES['ProductPic2'], $_FILES['ProductPic1']];
+
+    for ($i = 0; $i <= count($imgARR); $i++) {
+        $file_name = preg_replace('/\s+/', '', $_POST["ProductName"]);
+        $file_size = $imgARR[$i]['size'];
+        $file_tmp = $imgARR[$i]['tmp_name'];
+        $file_type = $imgARR[$i]['type'];
+        $arrEXT = explode('.', $imgARR[$i]['name']);
+
+        $file_ext = strtolower($arrEXT[count($arrEXT) - 1]);
+        $extensions = array("jpeg", "jpg", "png");
+        if (in_array($file_ext, $extensions) === false) {
+            print "<script>alert('Extension not allowed, please choose a JPEG or PNG file.')</script>";
+            header("Refresh:0");
+            die();
+        }
+
+        if ($file_size > 26214400) {
+            print "<script>alert('File size must be less than or 25 MB:')</script>";
+            header("Refresh:0");
+            die();
+        }
+
+        if ($i == 0) {
+            $fullFileName = $file_name .  "." . $file_ext;
+        } else {
+            $fullFileName = $file_name . $i + 1 . "." . $file_ext;
+        }
+
+
+        if (move_uploaded_file($file_tmp, "../Images/" . $fullFileName)) {
+            print "<script>alert('Product has been created')</script>";
+            header("Refresh:0");
+            die();
+        }
+    }*/
 }
 
 ?>
@@ -29,21 +77,16 @@ if ($_SESSION["UserType"] != "Admin") {
     <!--<link rel="icon" href="../Images/Logo.jpg">-->
     <title>Create Product</title>
     <script>
-        var loadFile = function(event, output, spanIMG) {
-            var spanIMG = document.getElementById("spanIMG");
-            var output = document.getElementById('output');
+        var loadFile = function(event, output) {
+            var outputID = document.getElementById(output);
 
-            if (spanIMG.hasAttribute("hidden") == false) {
-                spanIMG.setAttribute("hidden", "hidden");
+            if (outputID.hasAttribute("hidden")) {
+                outputID.removeAttribute("hidden");
             }
 
-            if (output.hasAttribute("hidden")) {
-                output.removeAttribute("hidden");
-            }
-
-            output.src = URL.createObjectURL(event.target.files[0]);
-            output.onload = function() {
-                URL.revokeObjectURL(output.src) // free memory
+            outputID.src = URL.createObjectURL(event.target.files[0]);
+            outputID.onload = function() {
+                URL.revokeObjectURL(outputID.src) // free memory
             }
         };
     </script>
@@ -53,11 +96,6 @@ if ($_SESSION["UserType"] != "Admin") {
     <?php
     include_once("nav.php");
     navbar("createProduct.php?lang=" . $otherlang, "", $sqlLang);
-
-    if (isset($_POST["ProductName"])) {
-        $sqlInsert = $connection->prepare("INSERT INTO Products (ImageLink, ProductNameFull, Subtitle1, Subtitle2, Company, ProductLink, Price, DetailedTable1, DetailedTable2, DetailedTable3) VALUES (?,?,?,?,?,?,?,?,?,?)");
-        $sqlInsert->bind_param("ssssssssss", $_POST["ProductName"] . ".jpg", $_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["link"], $_POST["price"], $_POST["Spec1"], $_POST["Spec2"], $_POST["Spec3"]);
-    }
     ?>
 
     <section class="section1">
@@ -70,7 +108,7 @@ if ($_SESSION["UserType"] != "Admin") {
 
             <div class="row">
                 <div class="col-md order-md-1">
-                    <form method="POST">
+                    <form method="POST" enctype="multipart/form-data">
 
                         <div class="mb-3">
                             <div class="row">
@@ -192,28 +230,27 @@ if ($_SESSION["UserType"] != "Admin") {
                         <hr class="mb-4">
                         <h3 class="mb-3">Images</h3>
 
-                        <div class="row">
-                            <div class="col">
-                                <input id="InputFile1" type="file" accept="image/*" onchange="loadFile(event, 'output1', 'spanIMG1')" hidden>
-                                <img id="output1" style="height: 135px; width: 135px;" src="../Images/noIMG.jpg">
-                                <a class="btn btn-info" style="width: 135px;" href="javascript:{}">First Image</a>
+
+                        <div class="row mb-5">
+                            <div class="col d-flex flex-column">
+                                <input class="mx-auto" id="InputFile1" type="file" accept="image/*" onchange="loadFile(event, 'output1')" hidden>
+                                <img class="mx-auto rounded" id="output1" style="height: 135px; width: 135px;" src="../Images/noIMG.jpg">
+                                <a class="btn btn-info mx-auto mt-1" style="width: 135px;" href="javascript:{}" onclick="document.getElementById('InputFile1').click();">First Image</a>
                             </div>
-                            <div class="col">
-                                <input id="InputFile2" type="file" accept="image/*" onchange="loadFile(event, 'output2', 'spanIMG2')" hidden>
-                                <img id="output2" style="height: 135px; width: 135px;" src="../Images/noIMG.jpg">
-                                <a class="btn btn-info" style="width: 135px;" href="javascript:{}">Second Image</a>
+                            <div class="col d-flex flex-column">
+                                <input class="mx-auto" id="InputFile2" type="file" accept="image/*" onchange="loadFile(event, 'output2')" hidden>
+                                <img class="mx-auto rounded" id="output2" style="height: 135px; width: 135px;" src="../Images/noIMG.jpg">
+                                <a class="btn btn-info mx-auto mt-1" style="width: 135px;" href="javascript:{}" onclick="document.getElementById('InputFile2').click();">Second Image</a>
                             </div>
-                            <div class="col">
-                                <input id="InputFile3" type="file" accept="image/*" onchange="loadFile(event, 'output3', 'spanIMG3')" hidden>
-                                <img id="output3" style="height: 135px; width: 135px;" src="../Images/noIMG.jpg">
-                                <a class="btn btn-info" style="width: 135px;" href="javascript:{}">Third Image</a>
+                            <div class="col d-flex flex-column">
+                                <input class="mx-auto" id="InputFile3" type="file" accept="image/*" onchange="loadFile(event, 'output3')" hidden>
+                                <img class="mx-auto rounded" id="output3" style="height: 135px; width: 135px;" src="../Images/noIMG.jpg">
+                                <a class="btn btn-info mx-auto mt-1" style="width: 135px;" href="javascript:{}" onclick="document.getElementById('InputFile3').click();">Third Image</a>
                             </div>
                         </div>
 
 
-
-                        <br>
-                        <button type="submit" href="javascript:{}" class="btn btn-primary btn-lg btn-block">Create Product</button>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Create Product</button>
                         <br><br>
                     </form>
                 </div>
