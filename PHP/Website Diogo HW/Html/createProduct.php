@@ -14,50 +14,73 @@ if ($_SESSION["UserType"] != "Admin") {
     die();
 }
 
+//$_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["link"], $_POST["price"], $_POST["Spec1"], $_POST["Spec2"], $_POST["Spec3"], $_FILES['ProductPic1'], $_FILES['ProductPic2'], $_FILES['ProductPic3'], $_POST["Description1en"], $_POST["Description2en"], $_POST["Spec1nameen"], $_POST["Spec2nameen"], $_POST["Spec3nameen"], $_POST["Description1pt"], $_POST["Description2pt"], $_POST["Spec1namept"], $_POST["Spec2namept"], $_POST["Spec3namept"]
+if (isset($_POST["ProductName"], $_FILES['ProductPic1'], $_FILES['ProductPic2'], $_FILES['ProductPic3']) && $_SESSION["UserType"] = "Admin") {
+    /*//Getting the last used ID then +1 so i can use for the id descriptions
+    $sqlID = $connection->prepare("SELECT ProductsID from Products ORDER BY ProductsID DESC LIMIT 1");
+    $sqlID->execute();
+    $result = $sqlID->get_result();
+    $row = $result->fetch_assoc();
+    $productID = $row["ProductsID"] + 1; //+1 bcs the next
 
-if (isset($_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["link"], $_POST["price"], $_POST["Spec1"], $_POST["Spec2"], $_POST["Spec3"], $_FILES['ProductPic1'], $_FILES['ProductPic2'], $_FILES['ProductPic3']) && $_SESSION["UserType"] = "Admin") {
-    print "<script>alert('nice');</script>";
-    /*$sqlInsert = $connection->prepare("INSERT INTO Products (ImageLink, ProductNameFull, Subtitle1, Subtitle2, Company, ProductLink, Price, DetailedTable1, DetailedTable2, DetailedTable3) VALUES (?,?,?,?,?,?,?,?,?,?)");
-    $imgNameFile = preg_replace('/\s+/', '', $_POST["ProductName"]);
+    //Common product info
+    $sqlInsert = $connection->prepare("INSERT INTO Products (ImageLink, ProductNameFull, Subtitle1, Subtitle2, Company, ProductLink, Price, DetailedTable1, DetailedTable2, DetailedTable3) VALUES (?,?,?,?,?,?,?,?,?,?)");
+    $imgNameFile = preg_replace('/\s+/', '', $_POST["ProductName"]); //remove all types of spaces 
     $sqlInsert->bind_param("ssssssssss", $imgNameFile, $_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["link"], $_POST["price"], $_POST["Spec1"], $_POST["Spec2"], $_POST["Spec3"]);
+    $sqlInsert->execute();
+
+    //English Description
+    $sqlInsertEN = $connection->prepare("INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDescription1, TableDescription2, TableDescription3) VALUES (?,?,?,?,?,?,?)");
+    $one1 = 1;
+    $sqlInsertEN->bind_param("iisssss", $productID, $one1, $_POST["Description1en"], $_POST["Description2en"], $_POST["Spec1nameen"], $_POST["Spec2nameen"], $_POST["Spec3nameen"]);
+    $sqlInsertEN->execute();
+
+    //Portuguese Description
+    $sqlInsertPT = $connection->prepare("INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDescription1, TableDescription2, TableDescription3) VALUES (?,?,?,?,?,?,?)");
+    $two2 = 2;
+    $sqlInsertPT->bind_param("iisssss", $productID, $two2, $_POST["Description1pt"], $_POST["Description2pt"], $_POST["Spec1namept"], $_POST["Spec2namept"], $_POST["Spec3namept"]);
+    $sqlInsertPT->execute();*/
 
 
-    $imgARR = [$_FILES['ProductPic1'], $_FILES['ProductPic2'], $_FILES['ProductPic1']];
+    //3 different files but same code, so for loop
+    $imgARR = [$_FILES['ProductPic1'], $_FILES['ProductPic2'], $_FILES['ProductPic3']];
 
-    for ($i = 0; $i <= count($imgARR); $i++) {
+    for ($i = 1; $i <= 3; $i++) {
+        $nameArr = 'ProductPic' . $i;
         $file_name = preg_replace('/\s+/', '', $_POST["ProductName"]);
-        $file_size = $imgARR[$i]['size'];
-        $file_tmp = $imgARR[$i]['tmp_name'];
-        $file_type = $imgARR[$i]['type'];
-        $arrEXT = explode('.', $imgARR[$i]['name']);
+        $file_size = $_FILES[$nameArr]['size'];
+        $file_tmp = $_FILES[$nameArr]['tmp_name'];
+        $file_type = $_FILES[$nameArr]['type'];
+        $arrEXT = explode('.', $_FILES[$nameArr]['name']);
 
         $file_ext = strtolower($arrEXT[count($arrEXT) - 1]);
         $extensions = array("jpeg", "jpg", "png");
         if (in_array($file_ext, $extensions) === false) {
             print "<script>alert('Extension not allowed, please choose a JPEG or PNG file.')</script>";
-            header("Refresh:0");
+            //header("Refresh:0");
             die();
         }
 
         if ($file_size > 26214400) {
             print "<script>alert('File size must be less than or 25 MB:')</script>";
-            header("Refresh:0");
+            //header("Refresh:0");
             die();
         }
 
-        if ($i == 0) {
+        if ($i == 0) { //the first file should have just the name
             $fullFileName = $file_name .  "." . $file_ext;
         } else {
-            $fullFileName = $file_name . $i + 1 . "." . $file_ext;
+            $numberPIC = $i + 1;
+            $fullFileName = $file_name . $numberPIC . "." . $file_ext; //the 2 and the 3 should have the number
         }
 
 
         if (move_uploaded_file($file_tmp, "../Images/" . $fullFileName)) {
             print "<script>alert('Product has been created')</script>";
-            header("Refresh:0");
+            //header("Refresh:0");
             die();
         }
-    }*/
+    }
 }
 
 ?>
@@ -114,7 +137,7 @@ if (isset($_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POS
                             <div class="row">
                                 <div class="col mb-3">
                                     <label for="Name">Product Name</label>
-                                    <input type="text" class="form-control" id="Name" placeholder="AMD Ryzen 7 3800X" required="" name="ProductName">
+                                    <input type="text" class="form-control" id="Name" placeholder="AMD Ryzen 7 3800X" name="ProductName">
                                 </div>
                             </div>
                         </div>
@@ -123,11 +146,11 @@ if (isset($_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POS
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="Subtitle1">Subtitle1</label>
-                                    <input type="text" class="form-control" id="Subtitle1" placeholder="8-Core 16-Threads" required="" name="Subtitle1">
+                                    <input type="text" class="form-control" id="Subtitle1" placeholder="8-Core 16-Threads" name="Subtitle1">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="Subtitle2">Subtitle2</label>
-                                    <input type="text" class="form-control" id="Subtitle2" placeholder="(3.9 GHz / 4.5 GHz)" required="" name="Subtitle2">
+                                    <input type="text" class="form-control" id="Subtitle2" placeholder="(3.9 GHz / 4.5 GHz)" name="Subtitle2">
                                 </div>
                             </div>
                         </div>
@@ -135,7 +158,7 @@ if (isset($_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POS
                         <div class="mb-3">
                             <label for="company">Company</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="company" placeholder="AMD" required="" name="company">
+                                <input type="text" class="form-control" id="company" placeholder="AMD" name="company">
                             </div>
                         </div>
 
@@ -147,7 +170,7 @@ if (isset($_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POS
                         <div class="mb-3">
                             <label for="price">Price</label>
                             <div class="input-group w-25">
-                                <input type="number" class="form-control" id="price" placeholder="439" required="" name="price">
+                                <input type="number" class="form-control" id="price" placeholder="439" name="price">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">€</span>
                                 </div>
@@ -157,15 +180,15 @@ if (isset($_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POS
                         <div class="row">
                             <div class="col-md-5 mb-3">
                                 <label for="Spec1">Spec 1</label>
-                                <input type="text" class="form-control" id="Spec1" placeholder="3.9 Ghz" required="" name="Spec1">
+                                <input type="text" class="form-control" id="Spec1" placeholder="3.9 Ghz" name="Spec1">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="Spec2">Spec 2</label>
-                                <input type="text" class="form-control" id="Spec2" placeholder="8" required="" name="Spec2">
+                                <input type="text" class="form-control" id="Spec2" placeholder="8" name="Spec2">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="Spec3">Spec 3</label>
-                                <input type="text" class="form-control" id="Spec3" placeholder="16" required="" name="Spec3">
+                                <input type="text" class="form-control" id="Spec3" placeholder="16" name="Spec3">
                             </div>
                         </div>
                         <hr class="mb-4">
@@ -175,26 +198,26 @@ if (isset($_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POS
                             <h5 class="mb-3">English</h5>
                             <div class="mb-3 w-25">
                                 <label for="Description1en">Description 1</label>
-                                <input type="text" class="form-control" id="Description1en" placeholder="This is a CPU from" required="" name="Description1en">
+                                <input type="text" class="form-control" id="Description1en" placeholder="This is a CPU from" name="Description1en">
                             </div>
 
                             <div class="mb-3">
                                 <label for="Description2en">Description 2</label>
-                                <input type="text" class="form-control" id="Description2en" placeholder="Long text explaning the product" required="" name="Description2en">
+                                <input type="text" class="form-control" id="Description2en" placeholder="Long text explaning the product" name="Description2en">
                             </div>
 
                             <div class="row">
                                 <div class="col-md-5 mb-3">
                                     <label for="Spec1nameen">Spec 1 Name</label>
-                                    <input type="text" class="form-control" id="Spec1nameen" placeholder="Clock" required="" name="Spec1nameen">
+                                    <input type="text" class="form-control" id="Spec1nameen" placeholder="Clock" name="Spec1nameen">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="Spec2nameen">Spec 2 Name</label>
-                                    <input type="text" class="form-control" id="Spec2nameen" placeholder="Cores" required="" name="Spec2nameen">
+                                    <input type="text" class="form-control" id="Spec2nameen" placeholder="Cores" name="Spec2nameen">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label for="Spec3nameen">Spec 3 Name</label>
-                                    <input type="text" class="form-control" id="Spec3nameen" placeholder="Threads" required="" name="Spec3nameen">
+                                    <input type="text" class="form-control" id="Spec3nameen" placeholder="Threads" name="Spec3nameen">
                                 </div>
                             </div>
                         </div>
@@ -203,26 +226,26 @@ if (isset($_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POS
                             <h5 class="mb-3">Portuguese</h5>
                             <div class="mb-3 w-25">
                                 <label for="Description1en">Description 1</label>
-                                <input type="text" class="form-control" id="Description1en" placeholder="This is a CPU from" required="" name="Description1en">
+                                <input type="text" class="form-control" id="Description1en" placeholder="This is a CPU from" name="Description1pt">
                             </div>
 
                             <div class="mb-3">
                                 <label for="Description2en">Description 2</label>
-                                <input type="text" class="form-control" id="Description2en" placeholder="Long text explaning the product" required="" name="Description2en">
+                                <input type="text" class="form-control" id="Description2en" placeholder="Long text explaning the product" name="Description2pt">
                             </div>
 
                             <div class="row">
                                 <div class="col-md-5 mb-3">
                                     <label for="Spec1nameen">Spec 1 Name</label>
-                                    <input type="text" class="form-control" id="Spec1nameen" placeholder="Clock" required="" name="Spec1nameen">
+                                    <input type="text" class="form-control" id="Spec1nameen" placeholder="Clock" name="Spec1namept">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="Spec2nameen">Spec 2 Name</label>
-                                    <input type="text" class="form-control" id="Spec2nameen" placeholder="Cores" required="" name="Spec2nameen">
+                                    <input type="text" class="form-control" id="Spec2nameen" placeholder="Cores" name="Spec2namept">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label for="Spec3nameen">Spec 3 Name</label>
-                                    <input type="text" class="form-control" id="Spec3nameen" placeholder="Threads" required="" name="Spec3nameen">
+                                    <input type="text" class="form-control" id="Spec3nameen" placeholder="Threads" name="Spec3namept">
                                 </div>
                             </div>
                         </div>
@@ -233,17 +256,17 @@ if (isset($_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POS
 
                         <div class="row mb-5">
                             <div class="col d-flex flex-column">
-                                <input class="mx-auto" id="InputFile1" type="file" accept="image/*" onchange="loadFile(event, 'output1')" hidden>
+                                <input class="mx-auto" id="InputFile1" type="file" accept="image/*" onchange="loadFile(event, 'output1')" hidden name="ProductPic1">
                                 <img class="mx-auto rounded" id="output1" style="height: 135px; width: 135px;" src="../Images/noIMG.jpg">
                                 <a class="btn btn-info mx-auto mt-1" style="width: 135px;" href="javascript:{}" onclick="document.getElementById('InputFile1').click();">First Image</a>
                             </div>
                             <div class="col d-flex flex-column">
-                                <input class="mx-auto" id="InputFile2" type="file" accept="image/*" onchange="loadFile(event, 'output2')" hidden>
+                                <input class="mx-auto" id="InputFile2" type="file" accept="image/*" onchange="loadFile(event, 'output2')" hidden name="ProductPic2">
                                 <img class="mx-auto rounded" id="output2" style="height: 135px; width: 135px;" src="../Images/noIMG.jpg">
                                 <a class="btn btn-info mx-auto mt-1" style="width: 135px;" href="javascript:{}" onclick="document.getElementById('InputFile2').click();">Second Image</a>
                             </div>
                             <div class="col d-flex flex-column">
-                                <input class="mx-auto" id="InputFile3" type="file" accept="image/*" onchange="loadFile(event, 'output3')" hidden>
+                                <input class="mx-auto" id="InputFile3" type="file" accept="image/*" onchange="loadFile(event, 'output3')" hidden name="ProductPic3">
                                 <img class="mx-auto rounded" id="output3" style="height: 135px; width: 135px;" src="../Images/noIMG.jpg">
                                 <a class="btn btn-info mx-auto mt-1" style="width: 135px;" href="javascript:{}" onclick="document.getElementById('InputFile3').click();">Third Image</a>
                             </div>
