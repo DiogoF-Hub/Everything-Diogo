@@ -1,6 +1,36 @@
 <?php
 include_once("start.php");
 
+function InsertPic($picName, $a)
+{
+    $file_name = preg_replace('/\s+/', '', $_POST["ProductName"]);
+    $file_size = $_FILES[$picName]['size'];
+    $file_tmp = $_FILES[$picName]['tmp_name'];
+    //$file_type = $_FILES[$picName]['type'];
+    $arrEXT = explode('.', $_FILES[$picName]['name']);
+
+    $file_ext = strtolower($arrEXT[count($arrEXT) - 1]);
+    $extensions = array("jpeg", "jpg", "png");
+    if (in_array($file_ext, $extensions) === false) {
+        print "<script>alert('Extension not allowed, please choose a JPEG or PNG file.')</script>";
+        header("Refresh:0");
+        die();
+    }
+
+    if ($file_size > 26214400) {
+        print "<script>alert('File size must be less than or 25 MB:')</script>";
+        header("Refresh:0");
+        die();
+    }
+
+    if ($a == 0) { //the first file should have just the name
+        $fullFileName = $file_name .  ".jpg";
+    } else {
+        $fullFileName = $file_name . $a . ".jpg"; //the 2 and the 3 should have the number
+    }
+
+    move_uploaded_file($file_tmp, "../Images/" . $fullFileName);
+}
 
 if ($_SESSION["userloggedIn"] == false) {
     print "<script>alert('You are not logged In');</script>";
@@ -10,7 +40,8 @@ if ($_SESSION["userloggedIn"] == false) {
 
 
 if ($_SESSION["UserType"] != "Admin") {
-    header("Location: Home.php");
+    print "<script>alert('You are not an Admin');</script>";
+    print '<script>window.location.href = "Home.php";</script>';
     die();
 }
 
@@ -30,51 +61,23 @@ if (isset($_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["l
     $sqlInsert->execute();
 
     //English Description
-    $sqlInsertEN = $connection->prepare("INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDescription1, TableDescription2, TableDescription3) VALUES (?,?,?,?,?,?,?)");
-    $one1 = 1;
-    $sqlInsertEN->bind_param("iisssss", $productID, $one1, $_POST["Description1en"], $_POST["Description2en"], $_POST["Spec1nameen"], $_POST["Spec2nameen"], $_POST["Spec3nameen"]);
+    $sqlInsertEN = $connection->prepare("INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDescription1, TableDescription2, TableDescription3) VALUES (?,1,?,?,?,?,?)");
+    $sqlInsertEN->bind_param("isssss", $productID, $_POST["Description1en"], $_POST["Description2en"], $_POST["Spec1nameen"], $_POST["Spec2nameen"], $_POST["Spec3nameen"]);
     $sqlInsertEN->execute();
 
     //Portuguese Description
-    $sqlInsertPT = $connection->prepare("INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDescription1, TableDescription2, TableDescription3) VALUES (?,?,?,?,?,?,?)");
-    $two2 = 2;
-    $sqlInsertPT->bind_param("iisssss", $productID, $two2, $_POST["Description1pt"], $_POST["Description2pt"], $_POST["Spec1namept"], $_POST["Spec2namept"], $_POST["Spec3namept"]);
+    $sqlInsertPT = $connection->prepare("INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDescription1, TableDescription2, TableDescription3) VALUES (?,2,?,?,?,?,?)");
+    $sqlInsertPT->bind_param("isssss", $productID, $_POST["Description1pt"], $_POST["Description2pt"], $_POST["Spec1namept"], $_POST["Spec2namept"], $_POST["Spec3namept"]);
     $sqlInsertPT->execute();
 
 
     //3 different files but same code, so for loop
-    $imgARR = ['ProductPic1', 'ProductPic2', 'ProductPic3'];
+    //$imgARR = ['ProductPic1', 'ProductPic2', 'ProductPic3'];
 
-    for ($i = 0; $i <= count($imgARR) - 1; $i++) {
-        $file_name = preg_replace('/\s+/', '', $_POST["ProductName"]);
-        $file_size = $_FILES[$imgARR[$i]]['size'];
-        $file_tmp = $_FILES[$imgARR[$i]]['tmp_name'];
-        $file_type = $_FILES[$imgARR[$i]]['type'];
-        $arrEXT = explode('.', $_FILES[$imgARR[$i]]['name']);
+    InsertPic("ProductPic1", 0);
+    InsertPic("ProductPic2", 2);
+    InsertPic("ProductPic3", 3);
 
-        $file_ext = strtolower($arrEXT[count($arrEXT) - 1]);
-        $extensions = array("jpeg", "jpg", "png");
-        if (in_array($file_ext, $extensions) === false) {
-            print "<script>alert('Extension not allowed, please choose a JPEG or PNG file.')</script>";
-            header("Refresh:0");
-            die();
-        }
-
-        if ($file_size > 26214400) {
-            print "<script>alert('File size must be less than or 25 MB:')</script>";
-            header("Refresh:0");
-            die();
-        }
-
-        if ($i == 0) { //the first file should have just the name
-            $fullFileName = $file_name .  "." . $file_ext;
-        } else {
-            $numberPIC = $i + 1;
-            $fullFileName = $file_name . $numberPIC . "." . $file_ext; //the 2 and the 3 should have the number
-        }
-
-        move_uploaded_file($file_tmp, "../Images/" . $fullFileName);
-    }
 
     print "<script>alert('Product has been created')</script>";
     header("Refresh:0");
@@ -120,9 +123,17 @@ if (isset($_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["l
     ?>
 
     <section class="section1">
-
         <div class="container border border-secondary rounded">
-            <div class="py-5 text-center">
+            <div class="p-3" style="width: 200px;">
+                <div class="e-navlist e-navlist--active-bg">
+                    <ul class="nav">
+                        <li class="nav-item"><a class="nav-link px-2" href="createProduct.php"><i class="fa fa-plus-square mr-1"></i><span> Create Product</span></a></li>
+                        <li class="nav-item"><a class="nav-link px-2" href="orders.php"><i class="fa fa-fw fa-th mr-1"></i><span> Orders</span></a></li>
+                        <li class="nav-item"><a class="nav-link px-2" href="user.php"><i class="fa fa-undo mr-1"></i><span> Go back</span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="py-2 text-center">
                 <img class="d-block mx-auto mb-4" src="../Images/product-create.png" alt="" width="72" height="72">
                 <h2>Create Product</h2>
             </div>

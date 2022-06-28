@@ -671,9 +671,8 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                             <div class="card p-3">
                                 <div class="e-navlist e-navlist--active-bg">
                                     <ul class="nav">
-                                        <!--<li class="nav-item"><a class="nav-link px-2 active" href="javascript:{}"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Overview</span></a></li>-->
                                         <li class="nav-item"><a class="nav-link px-2" href="createProduct.php"><i class="fa fa-plus-square mr-1"></i><span> Create Product</span></a></li>
-                                        <li class="nav-item"><a class="nav-link px-2" href="javascript:{}"><i class="fa fa-fw fa-th mr-1"></i><span>Orders</span></a></li>
+                                        <li class="nav-item"><a class="nav-link px-2" href="orders.php"><i class="fa fa-fw fa-th mr-1"></i><span>Orders</span></a></li>
                                     </ul>
                                 </div>
                             </div>
