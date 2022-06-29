@@ -559,7 +559,7 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
 
     <?php
     include_once("nav.php");
-    navbar("user.php?lang=" . $otherlang, "", $sqlLang);
+    navbar("user.php?lang=" . $otherlang, "user", $sqlLang);
     ?>
 
     <section class="section1">

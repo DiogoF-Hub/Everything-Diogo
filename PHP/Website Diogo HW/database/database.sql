@@ -56,7 +56,7 @@ CREATE TABLE Products (
 
 
 CREATE TABLE Orders(
-    OrderID INT NOT NULL AUTO_INCREMENT,
+    OrderID VARCHAR(500),
     UserName VARCHAR(250),
     ListID VARCHAR(250),
     PRIMARY KEY(OrderID),
@@ -66,9 +66,11 @@ CREATE TABLE Orders(
 
 CREATE TABLE ListOrder(
     ListID INT NOT NULL AUTO_INCREMENT,
+    OrderID INT NOT NULL,
     ProductsID INT,
     QuantityProduct INT,
     PRIMARY KEY(ListID),
+    FOREIGN KEY(OrderID) REFERENCES Orders(OrderID),
     FOREIGN KEY(ProductsID) REFERENCES Products(ProductsID)
 );
 

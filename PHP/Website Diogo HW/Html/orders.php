@@ -34,7 +34,7 @@ if ($_SESSION["UserType"] != "Admin") {
 <body>
     <?php
     include_once("nav.php");
-    navbar("orders.php?lang=" . $otherlang, "", $sqlLang);
+    navbar("orders.php?lang=" . $otherlang, "user", $sqlLang);
     ?>
 
     <section class="section1">

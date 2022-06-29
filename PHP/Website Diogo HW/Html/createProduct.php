@@ -119,7 +119,7 @@ if (isset($_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["l
 <body>
     <?php
     include_once("nav.php");
-    navbar("createProduct.php?lang=" . $otherlang, "", $sqlLang);
+    navbar("createProduct.php?lang=" . $otherlang, "user", $sqlLang);
     ?>
 
     <section class="section1">

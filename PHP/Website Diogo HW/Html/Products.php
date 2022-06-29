@@ -44,6 +44,10 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
     <title>Products</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='../Styling/MyStylesEN.css?t<?= time(); ?>'>
+    <link href="../Styling/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src='../Styling/bootstrap/js/bootstrap.bundle.min.js'></script>
+    <script src="../jquery/jquery-3.6.0.min.js"></script>
+    <link href="../Styling/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
         function pricerangefunc() {
             document.getElementById("pricerange").submit();
@@ -120,7 +124,7 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
                 if ($lineNumber == 0)
                     print("<div class='oneLineOfProduct'>");
         ?>
-                <div class="product">
+                <div class="Myproduct">
                     <a href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1"><img src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductNameFull"] ?>" class="productimage"></a>
                     <div><?= $row["ProductNameFull"] ?></div>
                     <div><?= $row["Subtitle1"] ?></div>

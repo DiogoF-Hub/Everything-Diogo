@@ -38,8 +38,8 @@ function navbar($URL, $ActivePage, $sqlLang)
         <?php
         } else {
         ?>
-            <div> <a style="color: inherit;" href="user.php"><?php if ($_SESSION["lang"] == "EN") print "Hi,";
-                                                                else print "Ola," ?> <?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></a> </div>
+            <div> <a class="<?php if ($ActivePage == "user") print "active1" ?>" style="color: inherit;" href="user.php"><?php if ($_SESSION["lang"] == "EN") print "Hi,";
+                                                                                                                            else print "Ola," ?> <?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></a> </div>
             <form method="POST" id="logoutform">
                 <input hidden type="text" name="logoutbutton">
                 <a name="logoutbutton" onclick="document.getElementById('logoutform').submit();" class="aclass <?php if ($ActivePage == "logbutton") print "active1" ?>" href="javascript:{}"><?= $navitems[5] ?></a>
