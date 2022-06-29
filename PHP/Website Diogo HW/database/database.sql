@@ -66,7 +66,7 @@ CREATE TABLE Orders(
 
 CREATE TABLE ListOrder(
     ListID INT NOT NULL AUTO_INCREMENT,
-    OrderID INT NOT NULL,
+    OrderID VARCHAR(500),
     ProductsID INT,
     QuantityProduct INT,
     PRIMARY KEY(ListID),
