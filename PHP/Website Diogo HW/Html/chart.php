@@ -4,8 +4,6 @@ include_once("start.php");
 if ($_SESSION["userloggedIn"] == false) {
     print "<script>alert('You are not logged In');</script>";
     print '<script>window.location.href = "user.php";</script>';
-    //header("Location: user.php");
-    //header("Refresh:0");
     die();
 }
 
@@ -40,11 +38,36 @@ if (isset($_POST["deletechart"])) {
 
 if (isset($_POST["orderSave"])) {
     if (count($_SESSION["Chart"]) > 0) {
-        $orderSerialize = serialize($_SESSION["Chart"]);
-        $sqlInsert = $connection->prepare("INSERT INTO Orders (UserName, OrderList) VALUES (?, ?)");
-        $sqlInsert->bind_param("ss", $_SESSION["username"], $orderSerialize);
+
+        foreach ($_SESSION["Chart"] as $productID => $quantity) {
+            $sqlStatement2 = $connection->prepare("SELECT * from products natural join description where ProductsID=? AND IDLang=" . $sqlLang);
+            $sqlStatement2->bind_param("s", $productID);
+            $sqlStatement2->execute();
+            $result2 = $sqlStatement2->get_result();
+
+            $row = $result2->fetch_assoc();
+
+            $totalOrderCheckout = $totalOrderCheckout + ($row["Price"] * $quantity);
+        }
+
+        $OrderId = "#" . $_SESSION["username"] . time();
+        // start inserting
+        $sqlInsert = $connection->prepare("INSERT INTO Orders(OrderID, UserID, TotalOrder, StatusOrder) VALUES(?, ?, ?, 'In progress')");
+        $sqlInsert->bind_param("sii", $OrderId, $_SESSION["UserID"], $totalOrderCheckout);
         $sqlInsert->execute();
-        $_SESSION["Chart"] = [];
+
+        // insert items in to the list table
+
+        foreach ($_SESSION["Chart"] as $productID => $quantity) {
+            $sqlInsert = $connection->prepare("INSERT INTO ListOrder(ProductsID, QuantityProduct, OrderID) VALUES(?,?,?)");
+            $sqlInsert->bind_param("iis", $productID, $quantity, $OrderId);
+            $sqlInsert->execute();
+        }
+
+        $_SESSION["Chart"]  = [];
+        print "<script>alert('You just placed your order!!!')</script>";
+        header("Refresh:0");
+        die();
     } else {
         echo "<script> alert('Your Shopping-cart is empty'); </>";
         header("Refresh:0");

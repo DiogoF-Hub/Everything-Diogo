@@ -1,6 +1,20 @@
 <?php
 include_once("start.php");
 
+if ($_SESSION["userloggedIn"] == false) {
+    print "<script>alert('You are not logged In');</script>";
+    print '<script>window.location.href = "user.php";</script>';
+    die();
+}
+
+
+if ($_SESSION["UserType"] != "Admin") {
+    print "<script>alert('You are not an Admin');</script>";
+    print '<script>window.location.href = "Home.php";</script>';
+    die();
+}
+
+
 function InsertPic($picName, $a)
 {
     $file_name = preg_replace('/\s+/', '', $_POST["ProductName"]);
@@ -32,18 +46,6 @@ function InsertPic($picName, $a)
     move_uploaded_file($file_tmp, "../Images/" . $fullFileName);
 }
 
-if ($_SESSION["userloggedIn"] == false) {
-    print "<script>alert('You are not logged In');</script>";
-    print '<script>window.location.href = "user.php";</script>';
-    die();
-}
-
-
-if ($_SESSION["UserType"] != "Admin") {
-    print "<script>alert('You are not an Admin');</script>";
-    print '<script>window.location.href = "Home.php";</script>';
-    die();
-}
 
 
 if (isset($_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["link"], $_POST["price"], $_POST["Spec1"], $_POST["Spec2"], $_POST["Spec3"], $_FILES['ProductPic1'], $_FILES['ProductPic2'], $_FILES['ProductPic3'], $_POST["Description1en"], $_POST["Description2en"], $_POST["Spec1nameen"], $_POST["Spec2nameen"], $_POST["Spec3nameen"], $_POST["Description1pt"], $_POST["Description2pt"], $_POST["Spec1namept"], $_POST["Spec2namept"], $_POST["Spec3namept"]) && $_SESSION["UserType"] = "Admin") {
@@ -56,7 +58,7 @@ if (isset($_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["l
 
     //Common product info
     $sqlInsert = $connection->prepare("INSERT INTO Products (ImageLink, ProductNameFull, Subtitle1, Subtitle2, Company, ProductLink, Price, DetailedTable1, DetailedTable2, DetailedTable3) VALUES (?,?,?,?,?,?,?,?,?,?)");
-    $imgNameFile = preg_replace('/\s+/', '', $_POST["ProductName"]); //remove all types of spaces 
+    $imgNameFile = preg_replace('/\s+/', '', $_POST["ProductName"]); //remove all types of spaces
     $sqlInsert->bind_param("ssssssssss", $imgNameFile, $_POST["ProductName"], $_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["link"], $_POST["price"], $_POST["Spec1"], $_POST["Spec2"], $_POST["Spec3"]);
     $sqlInsert->execute();
 

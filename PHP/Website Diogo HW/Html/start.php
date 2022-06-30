@@ -9,7 +9,7 @@ $portNo = 3306;
 
 $connection = new mysqli($host, $user, $psw, $database, $portNo);
 
-mysqli_report(MYSQLI_REPORT_OFF);
+//mysqli_report(MYSQLI_REPORT_OFF);
 
 if (isset($_POST["logoutbutton"])) {
     $chartArrayserialized = serialize($_SESSION["Chart"]);

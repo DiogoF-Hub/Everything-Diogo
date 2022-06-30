@@ -57,21 +57,21 @@ CREATE TABLE Products (
 
 CREATE TABLE Orders(
     OrderID VARCHAR(500),
-    UserName VARCHAR(250),
-    ListID VARCHAR(250),
+    UserID INT NOT NULL,
+    TotalOrder INT NOT NULL,
+    StatusOrder VARCHAR(25),
     PRIMARY KEY(OrderID),
-    FOREIGN KEY(UserName) REFERENCES Users(UserName)
+    FOREIGN KEY(UserID) REFERENCES Users(UserID)
 );
 
 
 CREATE TABLE ListOrder(
     ListID INT NOT NULL AUTO_INCREMENT,
     OrderID VARCHAR(500),
-    ProductsID INT,
-    QuantityProduct INT,
+    ProductsID INT NOT NULL,
+    QuantityProduct INT NOT NULL,
     PRIMARY KEY(ListID),
-    FOREIGN KEY(OrderID) REFERENCES Orders(OrderID),
-    FOREIGN KEY(ProductsID) REFERENCES Products(ProductsID)
+    FOREIGN KEY(OrderID) REFERENCES Orders(OrderID)
 );
 
 

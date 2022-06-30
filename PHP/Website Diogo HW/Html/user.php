@@ -35,6 +35,7 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
         $row = $result2->fetch_assoc();
         if (password_verify($_POST["passwordlogin"], $row["UserPassword"])) {
 
+            $_SESSION["UserID"] = $row["UserID"];
             $_SESSION["username"] = $row["UserName"];
             $_SESSION["firstname"] = $row["FirstName"];
             $_SESSION["lastname"] = $row["LastName"];
@@ -137,6 +138,12 @@ if (isset($_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], 
         $sqlInsert->bind_param("sssss", $firstnamereg, $lastnamereg, $usernamereg, $emailreg, $hashPSW);
 
         if ($sqlInsert->execute()) {
+            $sqlID = $connection->prepare("SELECT UserID from Users ORDER BY UserID DESC LIMIT 1");
+            $sqlID->execute();
+            $result = $sqlID->get_result();
+            $row = $result->fetch_assoc();
+
+            $_SESSION["UserID"] = $row["UserID"];
             $_SESSION["username"] = $usernamereg;
             $_SESSION["firstname"] = $firstnamereg;
             $_SESSION["lastname"] = $lastnamereg;
@@ -181,7 +188,7 @@ if (isset($_FILES['photoprofileEditIMG']) && $_SESSION["userloggedIn"] == true) 
     $extensions = array("jpeg", "jpg", "png");
 
     if (in_array($file_ext, $extensions) === false) {
-        print "<script>alert('Extension not allowed, please choose a JPEG or PNG file.')</script>";
+        print "<script>alert('Extension not allowed, please choose a JPEG, PNG or JPG file.')</script>";
         header("Refresh:0");
         die();
     }
