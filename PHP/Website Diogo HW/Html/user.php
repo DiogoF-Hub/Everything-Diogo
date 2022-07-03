@@ -24,9 +24,9 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
         die();
     }
 
-
+    $usernametrimmed = trim($_POST["usernamelogin"]);
     $sqlStatement2 = $connection->prepare("SELECT * from Users WHERE UserName=?");
-    $sqlStatement2->bind_param("s", trim($_POST["usernamelogin"]));
+    $sqlStatement2->bind_param("s", $usernametrimmed);
     $sqlStatement2->execute();
     $result2 = $sqlStatement2->get_result();
     $userexists2 = $result2->num_rows;
@@ -51,12 +51,21 @@ if (isset($_POST["usernamelogin"], $_POST["passwordlogin"])) {
             header("Location: Home.php");
             die();
         } else {
-            print "<script>alert('Password does not match');</script>";
+            if ($_SESSION["lang"] == "EN") {
+                print "<script>alert('Password does not match');</script>";
+            } else {
+                print "<script>alert('Senha não corresponde');</script>";
+            }
+
             header("Refresh:0");
             die();
         }
     } else {
-        print "<script>alert('User does not exist');</script>";
+        if ($_SESSION["lang"] == "EN") {
+            print "<script>alert('User does not exist');</script>";
+        } else {
+            print "<script>alert('Usuário não existe');</script>";
+        }
         header("Refresh:0");
         die();
     }
@@ -134,7 +143,7 @@ if (isset($_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], 
         $pswSignup = $_POST["passwordreg"];
         $hashPSW = password_hash($pswSignup, PASSWORD_DEFAULT);
 
-        $sqlInsert = $connection->prepare("INSERT INTO Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country) VALUES (?, ?, ?, ?, ?, '','Normal', current_date(), '', '', '', '', '', '', '', '', '')");
+        $sqlInsert = $connection->prepare("INSERT INTO Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, countryId) VALUES (?, ?, ?, ?, ?, '','Normal', current_date(), '', '', '', '', '', '', '', '', 1)");
         $sqlInsert->bind_param("sssss", $firstnamereg, $lastnamereg, $usernamereg, $emailreg, $hashPSW);
 
         if ($sqlInsert->execute()) {
@@ -155,7 +164,11 @@ if (isset($_POST["firstnamereg"], $_POST["lastnamereg"], $_POST["usernamereg"], 
             die();
         }
     } else {
-        print "<script>alert('User already exists');</script>";
+        if ($_SESSION["lang"] == "EN") {
+            print "<script>alert('User already exists');</script>";
+        } else {
+            print "<script>alert('Usuário já existe');</script>";
+        }
         header("Refresh:0");
         die();
     }
@@ -188,13 +201,21 @@ if (isset($_FILES['photoprofileEditIMG']) && $_SESSION["userloggedIn"] == true) 
     $extensions = array("jpeg", "jpg", "png");
 
     if (in_array($file_ext, $extensions) === false) {
-        print "<script>alert('Extension not allowed, please choose a JPEG, PNG or JPG file.')</script>";
+        if ($_SESSION["lang"] == "EN") {
+            print "<script>alert('Extension not allowed, please choose a JPEG, PNG or JPG file.');</script>";
+        } else {
+            print "<script>alert('Extensão não permitida, escolha um arquivo JPEG, PNG ou JPG.');</script>";
+        }
         header("Refresh:0");
         die();
     }
 
     if ($file_size > 26214400) {
-        print "<script>alert('File size must be less than or 25 MB:')</script>";
+        if ($_SESSION["lang"] == "EN") {
+            print "<script>alert('File size must be less than or 25 MB.');</script>";
+        } else {
+            print "<script>alert('O tamanho do arquivo deve ser menor ou 25 MB.');</script>";
+        }
         header("Refresh:0");
         die();
     }
@@ -211,8 +232,7 @@ if (isset($_FILES['photoprofileEditIMG']) && $_SESSION["userloggedIn"] == true) 
 
 
 if (isset($_POST["firstnameEdit"]) && $_SESSION["userloggedIn"] == true) {
-    //print "<script>alert('nice')</script>";
-    $sqlStatement4 = $connection->prepare("SELECT FirstName, LastName, Email, UserType, ProfilePic, DATE_FORMAT(JoinDate, '%e %b %Y') AS DateJoin, DATE_FORMAT(DateOfBirth, '%e') AS DayBirth, DATE_FORMAT(DateOfBirth, '%c') AS MonthBirth, DATE_FORMAT(DateOfBirth, '%Y') AS YearBirth, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country from Users WHERE UserName=?");
+    $sqlStatement4 = $connection->prepare("SELECT FirstName, LastName, Email, UserType, ProfilePic, DATE_FORMAT(JoinDate, '%e %b %Y') AS DateJoin, DATE_FORMAT(DateOfBirth, '%e') AS DayBirth, DATE_FORMAT(DateOfBirth, '%c') AS MonthBirth, DATE_FORMAT(DateOfBirth, '%Y') AS YearBirth, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, countryId from Users WHERE UserName=?");
     $sqlStatement4->bind_param("s", $_SESSION["username"]);
     $sqlStatement4->execute();
     $result4 = $sqlStatement4->get_result();
@@ -255,8 +275,12 @@ if (isset($_POST["firstnameEdit"]) && $_SESSION["userloggedIn"] == true) {
         $sqlUpdate2->execute();
     }
 
+    if ($_SESSION["lang"] == "EN") {
+        $monthsArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    } else {
+        $monthsArr = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    }
 
-    $monthsArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     $DaysN = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     (int)$ThisYear = date("Y");
 
@@ -355,17 +379,23 @@ if (isset($_POST["firstnameEdit"]) && $_SESSION["userloggedIn"] == true) {
 
 
     if (!empty($_POST["Country"])) {
-        $Country = trim($_POST["Country"]);
-        $CountryArr = ["France", "Luxembourg", "Germany"];
-        if (in_array($Country, $CountryArr)) {
-            if ($Country != $row3["Country"]) {
-                $sqlUpdate10 = $connection->prepare("UPDATE Users SET Country=? WHERE UserName=?");
-                $sqlUpdate10->bind_param("ss", $Country, $_SESSION["username"]);
-                $sqlUpdate10->execute();
+        if ($_POST["Country"] != 1) {
+            $sql = $connection->prepare("SELECT countryId From AvailableCountries WHERE countryId=?");
+            $sql->bind_param("i", $_POST["Country"]);
+            $sql->execute();
+            $result = $sql->get_result();
+            $numRows = $result->num_rows;
+            $row = $result->fetch_assoc();
+            if ($numRows == 1) {
+                if ($row3["countryId"] != $_POST["Country"]) {
+                    $sqlUpdate10 = $connection->prepare("UPDATE Users SET countryId=? WHERE UserName=?");
+                    $sqlUpdate10->bind_param("ss", $row["countryId"], $_SESSION["username"]);
+                    $sqlUpdate10->execute();
+                }
+            } else {
+                header("Refresh:0");
+                die();
             }
-        } else {
-            header("Refresh:0");
-            die();
         }
     }
 }
@@ -392,11 +422,19 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
             $sqlUpdate12->bind_param("ss", $hashPSWEdit, $_SESSION["username"]);
             $sqlUpdate12->execute();
 
-            print "<script>alert('Your Current Password has been changed')</script>";
+            if ($_SESSION["lang"] == "EN") {
+                print "<script>alert('Your Current Password has been changed');</script>";
+            } else {
+                print "<script>alert('Sua senha atual foi alterada');</script>";
+            }
             header("Refresh:0");
             die();
         } else {
-            print "<script>alert('Your Current Password does not match')</script>";
+            if ($_SESSION["lang"] == "EN") {
+                print "<script>alert('Your Current Password does not match');</script>";
+            } else {
+                print "<script>alert('Sua senha atual não corresponde');</script>";
+            }
             header("Refresh:0");
             die();
         }
@@ -416,6 +454,7 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
     <link href="../Styling/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src='../Styling/bootstrap/js/bootstrap.bundle.min.js'></script>
     <script src="../jquery/jquery-3.6.0.min.js"></script>
+    <script src="../jquery/dateSelect.js"></script>
     <link href="../Styling/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <title>Acount page</title>
     <script>
@@ -425,22 +464,12 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
             Password = document.getElementById("Password");
             PasswordRepeat = document.getElementById("PasswordRepeat");
 
-            if (Password.value.length > 249) {
-                Password.setCustomValidity("Passwords lenght must be less than 250 characters");
-                Password.reportValidity();
-            } else {
-                Password.setCustomValidity("");
-            }
-
-            if (PasswordRepeat.value.length > 249) {
-                PasswordRepeat.setCustomValidity("Passwords lenght must be less than 250 characters");
-                PasswordRepeat.reportValidity();
-            } else {
-                PasswordRepeat.setCustomValidity("");
-            }
-
             if (Password.value != PasswordRepeat.value) {
-                PasswordRepeat.setCustomValidity("Both Passwords must match");
+                if (lang == "EN") {
+                    PasswordRepeat.setCustomValidity("Both Passwords must match");
+                } else {
+                    PasswordRepeat.setCustomValidity("Ambas as senhas devem corresponder");
+                }
                 PasswordRepeat.reportValidity();
             } else {
                 PasswordRepeat.setCustomValidity("");
@@ -474,22 +503,12 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
             Password = document.getElementById("PasswordEdit");
             PasswordRepeat = document.getElementById("PasswordRepeatEdit");
 
-            if (Password.value.length > 249) {
-                Password.setCustomValidity("Passwords lenght must be less than 250 characters");
-                Password.reportValidity();
-            } else {
-                Password.setCustomValidity("");
-            }
-
-            if (PasswordRepeat.value.length > 249) {
-                PasswordRepeat.setCustomValidity("Passwords lenght must be less than 250 characters");
-                PasswordRepeat.reportValidity();
-            } else {
-                PasswordRepeat.setCustomValidity("");
-            }
-
             if (Password.value != PasswordRepeat.value) {
-                PasswordRepeat.setCustomValidity("Both Passwords must match");
+                if (lang == "EN") {
+                    PasswordRepeat.setCustomValidity("Both Passwords must match");
+                } else {
+                    PasswordRepeat.setCustomValidity("Ambas as senhas devem corresponder");
+                }
                 PasswordRepeat.reportValidity();
             } else {
                 PasswordRepeat.setCustomValidity("");
@@ -505,6 +524,11 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
             if (UserSignIn.value.trim().length != 0 && pswSignIn.value.trim().length != 0) {
                 SignIn = document.getElementById("SignIn").submit();
             } else {
+                if (lang == "EN") {
+                    UserSignIn.setCustomValidity("User Name must only contain 'A-Z', 'a-z', '0-9', '-', or '_'");
+                } else {
+                    UserSignIn.setCustomValidity("O nome de usuário deve conter apenas 'A-Z', 'a-z', '0-9', '-' ou '_'");
+                }
                 UserSignIn.reportValidity();
                 pswSignIn.reportValidity
             }
@@ -533,19 +557,34 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
         function changeNavItem(tab) {
             if (tab == "settings") {
                 document.getElementById("securityTab").setAttribute("hidden", "hidden");
+                document.getElementById("ordersTab").setAttribute("hidden", "hidden");
                 document.getElementById("settingsTab").removeAttribute("hidden", "hidden");
 
                 document.getElementById("security-link").classList.remove('active');
+                document.getElementById("orders-link").classList.remove('active');
                 document.getElementById("settings-link").classList.add('active');
             }
 
             if (tab == "security") {
                 document.getElementById("settingsTab").setAttribute("hidden", "hidden");
+                document.getElementById("ordersTab").setAttribute("hidden", "hidden");
                 document.getElementById("securityTab").removeAttribute("hidden", "hidden");
 
                 document.getElementById("settings-link").classList.remove('active');
+                document.getElementById("orders-link").classList.remove('active');
                 document.getElementById("security-link").classList.add('active');
             }
+
+            if (tab == "orders") {
+                document.getElementById("settingsTab").setAttribute("hidden", "hidden");
+                document.getElementById("securityTab").setAttribute("hidden", "hidden");
+                document.getElementById("ordersTab").removeAttribute("hidden", "hidden");
+
+                document.getElementById("settings-link").classList.remove('active');
+                document.getElementById("security-link").classList.remove('active');
+                document.getElementById("orders-link").classList.add('active');
+            }
+
         }
 
 
@@ -554,7 +593,12 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
             PasswordEdit = document.getElementById("PasswordEdit").value;
             PasswordRepeatEdit = document.getElementById("PasswordRepeatEdit").value;
             if (CurrentPassword.length == 0 || PasswordEdit.length == 0 || PasswordRepeatEdit.length == 0) {
-                alert("All the fields must me fullfilled to change the Password");
+                if (lang = "EN") {
+                    alert("All the fields must be fulfilled to change the Password");
+                } else {
+                    alert("Todos os campos devem ser preenchidos para alterar a Senha");
+                }
+
             } else {
                 document.getElementById("changePSWFform").submit();
             }
@@ -573,93 +617,132 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
 
         <?php if ($_SESSION["userloggedIn"] == false) { ?>
             <form class="form-signin" method="POST" id="SignIn">
-                <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+                <h1 class="h3 mb-3 fw-normal"><?php if ($_SESSION["lang"] == "EN") {
+                                                    print "Please sign in";
+                                                } else {
+                                                    print "Por favor, entre";
+                                                } ?></h1>
 
                 <div class="form-floating">
-                    <input name="usernamelogin" type="text" class="form-control" id="UserSignIn" placeholder="User name" required pattern="[a-zA-Z0-9-_-]+" title="User Name must only contain 'A-Z', 'a-z', '0-9', '-', or '_'" oninput="reportValidity();" minlength="1" maxlength="25">
-                    <label for="floatingInput">User name</label>
+                    <input name="usernamelogin" type="text" class="form-control" id="UserSignIn" placeholder="User name" required pattern="[a-zA-Z0-9-_-]+" oninput="reportValidity();" minlength="1" maxlength="25">
+                    <label for="floatingInput"><?php if ($_SESSION["lang"] == "EN") {
+                                                    print "User name";
+                                                } else {
+                                                    print "Nome de usuário";
+                                                } ?></label>
                 </div>
                 <div class="form-floating">
                     <input name="passwordlogin" type="password" class="form-control" id="pswSignIn" placeholder="Password" oninput="reportValidity();" required minlength="7">
-                    <label for="floatingPassword">Password</label>
+                    <label for="floatingPassword"><?php if ($_SESSION["lang"] == "EN") {
+                                                        print "Password";
+                                                    } else {
+                                                        print "Senha";
+                                                    } ?></label>
                 </div>
 
-                <a class="w-100 btn btn-lg btn-primary" href="javascript:{}" onclick="checklogin();">Sign in</a>
-
-                <a id="createaccA" class="w-75 btn btn changeform" href="javascript:{}" onclick="changeform('SignUp');">Create Account</a>
-
+                <a class="w-100 btn btn-lg btn-primary" href="javascript:{}" onclick="checklogin();"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                            print "Sign in";
+                                                                                                        } else {
+                                                                                                            print "Entrar";
+                                                                                                        } ?></a>
+                <a id="createaccA" class="w-75 btn btn changeform" href="javascript:{}" onclick="changeform('SignUp');"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                            print "Create Account";
+                                                                                                                        } else {
+                                                                                                                            print "Criar uma conta";
+                                                                                                                        } ?></a>
                 <p class="mt-5 mb-3 text-muted">&copy; 2019–2022</p>
             </form>
 
 
 
             <form class="form-signup" method="POST" id="SignUp" hidden>
-                <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+                <h1 class="h3 mb-3 fw-normal"><?php if ($_SESSION["lang"] == "EN") {
+                                                    print "Please sign up";
+                                                } else {
+                                                    print "Por favor, inscreva-se";
+                                                } ?></h1>
 
                 <div class="form-floating">
-                    <input name="firstnamereg" type="text" class="form-control" id="firstname" placeholder="First name" required pattern="[\p{L}\s]+" title="First name must contain only letters" oninput="reportValidity();" minlength="1" maxlength="100">
-                    <label for="floatingInput">First name</label>
+                    <input name="firstnamereg" type="text" class="form-control" id="firstname" placeholder="First name" required pattern="[\p{L}\s]+" title="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                    print "First name must contain only letters";
+                                                                                                                                                                } else {
+                                                                                                                                                                    print "O nome deve conter apenas letras";
+                                                                                                                                                                } ?>" oninput="reportValidity();" minlength="1" maxlength="100">
+                    <label for="floatingInput"><?php if ($_SESSION["lang"] == "EN") {
+                                                    print "First name";
+                                                } else {
+                                                    print "Primeiro nome";
+                                                } ?></label>
                 </div>
 
-
                 <div class="form-floating">
-                    <input name="lastnamereg" type="text" class="form-control" id="lastname" placeholder="Last name" required pattern="[\p{L}\s]+" title="Last name must contain only letters" oninput="reportValidity()" minlength="1" maxlength="100">
-                    <label for="floatingInput">Last name</label>
+                    <input name="lastnamereg" type="text" class="form-control" id="lastname" placeholder="Last name" required pattern="[\p{L}\s]+" title="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                print "Last name must contain only letters";
+                                                                                                                                                            } else {
+                                                                                                                                                                print "O sobrenome deve conter apenas letras";
+                                                                                                                                                            } ?>" oninput="reportValidity()" minlength="1" maxlength="100">
+                    <label for="floatingInput"><?php if ($_SESSION["lang"] == "EN") {
+                                                    print "Last name";
+                                                } else {
+                                                    print "Sobrenome";
+                                                } ?></label>
                 </div>
 
-
-
                 <div class="form-floating">
-                    <input name="usernamereg" type="text" class="form-control" id="username" placeholder="User name" required pattern="[a-zA-Z0-9-_-]+" title="User Name must only contain 'A-Z', 'a-z', '0-9', '-', or '_'" oninput="reportValidity();" minlength="1" maxlength="25">
-                    <label for="floatingInput">User name</label>
+                    <input name="usernamereg" type="text" class="form-control" id="username" placeholder="User name" required pattern="[a-zA-Z0-9-_-]+" title="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                    print "User Name must only contain 'A-Z', 'a-z', '0-9', '-', or '_'";
+                                                                                                                                                                } else {
+                                                                                                                                                                    print "O nome de usuário deve conter apenas 'A-Z', 'a-z', '0-9', '-' ou '_'";
+                                                                                                                                                                } ?>" oninput="reportValidity();" minlength="1" maxlength="25">
+                    <label for="floatingInput"><?php if ($_SESSION["lang"] == "EN") {
+                                                    print "User name";
+                                                } else {
+                                                    print "Nome de usuário";
+                                                } ?></label>
                 </div>
 
-
-
                 <div class="form-floating">
-                    <input name="emailreg" type="email" class="form-control" id="email" placeholder="Email" required pattern="[^@\s]+@[^@\s]+" title="Invalid email address" oninput="reportValidity();" minlength="1" maxlength="320">
+                    <input name="emailreg" type="email" class="form-control" id="email" placeholder="Email" required pattern="[^@\s]+@[^@\s]+" title="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                            print "Invalid email address";
+                                                                                                                                                        } else {
+                                                                                                                                                            print "Endereço de email invalido";
+                                                                                                                                                        } ?>" oninput="reportValidity();" minlength="1" maxlength="320">
                     <label for="floatingInput">Email</label>
                 </div>
 
-
-
                 <div class="form-floating">
                     <input name="passwordreg" type="password" class="form-control" id="Password" placeholder="Password" oninput="reportValidity();" required minlength="7" maxlength="249">
-                    <label for="floatingInput">Password</label>
+                    <label for="floatingInput"><?php if ($_SESSION["lang"] == "EN") {
+                                                    print "Password";
+                                                } else {
+                                                    print "Senha";
+                                                } ?></label>
                 </div>
-
-
 
                 <div class="form-floating">
                     <input name="passwordregRepeat" type="password" class="form-control" id="PasswordRepeat" placeholder="Password Repeat" oninput="passwordCheck();" required minlength="7" maxlength="249">
-                    <label for="floatingPassword">Password Repeat</label>
+                    <label for="floatingPassword"><?php if ($_SESSION["lang"] == "EN") {
+                                                        print "Password Repeat";
+                                                    } else {
+                                                        print "Repetição da senha";
+                                                    } ?></label>
                 </div>
 
-
-
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-
-                <a id="LoginaccA" class="w-75 btn btn changeform" href='#' onclick="changeform('SignIn');">Login to existing Account</a>
-
+                <button class="w-100 btn btn-lg btn-primary" type="submit"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                print "Sign in";
+                                                                            } else {
+                                                                                print "Entrar";
+                                                                            } ?></button>
+                <a id="LoginaccA" class="w-75 btn btn changeform" href='#' onclick="changeform('SignIn');"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                print "Login to existing Account";
+                                                                                                            } else {
+                                                                                                                print "Faça login na conta existente";
+                                                                                                            } ?></a>
                 <p class="mt-5 mb-3 text-muted">&copy; 2019–2022</p>
             </form>
 
-            <script>
-                function checklogin() {
-                    UserSignIn = document.getElementById("UserSignIn");
-                    pswSignIn = document.getElementById("pswSignIn");
-
-                    if (UserSignIn.value.trim().length != 0 && pswSignIn.value.trim().length != 0) {
-                        SignIn = document.getElementById("SignIn").submit();
-                    } else {
-                        UserSignIn.reportValidity();
-                        pswSignIn.reportValidity
-                    }
-                }
-            </script>
-
         <?php } else {
-            $sqlStatement2 = $connection->prepare("SELECT FirstName, LastName, UserName, Email, UserType, ProfilePic, DATE_FORMAT(JoinDate, '%e %b %Y') AS DateJoin, DATE_FORMAT(DateOfBirth, '%e') AS DayBirth, DATE_FORMAT(DateOfBirth, '%c') AS MonthBirth, DATE_FORMAT(DateOfBirth, '%Y') AS YearBirth, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country from Users WHERE UserName=?");
+            $sqlStatement2 = $connection->prepare("SELECT * FROM UserLoggedIn WHERE UserName=?");
             $sqlStatement2->bind_param("s", $_SESSION["username"]);
             $sqlStatement2->execute();
             $result2 = $sqlStatement2->get_result();
@@ -715,21 +798,42 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                         <div class="mt-2">
 
                                                             <form method="POST" id="infoForm" enctype="multipart/form-data">
-                                                                <input hidden id="photoprofileEdit" name="photoprofileEditIMG" type="file" accept="image/*" onchange="loadFile(event)">
+                                                                <input hidden id="photoprofileEdit" name="photoprofileEditIMG" type="file" accept=".png, .jpg, .jpeg" onchange="loadFile(event)">
                                                                 <a href="javascript:{}" class="btn btn-primary" onclick="photoprofileEdit();">
                                                                     <i class="fa fa-fw fa-camera"></i>
-                                                                    <span>Change Photo</span>
+                                                                    <span><?php if ($_SESSION["lang"] == "EN") {
+                                                                                print "Change Photo";
+                                                                            } else {
+                                                                                print "Mudar foto";
+                                                                            } ?></span>
                                                                 </a>
                                                         </div>
                                                     </div>
                                                     <div class="text-center text-sm-right">
-                                                        <div class="text-muted"><small>Joined <?= $row["DateJoin"] ?></small></div>
+                                                        <div class="text-muted"><small><?php if ($_SESSION["lang"] == "EN") {
+                                                                                            print "Joined";
+                                                                                        } else {
+                                                                                            print "Ingressou";
+                                                                                        } ?> <?= $row["DateJoin"] ?></small></div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <ul class="nav nav-tabs">
-                                                <li class="nav-item"><a id="settings-link" href="javascript:{}" class="active nav-link" onclick="changeNavItem('settings');">Settings</a></li>
-                                                <li class="nav-item"><a id="security-link" href="javascript:{}" class="nav-link" onclick="changeNavItem('security');">Security</a></li>
+                                                <li class="nav-item"><a id="settings-link" href="javascript:{}" class="active nav-link" onclick="changeNavItem('settings');"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                                    print "Settings";
+                                                                                                                                                                                } else {
+                                                                                                                                                                                    print "Definições";
+                                                                                                                                                                                } ?></a></li>
+                                                <li class="nav-item"><a id="security-link" href="javascript:{}" class="nav-link" onclick="changeNavItem('security');"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                            print "Security";
+                                                                                                                                                                        } else {
+                                                                                                                                                                            print "Segurança";
+                                                                                                                                                                        } ?></a></li>
+                                                <li class="nav-item"><a id="orders-link" href="javascript:{}" class="nav-link" onclick="changeNavItem('orders');"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                        print "Orders";
+                                                                                                                                                                    } else {
+                                                                                                                                                                        print "Pedidos";
+                                                                                                                                                                    } ?></a></li>
                                             </ul>
                                             <div class="tab-content pt-3">
                                                 <div id="settingsTab" class="tab-pane active">
@@ -739,14 +843,30 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group">
-                                                                        <label>First Name</label>
-                                                                        <input id="firstnameEdit" class="form-control" type="text" name="firstnameEdit" placeholder="<?= $row["FirstName"] ?>" value="<?= $row["FirstName"] ?>" pattern="[\p{L}\s]+" title="First name must contain only letters" oninput="reportValidity();" minlength="1" maxlength="100" required>
+                                                                        <label><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "First Name";
+                                                                                } else {
+                                                                                    print "Primeiro nome";
+                                                                                } ?></label>
+                                                                        <input id="firstnameEdit" class="form-control" type="text" name="firstnameEdit" placeholder="<?= $row["FirstName"] ?>" value="<?= $row["FirstName"] ?>" pattern="[\p{L}\s]+" title="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                                                                                                                print "First name must contain only letters";
+                                                                                                                                                                                                                                                            } else {
+                                                                                                                                                                                                                                                                print "O nome deve conter apenas letras";
+                                                                                                                                                                                                                                                            } ?>" oninput="reportValidity();" minlength="1" maxlength="100" required>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col">
                                                                     <div class="form-group">
-                                                                        <label>Last Name</label>
-                                                                        <input id="lastnameEdit" class="form-control" type="text" name="lastnameEdit" placeholder="<?= $row["LastName"] ?>" value="<?= $row["LastName"] ?>" pattern="[\p{L}\s]+" title="First name must contain only letters" oninput="reportValidity();" minlength="1" maxlength="100" required>
+                                                                        <label><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "Last Name";
+                                                                                } else {
+                                                                                    print "Sobrenome";
+                                                                                } ?></label>
+                                                                        <input id="lastnameEdit" class="form-control" type="text" name="lastnameEdit" placeholder="<?= $row["LastName"] ?>" value="<?= $row["LastName"] ?>" pattern="[\p{L}\s]+" title="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                                                                                                            print "Last name must contain only letters";
+                                                                                                                                                                                                                                                        } else {
+                                                                                                                                                                                                                                                            print "O sobrenome deve conter apenas letras";
+                                                                                                                                                                                                                                                        } ?>" oninput="reportValidity();" minlength="1" maxlength="100" required>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -754,7 +874,11 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group">
-                                                                        <label>Username</label>
+                                                                        <label><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "Username";
+                                                                                } else {
+                                                                                    print "Nome de usuário";
+                                                                                } ?></label>
                                                                         <input disabled class="form-control" type="text" placeholder="<?= $row["UserName"] ?>">
                                                                     </div>
                                                                 </div>
@@ -763,12 +887,22 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                                 <div class="col">
                                                                     <div class="form-group">
                                                                         <label>Email</label>
-                                                                        <input id="emailEdit" class="form-control" type="text" name="emailEdit" placeholder="user@example.com" value="<?= $row["Email"] ?>" required pattern="[^@\s]+@[^@\s]+" title="Invalid email address" oninput="reportValidity();" minlength="1" maxlength="320">
+                                                                        <input id="emailEdit" class="form-control" type="text" name="emailEdit" placeholder="user@example.com" value="<?= $row["Email"] ?>" required pattern="[^@\s]+@[^@\s]+" title="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                                                                                                            print "Invalid email address";
+                                                                                                                                                                                                                                                        } else {
+                                                                                                                                                                                                                                                            print "Endereço de email invalido";
+                                                                                                                                                                                                                                                        } ?>" oninput="reportValidity();" minlength="1" maxlength="320">
                                                                     </div>
                                                                 </div>
                                                             </div>
 
                                                             <script>
+                                                                var months = <?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];";
+                                                                                } else {
+                                                                                    print "['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro '];";
+                                                                                } ?>;
+
                                                                 selectedDayN = <?php if (!empty($row["DayBirth"])) {
                                                                                     print $row["DayBirth"];
                                                                                 } else {
@@ -788,10 +922,93 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                                                 } else {
                                                                                     print "-1";
                                                                                 }  ?>;
-                                                            </script>
-                                                            <script src="../jquery/dateSelect.js"></script>
 
-                                                            <div class="mb-2"><b>Date of Birth</b></div>
+
+                                                                <?php if ($_SESSION["lang"] == "EN") {
+                                                                ?>
+                                                                    if (selectedDayN != -1) {
+                                                                        var optionDay = '<option id="dayOption" disabled value="day">Day</option>';
+                                                                    } else {
+                                                                        var optionDay = '<option id="dayOption" selected disabled value="day">Day</option>';
+                                                                    }
+                                                                <?php
+                                                                } else {
+                                                                ?>
+                                                                    if (selectedDayN != -1) {
+                                                                        var optionDay = '<option id="dayOption" disabled value="day">Dia</option>';
+                                                                    } else {
+                                                                        var optionDay = '<option id="dayOption" selected disabled value="day">Dia</option>';
+                                                                    }
+                                                                <?php
+                                                                } ?>
+
+
+                                                                <?php if ($_SESSION["lang"] == "EN") {
+                                                                ?>
+                                                                    if (selectedMonthN != -1) {
+                                                                        var optionMonth = '<option disabled value="month">Month</option>';
+                                                                    } else {
+                                                                        var optionMonth = '<option selected disabled value="month">Month</option>';
+                                                                    }
+                                                                <?php
+                                                                } else {
+                                                                ?>
+                                                                    if (selectedMonthN != -1) {
+                                                                        var optionMonth = '<option disabled value="month">Mês</option>';
+                                                                    } else {
+                                                                        var optionMonth = '<option selected disabled value="month">Mês</option>';
+                                                                    }
+                                                                <?php
+                                                                } ?>
+
+
+                                                                <?php if ($_SESSION["lang"] == "EN") {
+                                                                ?>
+                                                                    if (selectedYearN != -1) {
+                                                                        var optionYear = '<option disabled value="year">Year</option>';
+                                                                    } else {
+                                                                        var optionYear = '<option selected disabled value="year">Year</option>';
+                                                                    }
+                                                                <?php
+                                                                } else {
+                                                                ?>
+                                                                    if (selectedYearN != -1) {
+                                                                        var optionYear = '<option disabled value="year">Ano</option>';
+                                                                    } else {
+                                                                        var optionYear = '<option selected disabled value="year">Ano</option>';
+                                                                    }
+                                                                <?php
+                                                                } ?>
+
+
+                                                                <?php if ($_SESSION["lang"] == "EN") {
+                                                                ?>
+                                                                    var optionDay2 = '<option id="dayOption" selected disabled value="day">Day</option>';
+                                                                <?php
+                                                                } else {
+                                                                ?>
+                                                                    var optionDay2 = '<option id="dayOption" selected disabled value="day">Dia</option>';
+                                                                <?php
+                                                                } ?>
+
+
+                                                                <?php if ($_SESSION["lang"] == "EN") {
+                                                                ?>
+                                                                    var optionYear2 = '<option id="dayOption" selected disabled value="day">Day</option>';
+                                                                <?php
+                                                                } else {
+                                                                ?>
+                                                                    var optionYear2 = '<option id="dayOption" selected disabled value="day">Dia</option>';
+                                                                <?php
+                                                                } ?>
+                                                            </script>
+
+
+                                                            <div class="mb-2"><b><?php if ($_SESSION["lang"] == "EN") {
+                                                                                        print "Date of Birth";
+                                                                                    } else {
+                                                                                        print "Data de nascimento";
+                                                                                    } ?></b></div>
                                                             <div class="row mb-2">
 
                                                                 <div class="col-md-3">
@@ -809,18 +1026,46 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                             </div>
 
 
-                                                            <div class="mb-1"><b>Address</b></div>
+                                                            <div class="mb-1"><b><?php if ($_SESSION["lang"] == "EN") {
+                                                                                        print "Address";
+                                                                                    } else {
+                                                                                        print "Endereço";
+                                                                                    } ?></b></div>
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group">
-                                                                        <label>Address line 1</label>
-                                                                        <input id="Addressline1" class="form-control" type="text" name="Addressline1" placeholder="Address line 1" value="<?= $row["FirstLineAddress"] ?>" pattern="^[#.0-9a-zA-Z\s,-]+$" oninput="reportValidity();" title="Something is wrong with your Address line 1" maxlength="255">
+                                                                        <label><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "Address line 1";
+                                                                                } else {
+                                                                                    print "Endereço Linha 1";
+                                                                                } ?></label>
+                                                                        <input id="Addressline1" class="form-control" type="text" name="Addressline1" placeholder="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                        print "Address line 1";
+                                                                                                                                                                    } else {
+                                                                                                                                                                        print "Endereço Linha 1";
+                                                                                                                                                                    } ?>" value="<?= $row["FirstLineAddress"] ?>" pattern="^[#.0-9a-zA-Z\s,-]+$" oninput="reportValidity();" title="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                                                                                                                                        print "Something is wrong with your Address line 1";
+                                                                                                                                                                                                                                                                                    } else {
+                                                                                                                                                                                                                                                                                        print "Algo está errado com sua linha de endereço 1";
+                                                                                                                                                                                                                                                                                    } ?>" maxlength="255">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col">
                                                                     <div class="form-group w-50">
-                                                                        <label>Street Number</label>
-                                                                        <input id="StreetNumber" class="form-control" type="text" name="StreetNumber" placeholder="Street Number" value="<?php if ($row["HouseNumber"] != 0) print $row["HouseNumber"];  ?>" pattern="[0-9]+" oninput="reportValidity();" title="Street Number must contain only numbers" maxlength="3">
+                                                                        <label><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "Street Number";
+                                                                                } else {
+                                                                                    print "Número da rua";
+                                                                                } ?></label>
+                                                                        <input id="StreetNumber" class="form-control" type="text" name="StreetNumber" placeholder="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                        print "Street Number";
+                                                                                                                                                                    } else {
+                                                                                                                                                                        print "Número da rua";
+                                                                                                                                                                    } ?>" value="<?php if ($row["HouseNumber"] != 0) print $row["HouseNumber"];  ?>" pattern="[0-9]+" oninput="reportValidity();" title="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                                                                                                                                                                print "Street Number must contain only numbers";
+                                                                                                                                                                                                                                                                                                            } else {
+                                                                                                                                                                                                                                                                                                                print "O número da rua deve conter apenas números";
+                                                                                                                                                                                                                                                                                                            } ?>" maxlength="3">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -828,8 +1073,20 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group" style="width: 48.467%;">
-                                                                        <label>Address line 2</label>
-                                                                        <input id="Addressline2" class="form-control" type="text" name="Addressline2" placeholder="Address line 2" value="<?= $row["SecondLineAddress"] ?>" pattern="^[#.0-9a-zA-Z\s,-]+$" oninput="reportValidity();" title="Something is wrong with your Address line 1" maxlength="255">
+                                                                        <label><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "Address line 2";
+                                                                                } else {
+                                                                                    print "Endereço Linha 2";
+                                                                                } ?></label>
+                                                                        <input id="Addressline2" class="form-control" type="text" name="Addressline2" placeholder="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                        print "Address line 2";
+                                                                                                                                                                    } else {
+                                                                                                                                                                        print "Endereço linha 2";
+                                                                                                                                                                    } ?>" value="<?= $row["SecondLineAddress"] ?>" pattern="^[#.0-9a-zA-Z\s,-]+$" oninput="reportValidity();" title="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                                                                                                                                            print "Something is wrong with your Address line 2";
+                                                                                                                                                                                                                                                                                        } else {
+                                                                                                                                                                                                                                                                                            print "Algo está errado com sua linha de endereço 2";
+                                                                                                                                                                                                                                                                                        } ?>" maxlength="255">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -837,14 +1094,38 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group">
-                                                                        <label>City</label>
-                                                                        <input id="City" class="form-control" type="text" name="City" placeholder="City" value="<?= $row["City"] ?>" pattern="^[#.0-9a-zA-Z\s,-]+$" oninput="reportValidity();" title="Something is wrong with your City" maxlength="50">
+                                                                        <label><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "City";
+                                                                                } else {
+                                                                                    print "Cidade";
+                                                                                } ?></label>
+                                                                        <input id="City" class="form-control" type="text" name="City" placeholder="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                        print "City";
+                                                                                                                                                    } else {
+                                                                                                                                                        print "Cidade";
+                                                                                                                                                    } ?>" value="<?= $row["City"] ?>" pattern="^[#.0-9a-zA-Z\s,-]+$" oninput="reportValidity();" title="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                                                                                                            print "Something is wrong with your City";
+                                                                                                                                                                                                                                                        } else {
+                                                                                                                                                                                                                                                            print "Algo está errado com sua cidade";
+                                                                                                                                                                                                                                                        } ?>" maxlength="50">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col">
                                                                     <div class="form-group w-50">
-                                                                        <label>Postal Code</label>
-                                                                        <input id="PostalCode" class="form-control" type="text" name="PostalCode" placeholder="Postal Code" value="<?= $row["PostalCode"] ?>" pattern="[0-9]+" oninput="reportValidity();" title="Postal Code must contain only numbers" maxlength="5">
+                                                                        <label><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "Postal Code";
+                                                                                } else {
+                                                                                    print "Código postal";
+                                                                                } ?></label>
+                                                                        <input id="PostalCode" class="form-control" type="text" name="PostalCode" placeholder="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                    print "Postal Code";
+                                                                                                                                                                } else {
+                                                                                                                                                                    print "Código postal";
+                                                                                                                                                                } ?>" value="<?= $row["PostalCode"] ?>" pattern="[0-9]+" oninput="reportValidity();" title="<?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                                                                                                                                print "Postal Code must contain only numbers";
+                                                                                                                                                                                                                                                            } else {
+                                                                                                                                                                                                                                                                print "O código postal deve conter apenas números";
+                                                                                                                                                                                                                                                            } ?>" maxlength="5">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -852,18 +1133,35 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group" style="width: 48.467%;">
-                                                                        <label>Country</label>
+                                                                        <label><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "Country";
+                                                                                } else {
+                                                                                    print "País";
+                                                                                } ?></label>
                                                                         <select class="form-select" id="country" name="Country">
-                                                                            <option selected disabled hidden value="-1">Choose</option>
                                                                             <?php
-                                                                            $sqlStatement = $connection->prepare("SELECT Country from AvailableCountries");
+                                                                            $sqlStatement = $connection->prepare("SELECT countryId, NameCountry  From AvailableCountries NATURAL JOIN AvailableCountriesNames WHERE IDlang=" . $sqlLang);
                                                                             $sqlStatement->execute();
                                                                             $result = $sqlStatement->get_result();
+                                                                            ?>
+                                                                            <?php if ($_SESSION["lang"] == "EN") {
+                                                                            ?>
+                                                                                <option selected disabled hidden value="1">Choose</option>
+                                                                            <?php
+                                                                            } else {
+                                                                            ?>
+                                                                                <option selected disabled hidden value="1">Selecione</option>
+                                                                            <?php
+                                                                            } ?>
+
+                                                                            <?php
 
                                                                             while ($row2 = $result->fetch_assoc()) {
+                                                                                if ($row2["NameCountry"] != "") {
                                                                             ?>
-                                                                                <option <?php if ($row["Country"] == $row2["Country"]) print "selected"; ?> value="<?= $row2["Country"] ?>"><?= $row2["Country"] ?></option>
+                                                                                    <option <?php if ($row["countryId"] == $row2["countryId"]) print "selected"; ?> value="<?= $row2["countryId"] ?>"><?= $row2["NameCountry"] ?></option>
                                                                             <?php
+                                                                                }
                                                                             }
 
                                                                             ?>
@@ -876,13 +1174,25 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                     </div>
                                                     <div class="row">
                                                         <div class="col">
-                                                            <div class="mb-2"><b>Civility</b></div>
+                                                            <div class="mb-2"><b><?php if ($_SESSION["lang"] == "EN") {
+                                                                                        print "Civility";
+                                                                                    } else {
+                                                                                        print "Civilidade";
+                                                                                    } ?></b></div>
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <input <?php if ($row["Civility"] == "mr") print "checked"; ?> id="mr" type="radio" name="Civility" value="mr">
-                                                                    <label for="mr">Mr.</label>
+                                                                    <label for="mr"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                        print "Mr.";
+                                                                                    } else {
+                                                                                        print "Senhor.";
+                                                                                    } ?></label>
                                                                     <input <?php if ($row["Civility"] == "ms") print "checked"; ?> id="ms" type="radio" name="Civility" value="ms">
-                                                                    <label for="female">Ms.</label>
+                                                                    <label for="female"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                            print "Ms.";
+                                                                                        } else {
+                                                                                            print "Senhora.";
+                                                                                        } ?></label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -890,7 +1200,11 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
 
                                                     <div class="row">
                                                         <div class="col d-flex justify-content-end">
-                                                            <a href="javascript:{}" class="btn btn-primary" onclick="submitSettings();">Save Changes</a>
+                                                            <a href="javascript:{}" class="btn btn-primary" onclick="submitSettings();"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                            print "Save Changes";
+                                                                                                                                        } else {
+                                                                                                                                            print "Salvar alterações";
+                                                                                                                                        } ?></a>
                                                             <input type="hidden" name="infoFormInput">
                                                         </div>
                                                     </div>
@@ -901,11 +1215,19 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                 <div id="securityTab" class="tab-pane active" hidden>
                                                     <form method="POST" id="changePSWFform">
                                                         <div class="col-12 col-sm-6 mb-3">
-                                                            <div class="mb-2"><b>Change Password</b></div>
+                                                            <div class="mb-2"><b><?php if ($_SESSION["lang"] == "EN") {
+                                                                                        print "Change Password";
+                                                                                    } else {
+                                                                                        print "Mudar senha";
+                                                                                    } ?></b></div>
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group">
-                                                                        <label>Current Password</label>
+                                                                        <label><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "Current Password";
+                                                                                } else {
+                                                                                    print "Senha atual";
+                                                                                } ?></label>
                                                                         <input class="form-control" type="password" placeholder="••••••" required name="CurrentPassword" oninput="reportValidity();" required id="CurrentPassword" minlength="7" maxlength="249">
                                                                     </div>
                                                                 </div>
@@ -913,7 +1235,11 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group">
-                                                                        <label>New Password</label>
+                                                                        <label><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "New Password";
+                                                                                } else {
+                                                                                    print "Nova Senha";
+                                                                                } ?></label>
                                                                         <input class="form-control" type="password" placeholder="••••••" name="PasswordEdit" id="PasswordEdit" oninput="reportValidity();" required minlength="7" maxlength="249">
                                                                     </div>
                                                                 </div>
@@ -921,7 +1247,11 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="form-group">
-                                                                        <label>Confirm <span class="d-none d-xl-inline">Password</span></label>
+                                                                        <label>Confirm <span class="d-none d-xl-inline"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                            print "Password Repeat";
+                                                                                                                        } else {
+                                                                                                                            print "Repetição de senha";
+                                                                                                                        } ?></span></label>
                                                                         <input class="form-control" type="password" placeholder="••••••" name="PasswordRepeatEdit" id="PasswordRepeatEdit" oninput="passwordCheckEdit();" required minlength="7" maxlength="249">
                                                                     </div>
                                                                 </div>
@@ -930,13 +1260,102 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
 
                                                         <div class="row">
                                                             <div class="col d-flex justify-content-end">
-                                                                <a href="javascript:{}" class="btn btn-primary" type="submit" onclick="changePSW();">Update password</a>
+                                                                <a href="javascript:{}" class="btn btn-primary" type="submit" onclick="changePSW();"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                            print "Update password";
+                                                                                                                                                        } else {
+                                                                                                                                                            print "Atualizar senha";
+                                                                                                                                                        } ?></a>
                                                             </div>
                                                         </div>
                                                     </form>
                                                 </div>
 
+                                                <div id="ordersTab" class="tab-pane active" hidden>
 
+                                                    <div class="table-responsive">
+                                                        <table class="table align-middle mb-0 bg-white">
+                                                            <thead class="bg-light">
+                                                                <tr>
+                                                                    <th><?php if ($_SESSION["lang"] == "EN") {
+                                                                            print "OrderID";
+                                                                        } else {
+                                                                            print "PedidoID";
+                                                                        } ?></th>
+                                                                    <th>Status</th>
+                                                                    <th><?php if ($_SESSION["lang"] == "EN") {
+                                                                            print "Item List";
+                                                                        } else {
+                                                                            print "Lista de items";
+                                                                        } ?></th>
+                                                                    <th><?php if ($_SESSION["lang"] == "EN") {
+                                                                            print "Order Total";
+                                                                        } else {
+                                                                            print "Total pedido";
+                                                                        } ?></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php
+                                                                $sqlStatement2 = $connection->prepare("SELECT * FROM AllorderTotal WHERE UserID=?");
+                                                                $sqlStatement2->bind_param("i", $_SESSION["UserID"]);
+                                                                $sqlStatement2->execute();
+                                                                $result2 = $sqlStatement2->get_result();
+
+                                                                while ($row2 = $result2->fetch_assoc()) {
+                                                                ?>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <p class="fw-bold mb-1"><?= $row2["OrderID"] ?></p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if ($row2["StatusOrder"] == 0) {
+                                                                            ?>
+                                                                                <div style="color: red;"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                print "In progress";
+                                                                                                            } else {
+                                                                                                                print "Em andamento";
+                                                                                                            } ?></div>
+                                                                            <?php
+                                                                            } else {
+                                                                            ?>
+                                                                                <div style="color: green;"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                print "Done";
+                                                                                                            } else {
+                                                                                                                print "Pronto";
+                                                                                                            } ?></div>
+                                                                            <?php
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php
+                                                                            $sqlStatement = $connection->prepare("SELECT * FROM AllOrderUser WHERE UserID=? AND OrderID=?");
+                                                                            $sqlStatement->bind_param("is", $_SESSION["UserID"], $row2["OrderID"]);
+                                                                            $sqlStatement->execute();
+                                                                            $result = $sqlStatement->get_result();
+
+                                                                            while ($row = $result->fetch_assoc()) {
+                                                                            ?>
+                                                                                <div><small><?= $row["ProductNameFull"] ?> * <?= $row["QuantityProduct"] ?></small></div>
+                                                                            <?php
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td><?= $row2["TotalOrder"] ?>€</td>
+                                                                    </tr>
+                                                                <?php
+                                                                }
+                                                                ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+
+
+
+
+                                                </div>
 
 
                                             </div>
@@ -951,22 +1370,38 @@ if (isset($_POST["CurrentPassword"], $_POST["PasswordEdit"], $_POST["PasswordRep
                                         <div class="px-xl-3">
                                             <a class="btn btn-info" onclick="document.getElementById('logoutform').submit();">
                                                 <i class="fa fa-sign-out"></i>
-                                                <span>Logout</span>
+                                                <span><?php if ($_SESSION["lang"] == "EN") {
+                                                            print "Logout";
+                                                        } else {
+                                                            print "Sair";
+                                                        } ?></span>
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card">
                                     <div class="card-body">
-                                        <h6 class="card-title font-weight-bold">Support</h6>
-                                        <p class="card-text">Get fast, free help from our friendly assistants.</p>
+                                        <h6 class="card-title font-weight-bold"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "About";
+                                                                                } else {
+                                                                                    print "Acerca de";
+                                                                                } ?></h6>
+                                        <p class="card-text"><?php if ($_SESSION["lang"] == "EN") {
+                                                                    print "Contact Info";
+                                                                } else {
+                                                                    print "Informações de contato";
+                                                                } ?>:</p>
 
                                         <div class="col">
                                             <a class="btn btn-secondary mb-2" href="tel: +33372520234">+33 3 72 52 02 34</a>
 
                                             <a class="btn btn-secondary mb-2" href="mailto: boutiquethionville@ldlc.com">boutiquethionville@ldlc.com</a>
 
-                                            <a class="btn btn-secondary mb-2" href="https://g.page/LDLC-Thionville?share" target="_blank">Adress</a>
+                                            <a class="btn btn-secondary mb-2" href="https://g.page/LDLC-Thionville?share" target="_blank"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                print "Address";
+                                                                                                                                            } else {
+                                                                                                                                                print "Endereço";
+                                                                                                                                            } ?></a>
                                         </div>
                                     </div>
                                 </div>

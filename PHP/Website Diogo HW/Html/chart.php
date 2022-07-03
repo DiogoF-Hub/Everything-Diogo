@@ -2,7 +2,11 @@
 include_once("start.php");
 
 if ($_SESSION["userloggedIn"] == false) {
-    print "<script>alert('You are not logged In');</script>";
+    if ($_SESSION["lang"] == "EN") {
+        print "<script>alert('You are not logged In');</script>";
+    } else {
+        print "<script>alert('Você não está logado');</script>";
+    }
     print '<script>window.location.href = "user.php";</script>';
     die();
 }
@@ -13,6 +17,8 @@ if (isset($_POST["deleteProductChart"])) {
     } else {
         die();
     }
+    header("Refresh:0");
+    die();
 }
 
 if (isset($_POST["quantityProduct"], $_POST["quantityProductChartId"])) {
@@ -29,31 +35,23 @@ if (isset($_POST["quantityProduct"], $_POST["quantityProductChartId"])) {
     } else {
         $_SESSION["Chart"][$_POST["quantityProductChartId"]] = $_POST["quantityProduct"];
     }
+    header("Refresh:0");
+    die();
 }
 
 if (isset($_POST["deletechart"])) {
     unset($_SESSION["Chart"]);
     $_SESSION["Chart"] = [];
+    header("Refresh:0");
+    die();
 }
 
 if (isset($_POST["orderSave"])) {
     if (count($_SESSION["Chart"]) > 0) {
-
-        foreach ($_SESSION["Chart"] as $productID => $quantity) {
-            $sqlStatement2 = $connection->prepare("SELECT * from products natural join description where ProductsID=? AND IDLang=" . $sqlLang);
-            $sqlStatement2->bind_param("s", $productID);
-            $sqlStatement2->execute();
-            $result2 = $sqlStatement2->get_result();
-
-            $row = $result2->fetch_assoc();
-
-            $totalOrderCheckout = $totalOrderCheckout + ($row["Price"] * $quantity);
-        }
-
         $OrderId = "#" . $_SESSION["username"] . time();
         // start inserting
-        $sqlInsert = $connection->prepare("INSERT INTO Orders(OrderID, UserID, TotalOrder, StatusOrder) VALUES(?, ?, ?, 'In progress')");
-        $sqlInsert->bind_param("sii", $OrderId, $_SESSION["UserID"], $totalOrderCheckout);
+        $sqlInsert = $connection->prepare("INSERT INTO Orders(OrderID, UserID, StatusOrder) VALUES(?, ?, 0)");
+        $sqlInsert->bind_param("si", $OrderId, $_SESSION["UserID"]);
         $sqlInsert->execute();
 
         // insert items in to the list table
@@ -65,18 +63,26 @@ if (isset($_POST["orderSave"])) {
         }
 
         $_SESSION["Chart"]  = [];
-        print "<script>alert('You just placed your order!!!')</script>";
+        if ($_SESSION["lang"] == "EN") {
+            print "<script>alert('You just placed your order!!!');</script>";
+        } else {
+            print "<script>alert('Você acabou de fazer seu pedido!!!');</script>";
+        }
         header("Refresh:0");
         die();
     } else {
-        echo "<script> alert('Your Shopping-cart is empty'); </>";
+        if ($_SESSION["lang"] == "EN") {
+            print "<script>alert('Your Shopping-cart is empty');</script>";
+        } else {
+            print "<script>alert('Seu carrinho de compras está vazio');</script>";
+        }
         header("Refresh:0");
         die();
     }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $_SESSION["lang"] ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -107,7 +113,6 @@ if (isset($_POST["orderSave"])) {
     <section class="section1">
 
         <?php
-        //if (isset($_SESSION["Chart"])) {
         foreach ($_SESSION["Chart"] as $productID => $quantity) {
             $totalQuantity = $totalQuantity + $quantity;
         }
@@ -115,18 +120,42 @@ if (isset($_POST["orderSave"])) {
         <div class="container h-50">
             <div class="row d-flex justify-content-center align-items-center h-50">
                 <div class="col">
+                    <div class="container d-flex">
+                        <div class="col">
+                            <p><span class="h3"><?php if ($_SESSION["lang"] == "EN") {
+                                                    print "Shopping Cart";
+                                                } else {
+                                                    print "Carrinho de compras";
+                                                } ?> </span><span class="h5">(<?= $totalQuantity ?> <?php if ($_SESSION["lang"] == "EN") {
+                                                                                                        print "item(s) in your Shopping-Cart)";
+                                                                                                    } else {
+                                                                                                        print "item(ns) em seu carrinho de compras)";
+                                                                                                    } ?></span></p>
 
-                    <div class="col d-flex">
-                        <p><span class="h3">Shopping Cart </span><span class="h5">(<?= $totalQuantity ?> item(s) in your Shopping-Cart)</span></p>
-                        <form method="POST" id="deletechartId">
-                            <a href="javascript:{}" onclick="document.getElementById('deletechartId').submit();">
-                                <img src="../Images/trash.png" alt="trash" width="7%">
+                        </div>
+                        <div class="col">
+                            <style>
+                                .wrapper {
+                                    float: left;
+                                    clear: left;
+                                    display: table;
+                                    table-layout: fixed;
+                                }
+
+                                img.img-responsive {
+                                    display: table-cell;
+                                    min-width: 25%;
+                                }
+                            </style>
+                            <a class="wrapper col-md-3" href="javascript:{}" onclick="document.getElementById('deletechartId').submit();">
+                                <img class="img-responsive" src="../Images/trash.png" alt="trash" style="width: 7%;">
                             </a>
-                            <input name="deletechart" type="text" hidden>
-                        </form>
 
+                            <form method="POST" id="deletechartId" hidden>
+                                <input name="deletechart" type="text" hidden>
+                            </form>
+                        </div>
                     </div>
-
 
 
                     <?php
@@ -144,18 +173,22 @@ if (isset($_POST["orderSave"])) {
 
 
                         <div class="card mb-3">
-                            <div class="card-body p-3">
+                            <div class="card-body p-4">
 
                                 <div class="row align-items-center">
                                     <div class="col">
                                         <a style="text-decoration: none; color: inherit;" href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1">
-                                            <img src="../Images/<?= $row["ImageLink"] ?>.jpg" style="height: 50%; width: 50%;" alt="<?= $row["ProductNameFull"] ?>">
+                                            <img class="img-fluid mx-auto d-block" src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductNameFull"] ?>">
                                         </a>
                                     </div>
                                     <div class="col justify-content-center">
                                         <div>
                                             <a style="text-decoration: none; color: inherit;" href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1">
-                                                <div class="small text-muted mb-2 ">Name</div>
+                                                <div class="small text-muted mb-2 "><?php if ($_SESSION["lang"] == "EN") {
+                                                                                        print "Name";
+                                                                                    } else {
+                                                                                        print "Nome";
+                                                                                    } ?></div>
                                                 <div class="fw-normal mb-2"><?= $row["ProductNameFull"] ?></div>
                                             </a>
                                         </div>
@@ -163,7 +196,11 @@ if (isset($_POST["orderSave"])) {
                                     <div class="col d-flex justify-content-center">
                                         <div>
                                             <a style="text-decoration: none; color: inherit;" href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1">
-                                                <div class="small text-muted mb-2 ">Type</div>
+                                                <div class="small text-muted mb-2 "><?php if ($_SESSION["lang"] == "EN") {
+                                                                                        print "Info";
+                                                                                    } else {
+                                                                                        print "Informação";
+                                                                                    } ?></div>
                                                 <div class="fw-normal mb-2"><?= $row["Subtitle1"] ?></div>
                                             </a>
                                         </div>
@@ -171,14 +208,22 @@ if (isset($_POST["orderSave"])) {
                                     <div class="col d-flex justify-content-center">
                                         <div>
                                             <a style="text-decoration: none; color: inherit;" href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1">
-                                                <div class="small text-muted mb-2 ">Price</div>
+                                                <div class="small text-muted mb-2 "><?php if ($_SESSION["lang"] == "EN") {
+                                                                                        print "Price";
+                                                                                    } else {
+                                                                                        print "Preço";
+                                                                                    } ?></div>
                                                 <div class="fw-normal mb-2"><?= $row["Price"] ?>€</div>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="col d-flex justify-content-center">
                                         <div>
-                                            <div class="small text-muted mb-2 ">Quantity</div>
+                                            <div class="small text-muted mb-2 "><?php if ($_SESSION["lang"] == "EN") {
+                                                                                    print "Quantity";
+                                                                                } else {
+                                                                                    print "Quantidade";
+                                                                                } ?></div>
                                             <div class="fw-normal mb-2">
                                                 <form method="POST" id="quantityProductId<?= $productID ?>">
                                                     <input name="quantityProductChartId" value="<?= $productID ?>" type="text" hidden>
@@ -212,7 +257,11 @@ if (isset($_POST["orderSave"])) {
                                         <div>
                                             <form method="POST">
                                                 <input name="deleteProductChart" value="<?= $productID ?>" type="text" hidden>
-                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                                <button type="submit" class="btn btn-danger"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                    print "Delete";
+                                                                                                } else {
+                                                                                                    print "Excluir";
+                                                                                                } ?></button>
                                             </form>
                                         </div>
                                     </div>
@@ -232,7 +281,11 @@ if (isset($_POST["orderSave"])) {
 
                             <div class="float-end">
                                 <p class="mb-1 me-5 d-flex align-items-center">
-                                    <span class="small text-muted me-2">Order total:</span> <span class="lead fw-normal"><?= $totalOrder ?>€</span>
+                                    <span class="small text-muted me-2"><?php if ($_SESSION["lang"] == "EN") {
+                                                                            print "Order total";
+                                                                        } else {
+                                                                            print "Total pedido";
+                                                                        } ?>:</span> <span class="lead fw-normal"><?= $totalOrder ?>€</span>
                                 </p>
                             </div>
 
@@ -241,15 +294,17 @@ if (isset($_POST["orderSave"])) {
 
                     <div class="d-flex justify-content-end">
                         <form method="POST">
-                            <button name="orderSave" type="submit" class="btn btn-primary btn-lg">Proceed to checkout</button>
+                            <button name="orderSave" type="submit" class="btn btn-primary btn-lg"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                        print "Proceed to checkout";
+                                                                                                    } else {
+                                                                                                        print "Fazer o check-out";
+                                                                                                    } ?></button>
                         </form>
                     </div>
 
                 </div>
             </div>
         </div>
-        <?php // }
-        ?>
 
     </section>
 

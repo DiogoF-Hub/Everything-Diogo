@@ -36,7 +36,7 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $_SESSION["lang"] ?>">
 
 <head>
     <meta charset='utf-8'>
@@ -87,8 +87,16 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
 
             <select name="pricerange" onchange="pricerangefunc();">
                 <option <?php if (isset($_GET["pricerange"]) && $_GET["pricerange"] == "normal") echo "selected"; ?> value="normal">Normal</option>
-                <option <?php if (isset($_GET["pricerange"]) && $_GET["pricerange"] == "price_asc") echo "selected"; ?> value="price_asc">Price ascending</option>
-                <option <?php if (isset($_GET["pricerange"]) && $_GET["pricerange"] == "price_desc") echo "selected"; ?> value="price_desc">Price descending</option>
+                <option <?php if (isset($_GET["pricerange"]) && $_GET["pricerange"] == "price_asc") echo "selected"; ?> value="price_asc"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                print "Price ascending";
+                                                                                                                                            } else {
+                                                                                                                                                print "Preço ascendente";
+                                                                                                                                            } ?></option>
+                <option <?php if (isset($_GET["pricerange"]) && $_GET["pricerange"] == "price_desc") echo "selected"; ?> value="price_desc"><?php if ($_SESSION["lang"] == "EN") {
+                                                                                                                                                print "Price descending";
+                                                                                                                                            } else {
+                                                                                                                                                print "Preço descendente";
+                                                                                                                                            } ?></option>
             </select>
 
         </form>
@@ -99,11 +107,9 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
 
         if ($_GET["pricerange"] == "price_asc") {
             $Productsorder = " ORDER BY Price ASC";
-            //asort($PricesIds); //ascending 1-10
         } else {
             if ($_GET["pricerange"] == "price_desc") {
                 $Productsorder = " ORDER BY Price DESC";
-                //arsort($PricesIds); //descending 10-1
             }
         }
 
@@ -111,50 +117,48 @@ if (isset($_POST["productBuyId"], $_POST["productBuyTimes"])) {
         $sqlStatement = $connection->prepare("SELECT * from products natural join description where IDLang=" . $sqlLang . $Productsorder);
         $sqlStatement->execute();
         $result = $sqlStatement->get_result();
-        $numberofproducts = $result->num_rows;
 
         $lineNumber = 0;
         ?>
         <?php
-        if ($numberofproducts == 0) {
-            print("<h1>No Products were found :(</h1>");
-        } else {
-
-            while ($row = $result->fetch_assoc()) {
-                if ($lineNumber == 0)
-                    print("<div class='oneLineOfProduct'>");
+        while ($row = $result->fetch_assoc()) {
+            if ($lineNumber == 0)
+                print("<div class='oneLineOfProduct'>");
         ?>
-                <div class="Myproduct">
-                    <a href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>#slider-image-1"><img src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductNameFull"] ?>" class="productimage"></a>
-                    <div><?= $row["ProductNameFull"] ?></div>
-                    <div><?= $row["Subtitle1"] ?></div>
-                    <div><?= $row["Subtitle2"] ?></div>
-                    <span>----</span>
-                    <div><?= $row["Description1"] ?></div>
-                    <div><?= $row["Company"] ?></div>
-                    <a href="<?= $row["ProductLink"] ?>" target="_blank"><span class="greenPrice"><?= $row["Price"] ?>€</span></a>
-                    <form method="POST">
-                        <input name="productBuyId" value="<?= $row["ProductsID"] ?>" type="text" hidden>
-                        <select name="productBuyTimes">
-                            <?php
-                            for ($i = 1; $i <= 10; $i++) {
-                            ?>
-                                <option value="<?= $i ?>"><?= $i ?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
-                        <button type="submit">Buy</button>
-                    </form>
+            <div class="Myproduct">
+                <a href="ShowProduct.php?ProductID=<?= $row["ProductsID"] ?>"><img src="../Images/<?= $row["ImageLink"] ?>.jpg" alt="<?= $row["ProductNameFull"] ?>" class="productimage"></a>
+                <div><?= $row["ProductNameFull"] ?></div>
+                <div><?= $row["Subtitle1"] ?></div>
+                <div><?= $row["Subtitle2"] ?></div>
+                <span>----</span>
+                <div><?= $row["Description1"] ?></div>
+                <div><?= $row["Company"] ?></div>
+                <a href="<?= $row["ProductLink"] ?>" target="_blank"><span class="greenPrice"><?= $row["Price"] ?>€</span></a>
+                <form method="POST">
+                    <input name="productBuyId" value="<?= $row["ProductsID"] ?>" type="text" hidden>
+                    <select name="productBuyTimes">
+                        <?php
+                        for ($i = 1; $i <= 10; $i++) {
+                        ?>
+                            <option value="<?= $i ?>"><?= $i ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                    <button type="submit"><?php if ($_SESSION["lang"] == "EN") {
+                                                print "Buy";
+                                            } else {
+                                                print "Comprar";
+                                            } ?></button>
+                </form>
 
-                </div>
+            </div>
 
         <?php
-                $lineNumber++;
-                if ($lineNumber == 9) {
-                    print("</div>");
-                    $lineNumber = 0;
-                }
+            $lineNumber++;
+            if ($lineNumber == 9) {
+                print("</div>");
+                $lineNumber = 0;
             }
         }
         ?>

@@ -2,6 +2,47 @@ DROP DATABASE ProductsDatabase;
 create database ProductsDatabase;
 use ProductsDatabase;
 
+CREATE TABLE LANGUAGE (
+    IDLang int not null AUTO_INCREMENT,
+    NameLang VARCHAR(50),
+    PRIMARY KEY(IDLang)
+);
+
+CREATE TABLE AvailableCountries (
+    countryId int NOT NULL AUTO_INCREMENT,
+    CoutryNameID VARCHAR(255),
+    PRIMARY KEY(countryId)
+);
+
+CREATE TABLE AvailableCountriesNames (
+    AvailableCountriesNamesID INT NOT NULL AUTO_INCREMENT,
+    NameCountry VARCHAR(255),
+    countryId int NOT NULL,
+    IDLang INT NOT NULL,
+    PRIMARY KEY(AvailableCountriesNamesID),
+    FOREIGN KEY(IDlang) REFERENCES LANGUAGE(IDLang),
+    FOREIGN KEY(countryId) REFERENCES AvailableCountries(countryId)
+);
+
+INSERT INTO LANGUAGE(NameLang) VALUES("English");
+INSERT INTO LANGUAGE(NameLang) VALUES("Portuguese");
+
+
+INSERT INTO AvailableCountries (CoutryNameID) VALUES("");
+INSERT INTO AvailableCountries (CoutryNameID) VALUES("France");
+INSERT INTO AvailableCountries (CoutryNameID) VALUES("Luxembourg");
+INSERT INTO AvailableCountries (CoutryNameID) VALUES("Germany");
+
+INSERT INTO AvailableCountriesNames (NameCountry, countryId, IDLang) VALUES("", 1, 1);
+INSERT INTO AvailableCountriesNames (NameCountry, countryId, IDLang) VALUES("France", 2, 1);
+INSERT INTO AvailableCountriesNames (NameCountry, countryId, IDLang) VALUES("Luxembourg", 3, 1);
+INSERT INTO AvailableCountriesNames (NameCountry, countryId, IDLang) VALUES("Germany", 4, 1);
+
+
+INSERT INTO AvailableCountriesNames (NameCountry, countryId, IDLang) VALUES("", 1, 2);
+INSERT INTO AvailableCountriesNames (NameCountry, countryId, IDLang) VALUES("França", 2, 2);
+INSERT INTO AvailableCountriesNames (NameCountry, countryId, IDLang) VALUES("Luxemburgo", 3, 2);
+INSERT INTO AvailableCountriesNames (NameCountry, countryId, IDLang) VALUES("Alemanha", 4, 2);
 
 create TABLE Users(
     UserID INT NOT NULL AUTO_INCREMENT,
@@ -10,7 +51,7 @@ create TABLE Users(
     UserName VARCHAR(30) UNIQUE,
     Email VARCHAR(50),
     UserPassword VARCHAR(255),
-    Chart VARCHAR(255),
+    Chart VARCHAR(500),
     UserType VARCHAR(50),
     ProfilePic VARCHAR(255),
     JoinDate DATE,
@@ -21,21 +62,10 @@ create TABLE Users(
     SecondLineAddress VARCHAR(255),
     PostalCode VARCHAR(50),
     City VARCHAR(255),
-    Country VARCHAR(255),
-    Primary Key(UserID)
+    countryId int NOT NULL,
+    Primary Key(UserID),
+    FOREIGN KEY(countryId) REFERENCES AvailableCountries(countryId)
 );
-
-
-CREATE TABLE AvailableCountries (
-    countryId int NOT NULL AUTO_INCREMENT,
-    Country VARCHAR(255),
-    PRIMARY KEY(countryId)
-);
-
-
-INSERT INTO AvailableCountries (Country) VALUES("France");
-INSERT INTO AvailableCountries (Country) VALUES("Luxembourg");
-INSERT INTO AvailableCountries (Country) VALUES("Germany");
 
 
 CREATE TABLE Products (
@@ -50,7 +80,6 @@ CREATE TABLE Products (
     DetailedTable1 VARCHAR(255),
     DetailedTable2 VARCHAR(255),
     DetailedTable3 VARCHAR(255),
-    TypeProduct VARCHAR(50),
     PRIMARY KEY(ProductsID)
 );
 
@@ -58,8 +87,7 @@ CREATE TABLE Products (
 CREATE TABLE Orders(
     OrderID VARCHAR(500),
     UserID INT NOT NULL,
-    TotalOrder INT NOT NULL,
-    StatusOrder VARCHAR(25),
+    StatusOrder INT NOT NULL,
     PRIMARY KEY(OrderID),
     FOREIGN KEY(UserID) REFERENCES Users(UserID)
 );
@@ -72,14 +100,6 @@ CREATE TABLE ListOrder(
     QuantityProduct INT NOT NULL,
     PRIMARY KEY(ListID),
     FOREIGN KEY(OrderID) REFERENCES Orders(OrderID)
-);
-
-
-CREATE TABLE LANGUAGE (
-    IDLang int not null AUTO_INCREMENT,
-    NameLang VARCHAR(50),
-    imgsrc VARCHAR(50),
-    PRIMARY KEY(IDLang)
 );
 
 
@@ -114,12 +134,6 @@ CREATE TABLE DescriptionNav (
     FOREIGN KEY(ButtonsID) REFERENCES ButtonsNav(ButtonsID),
     FOREIGN KEY(IDlang) REFERENCES LANGUAGE(IDLang)
 );
-
-
-INSERT INTO LANGUAGE(NameLang) VALUES("English");
-INSERT INTO LANGUAGE(NameLang) VALUES("Portuguese");
-
-
 
 INSERT INTO ButtonsNav(Button) VALUES("Home");
 INSERT INTO ButtonsNav(Button) VALUES("Contact");
@@ -246,6 +260,14 @@ INSERT INTO Description (ProductsID, IDlang, Description1, Description2, TableDe
 
 
 
+/*View*/
+CREATE VIEW UserLoggedIn as SELECT FirstName, LastName, UserName, Email, UserType, ProfilePic, DATE_FORMAT(JoinDate, '%e %b %Y') AS DateJoin, DATE_FORMAT(DateOfBirth, '%e') AS DayBirth, DATE_FORMAT(DateOfBirth, '%c') AS MonthBirth, DATE_FORMAT(DateOfBirth, '%Y') AS YearBirth, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, countryId from Users;
 
-INSERT INTO  Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country) VALUES("Diogo", "Fernandes", "DFER7", "diogo_carvalhofer@hotmail.com", "$2y$10$GJgXPCnkyHucmEkXAonILuyjhixgxprvNJAp0v.gRQevgXphqIUny", "", "Admin", STR_TO_DATE('19, 9, 2021','%d, %m, %Y'), STR_TO_DATE('07, 3, 2004','%d, %m, %Y'), "", "mr", "", "", "", "", "", "");
-INSERT INTO  Users (FirstName, LastName, UserName, Email, UserPassword, Chart, UserType, JoinDate, DateOfBirth, ProfilePic, Civility, FirstLineAddress, HouseNumber, SecondLineAddress, PostalCode, City, Country) VALUES("Diogo", "Fernandes", "DFER72", "diogo_carvalhofer@hotmail.com", "$2y$10$GJgXPCnkyHucmEkXAonILuyjhixgxprvNJAp0v.gRQevgXphqIUny", "", "Normal", STR_TO_DATE('19, 9, 2021','%d, %m, %Y'), STR_TO_DATE('07, 3, 2004','%d, %m, %Y'), "", "mr", "", "", "", "", "", "");
+CREATE VIEW AllorderTotal as SELECT UserID, OrderID, ProfilePic, FirstName, LastName, UserName, Email, StatusOrder, SUM(Price*QuantityProduct) as TotalOrder FROM Orders NATURAL JOIN Users NATURAL JOIN ListOrder NATURAL JOIN Products GROUP BY OrderID;
+
+CREATE VIEW orderTotalperItem as SELECT OrderID, ProductsID, ImageLink, ProductNameFull, Price, QuantityProduct, Price*QuantityProduct as totalperItem  FROM Orders NATURAL JOIN Users NATURAL JOIN ListOrder NATURAL JOIN Products;
+
+CREATE VIEW AllOrderUser as SELECT OrderID, UserID, ProductNameFull, QuantityProduct, Price*QuantityProduct as totalperItem, Price FROM ListOrder NATURAL JOIN Orders NATURAL JOIN Users NATURAL JOIN Products;
+
+
+

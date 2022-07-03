@@ -15,9 +15,13 @@ body {
     align-items: center;
 }
 
+#navboot {
+    background-color: lightblue;
+}
+
 .section1 {
     position: relative;
-    top: 85px;
+    top: 55px;
 }
 
 #language1 {
@@ -52,7 +56,7 @@ body {
 .texthoverhome:hover,
 .greenPrice:hover,
 .blueGreenSpan:hover,
-.dropdown:hover,
+.dropdown2:hover,
 .aclass:hover,
 .dropbtn:hover {
     background-color: yellowgreen;
@@ -108,52 +112,6 @@ body {
 
 .dropdown:hover .dropdown-content {
     display: block;
-}
-
-
-/* @media querry */
-
-@media screen and (min-width: 500px) and (max-width: 1000px) {
-    #nav {
-        position: fixed;
-        height: 100%;
-        top: 0px;
-        width: 160px;
-        z-index: 10;
-        justify-content: center;
-        align-items: flex-start;
-        flex-direction: column;
-        background-color: lightblue;
-        top: 0px;
-        left: 0px;
-        display: flex;
-    }
-
-    .aclass {
-        margin: 0px;
-    }
-
-    .section1 {
-        margin-left: 160px;
-    }
-
-
-    .dropdown-content {
-        left: 100%;
-        top: 0;
-        z-index: 11;
-    }
-
-    .blueSpan,
-    .blueGreenSpan {
-        font-size: 65%;
-    }
-
-    .ldlcLogo {
-        width: 300px;
-        height: 110px;
-    }
-
 }
 
 /* Form */
@@ -221,12 +179,20 @@ body {
 
 .divAbout {
     background-color: #DAF4FB;
-    display: flex;
     flex-direction: column;
-    width: 320px;
+    width: 400px;
     padding: 15px;
-    align-items: center;
+}
+
+#imgabout {
+    width: 370px;
+    height: 330px;
+}
+
+.centeraboutbox {
+    display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 
@@ -415,4 +381,8 @@ button {
 #LoginaccA,
 #createaccA {
     background-color: yellowgreen;
+}
+
+.ml-1 {
+    margin-left: (1 * .25) !important;
 }
