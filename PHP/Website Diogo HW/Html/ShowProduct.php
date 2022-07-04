@@ -45,31 +45,61 @@ if (isset($_GET["ProductID"])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" media="screen" href="../Styling/MyStylesEN.css?t<?= time(); ?>" />
+    <link href="../Styling/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src='../Styling/bootstrap/js/bootstrap.bundle.min.js'></script>
+    <script src="../jquery/jquery-3.6.0.min.js"></script>
+    <link href="../Styling/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <title><?= $row["ProductNameFull"] ?></title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
+        .carousel-control-next,
+        .carousel-control-prev,
+        .carousel-indicators {
+            filter: invert(100%);
+        }
+    </style>
 </head>
 
 <body>
     <?php
     include_once("nav.php");
-    navbar("ShowProduct.php?ProductID=" . $_GET["ProductID"] . "&lang=" . $otherlang  . "#slider-image-1", "products", $sqlLang, $connection);
+    navbar("ShowProduct.php?ProductID=" . $_GET["ProductID"] . "&lang=" . $otherlang, "products", $sqlLang, $connection);
     ?>
 
     <section class="section1">
 
-        <div class="slider-holder">
-            <span id="slider-image-1"></span>
-            <span id="slider-image-2"></span>
-            <span id="slider-image-3"></span>
-            <div class="image-holder">
-                <img src="../images/<?= $row["ImageLink"] ?>.jpg" class="slider-image" />
-                <img src="../images/<?= $row["ImageLink"] ?>2.jpg" class="slider-image" />
-                <img src="../images/<?= $row["ImageLink"] ?>3.jpg" class="slider-image" />
-            </div>
-            <div class="button-holder">
-                <a href="#slider-image-1" class="slider-change"></a>
-                <a href="#slider-image-2" class="slider-change"></a>
-                <a href="#slider-image-3" class="slider-change"></a>
+        <div class="container-fluid" style="width: 39%;">
+            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2" class="" aria-current="true"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3" class=""></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="../images/<?= $row["ImageLink"] ?>.jpg" alt="" class="d-block w-100">
+
+                    </div>
+                    <div class="carousel-item">
+                        <img src="../images/<?= $row["ImageLink"] ?>2.jpg" alt="" class="d-block w-100">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="../images/<?= $row["ImageLink"] ?>3.jpg" alt="" class="d-block w-100">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
 

@@ -10,6 +10,10 @@ include_once("start.php");
     <title>Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" media="screen" href="../Styling/MyStylesEN.css?t<?= time(); ?>" />
+    <link href="../Styling/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src='../Styling/bootstrap/js/bootstrap.bundle.min.js'></script>
+    <script src="../jquery/jquery-3.6.0.min.js"></script>
+    <link href="../Styling/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -21,14 +25,31 @@ include_once("start.php");
 
     <section class="section1">
         <div class="divHome1">
-            <h1 id="homeH1">Diogo's Website</h1>
-            <h3>Welcome, this is my website:</h3>
-            <div>
-                Here in this website I'm selling some computers parts and it's located on
-                <a class="texthoverhome" href="ProductsEN.php">Products</a>
-            </div>
-            <div>If you want to contact me, you can go to Contact on top and click one of the 3 options</div>
-            <div>And if you want have some infos you can find out in <a class="texthoverhome" href="AboutEN.php">About</a></div>
+            <?php
+            if ($_SESSION["lang"] == "EN") {
+            ?>
+                <h1 id="homeH1">Diogo's Website</h1>
+                <h3>Welcome, this is my website:</h3>
+                <div>
+                    Here in this website I'm selling some computers parts and it's located on
+                    <a class="texthoverhome" href="Products.php">Products</a>
+                </div>
+                <div>If you want to contact me, you can go to Contact on top and click one of the 3 options</div>
+                <div>And if you want have some infos you can find out in <a class="texthoverhome" href="About.php">About</a></div>
+            <?php
+            } else {
+            ?>
+                <h1 id="homeH1">Website do Diogo</h1>
+                <h3>Bem-vindo, este é o meu website:</h3>
+                <div>
+                    Aqui neste website, eu estou vendendo alguns componentes de computador que estao localizadas em
+                    <a class="texthoverhome" href="Products.php">Produtos</a>
+                </div>
+                <div>Se voce quiser me contactar, voce pode ir em Contacto em cima e clicar em uma das 3 opções</div>
+                <div>E se voce quiser saber alguma informação voce pode as encontrar em <a class="texthoverhome" href="About.php">Acerca de</a></div>
+            <?php
+            }
+            ?>
         </div>
 
 
@@ -36,7 +57,11 @@ include_once("start.php");
         <div class="iframeHome">
 
             <div class="iframeMaps">
-                <h3>My shop is located on <span><a class="texthoverhome" href="https://g.page/LDLC-Thionville?share" target="_blank">Thionville, France:</a></span></h3>
+                <h5><?php if ($_SESSION["lang"] == "EN") {
+                        print "My shop is located on";
+                    } else {
+                        print "A minha loja é localizada em";
+                    } ?> <span><a class="texthoverhome" href="https://g.page/LDLC-Thionville?share" target="_blank">Thionville, France:</a></span></h5>
                 <?php
                 if ($_SESSION["lang"] == "EN") {
                 ?>
@@ -55,7 +80,11 @@ include_once("start.php");
             </div>
 
             <div class="iframeMaps">
-                <h3>Here is one video about our shop:</h3>
+                <h5><?php if ($_SESSION["lang"] == "EN") {
+                        print "Here is one video about our shop:";
+                    } else {
+                        print "Aqui é um video sobre a nossa loja:";
+                    } ?></h5>
                 <iframe class="iframe1" src="https://www.youtube.com/embed/508s1cz1phs?hl=<?= $_SESSION["lang"] ?>&persist_hl=1" frameborder="0"></iframe>
             </div>
         </div>

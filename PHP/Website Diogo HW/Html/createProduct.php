@@ -88,7 +88,7 @@ if (isset($_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["l
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $_SESSION["lang"] ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -129,7 +129,6 @@ if (isset($_POST["Subtitle1"], $_POST["Subtitle2"], $_POST["company"], $_POST["l
             <div class="p-3" style="width: 200px;">
                 <div class="e-navlist e-navlist--active-bg">
                     <ul class="nav">
-                        <li class="nav-item"><a class="nav-link px-2" href="createProduct.php"><i class="fa fa-plus-square mr-1"></i><span> Create Product</span></a></li>
                         <li class="nav-item"><a class="nav-link px-2" href="orders.php"><i class="fa fa-fw fa-th mr-1"></i><span> Orders</span></a></li>
                         <li class="nav-item"><a class="nav-link px-2" href="user.php"><i class="fa fa-undo mr-1"></i><span> Go back</span></a></li>
                     </ul>

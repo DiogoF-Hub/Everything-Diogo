@@ -1,0 +1,13 @@
+Hello M.Durbaca, I hope you like what I did here, it took a lot of time and effort but I made it xD.
+
+-To try/run, you need to run the file database.sql that is inside the database folder and you are ready,
+
+-To have admin user, I already created the update for you, so you just need to create an user and then open the CreateAdmins.sql that is inside the database folder then write the UserName of your user and run.
+
+-There should be a pic1.png on the same folder, and thats what you get when you are an admin, if you are not an admin you dont see that.
+
+-There should be a pic2.png on the same folder, and thats the tab to see each indidual users order, not all order like on pic2.png
+
+-To test the website on different screen sizes, pls test it with your phone bcs on the pc if you change it into the phone its doesnt really show how it should, so pls acess the page from the phone with the ip of the pc then the path.
+
+Thats it from me, I hope you like it!!!
