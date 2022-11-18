@@ -50,7 +50,7 @@ CREATE TABLE `Schedule_Slots`(
 
 CREATE TABLE `Batches`(
     `batch_number_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    `key` INT NOT NULL
+    `key` VARCHAR(255) NOT NULL UNIQUE
 );
 
 
@@ -73,3 +73,14 @@ ALTER TABLE
     `Booking_list` ADD CONSTRAINT `booking_list_schedule_slot_id_foreign` FOREIGN KEY(`schedule_slot_id`) REFERENCES `Schedule_Slots`(`schedule_slot_id`);
 ALTER TABLE
     `Users` ADD CONSTRAINT `users_batch_number_id_foreign` FOREIGN KEY(`batch_number_id`) REFERENCES `Batches`(`batch_number_id`);
+
+
+INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALUES (NULL, '8', '9');
+INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALUES (NULL, '9', '10');
+INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALUES (NULL, '10', '11');
+INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALUES (NULL, '11', '12');
+INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALUES (NULL, '12', '13');
+INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALUES (NULL, '13', '14');
+INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALUES (NULL, '14', '15');
+INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALUES (NULL, '15', '16');
+INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALUES (NULL, '16', '17');
