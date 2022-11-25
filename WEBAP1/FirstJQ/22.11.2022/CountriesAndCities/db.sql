@@ -1,4 +1,4 @@
-drop database CountriesAndCities;
+
 create database CountriesAndCities;
 
 use CountriesAndCities;
