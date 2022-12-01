@@ -20,7 +20,8 @@ CREATE TABLE `Users`(
     `password` VARCHAR(255) NOT NULL,
     `batch_number_id` INT NOT NULL UNIQUE,
     `group_id` INT NOT NULL,
-    `verified_email` INT NOT NULL
+    `verified_email` INT NOT NULL,
+    `verified_email_code` INT NOT NULL
 );
 
 
