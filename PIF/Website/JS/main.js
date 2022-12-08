@@ -1,3 +1,22 @@
+$(Start);
+
+function Start() {
+    $("#firstName, #lastName").bind("focusout", function () {
+        a = $(this).val();
+
+        checkNames(a);
+    })
+}
+
+
+function checkNames(name){
+    if (/^[ a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'\-]+$/.test(a)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function signup() {
     JSvalidation = 0;
 
@@ -70,4 +89,10 @@ function signup() {
     if (JSvalidation == 0) {
 
     }
+}
+
+
+
+function testName(name) {
+    alert(name);
 }
