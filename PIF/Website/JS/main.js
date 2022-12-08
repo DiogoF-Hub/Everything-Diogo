@@ -4,15 +4,45 @@ function Start() {
     $("#firstName, #lastName").bind("focusout", function () {
         a = $(this).val();
 
-        checkNames(a);
-    })
+        if (!a) {
+            $(this).parent().children("div").html("");
+            return;
+        }
+
+        if (checkNames(a) == false) {
+            $(this).parent().children("div").html("Please write a name with letters");
+        } else {
+            $(this).parent().children("div").html("");
+        }
+
+    });
+
+    $("#email").bind("focusout", function () {
+        a = $(this).val();
+
+        if (!a) {
+            $(this).parent().children("div").html("");
+            return;
+        }
+
+        if (checkEmail($.trim(a)) == false) {
+            $(this).parent().children("div").html("Please write a valid Email");
+        } else {
+            $(this).parent().children("div").html("");
+        }
+    });
 }
 
 
-function checkNames(name){
-    if (/^[ a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'\-]+$/.test(a)) {
-        return true;
-    } else {
+function checkNames(a) {
+    if (!/^[ a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'\-]+$/.test(a)) {
+        return false;
+    }
+}
+
+
+function checkEmail(a) {
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(a)) {
         return false;
     }
 }
@@ -33,15 +63,26 @@ function signup() {
         $("#firstName").parent().children("div").html("Please Write something for First Name");
         JSvalidation++;
     } else {
-        $("#firstName").parent().children("div").html("");
+        if (checkNames(firstName) == false) {
+            $("#firstName").parent().children("div").html("Please write a name with letters");
+            JSvalidation++;
+        } else {
+            $("#firstName").parent().children("div").html("");
+        }
     }
+
 
 
     if (!lastName) {
         $("#lastName").parent().children("div").html("Please Write something for Last Name");
         JSvalidation++;
     } else {
-        $("#lastName").parent().children("div").html("");
+        if (checkNames(lastName) == false) {
+            $("#lastName").parent().children("div").html("Please write a name with letters");
+            JSvalidation++;
+        } else {
+            $("#lastName").parent().children("div").html("");
+        }
     }
 
 
@@ -84,15 +125,7 @@ function signup() {
 
 
 
-
-
     if (JSvalidation == 0) {
-
+        //$("#signup").submit();
     }
-}
-
-
-
-function testName(name) {
-    alert(name);
 }
