@@ -1,5 +1,7 @@
 $(Start);
 
+SignIn = true;
+
 function Start() {
     $("#firstName, #lastName").bind("focusout", function () {
         a = $(this).val();
@@ -31,6 +33,26 @@ function Start() {
             $(this).parent().children("div").html("");
         }
     });
+
+
+
+    $("#emailin").bind("focusout", function () {
+        a = $(this).val();
+
+        if (!a) {
+            $(this).parent().children("div").html("");
+            return;
+        }
+
+        if (checkEmail($.trim(a)) == false) {
+            $(this).parent().children("div").html("Please write a valid Email");
+        } else {
+            $(this).parent().children("div").html("");
+        }
+    });
+
+
+    $("#signup").hide();
 }
 
 
@@ -90,7 +112,12 @@ function signup() {
         $("#email").parent().children("div").html("Please Write something for Email");
         JSvalidation++;
     } else {
-        $("#email").parent().children("div").html("");
+        if (checkEmail(email) == false) {
+            $("#email").parent().children("div").html("Please write a valid Email");
+            JSvalidation++;
+        } else {
+            $("#email").parent().children("div").html("");
+        }
     }
 
 
@@ -127,5 +154,71 @@ function signup() {
 
     if (JSvalidation == 0) {
         //$("#signup").submit();
+    }
+}
+
+
+
+
+function signin() {
+    JSvalidationIn = 0;
+
+    emailin = $("#emailin").val();
+    passwordin = $("#passwordin").val();
+
+
+    if (!emailin) {
+        $("#emailin").parent().children("div").html("Please Write something for Email");
+        JSvalidationIn++;
+    } else {
+        if (checkEmail(emailin) == false) {
+            $("#emailin").parent().children("div").html("Please write a valid Email");
+            JSvalidationIn++;
+        } else {
+            $("#emailin").parent().children("div").html("");
+        }
+    }
+
+
+    if (!passwordin) {
+        $("#passwordin").parent().children("div").html("Please Write something for Password");
+        JSvalidationIn++;
+    } else {
+        $("#passwordin").parent().children("div").html("");
+    }
+
+
+    if (JSvalidationIn == 0) {
+
+    }
+}
+
+
+
+function changeInUp() {
+    if (SignIn == true) {
+        SignIn = false;
+
+
+        $("#signin").hide(400);
+        $("#signup").show(400);
+        $("#buttonChange").html("Sign up");
+
+        //Remove errors when changing
+        $("#emailin").parent().children("div").html("");
+        $("#passwordin").parent().children("div").html("");
+    } else {
+        SignIn = true;
+
+        $("#signup").hide(400);
+        $("#signin").show(400);
+        $("#buttonChange").html("Sign in");
+
+        //Remove errors when changing
+        $("#firstName").parent().children("div").html("");
+        $("#lastName").parent().children("div").html("");
+        $("#email").parent().children("div").html("");
+        $("#password").parent().children("div").html("");
+        $("#passwordRepeat").parent().children("div").html("");
     }
 }
