@@ -52,6 +52,13 @@ function Start() {
     });
 
 
+
+    /*$("#passwordin").bind("focusout", function () { 
+
+
+    });*/
+
+
     $("#signup").hide();
 }
 
@@ -85,12 +92,18 @@ function signup() {
         $("#firstName").parent().children("div").html("Please Write something for First Name");
         JSvalidation++;
     } else {
-        if (checkNames(firstName) == false) {
-            $("#firstName").parent().children("div").html("Please write a name with letters");
-            JSvalidation++;
+        if (firstName.length < 250) {
+            if (checkNames(firstName) == false) {
+                $("#firstName").parent().children("div").html("Please write a name with letters");
+                JSvalidation++;
+            } else {
+                $("#firstName").parent().children("div").html("");
+            }
         } else {
-            $("#firstName").parent().children("div").html("");
+            $("#firstName").parent().children("div").html("Please write a smaller name");
+            JSvalidation++;
         }
+
     }
 
 
@@ -99,12 +112,18 @@ function signup() {
         $("#lastName").parent().children("div").html("Please Write something for Last Name");
         JSvalidation++;
     } else {
-        if (checkNames(lastName) == false) {
-            $("#lastName").parent().children("div").html("Please write a name with letters");
-            JSvalidation++;
+        if (lastName.length < 250) {
+            if (checkNames(lastName) == false) {
+                $("#lastName").parent().children("div").html("Please write a name with letters");
+                JSvalidation++;
+            } else {
+                $("#lastName").parent().children("div").html("");
+            }
         } else {
-            $("#lastName").parent().children("div").html("");
+            $("#lastName").parent().children("div").html("Please write a smaller name");
+            JSvalidation++;
         }
+
     }
 
 
@@ -121,39 +140,42 @@ function signup() {
     }
 
 
-    if (!password || !passwordRepeat) {
-
-        if (!password) {
-            $("#password").parent().children("div").html("Please Write something for Password");
-            JSvalidation++;
-        } else {
-            $("#password").parent().children("div").html("");
-        }
-
-
-        if (!passwordRepeat) {
-            $("#passwordRepeat").parent().children("div").html("Please Write something for Repeat Password");
-            JSvalidation++;
-        } else {
-            $("#passwordRepeat").parent().children("div").html("");
-        }
-
-
+    if (!password) {
+        $("#password").parent().children("div").html("Please Write something for Password");
+        JSvalidation++;
     } else {
-        if ($.trim(password) !== $.trim(passwordRepeat)) {
-            $("#passwordRepeat").parent().children("div").html("Please Write the same Password");
-            $("#password").parent().children("div").html("");
+        $("#password").parent().children("div").html("");
+    }
+
+
+    if (!passwordRepeat) {
+        $("#passwordRepeat").parent().children("div").html("Please Write something for Repeat Password");
+        JSvalidation++;
+    } else {
+        $("#passwordRepeat").parent().children("div").html("");
+    }
+
+
+    if (password || passwordRepeat) {
+        if (password.length < 8) {
+            $("#password").parent().children("div").html("The password must contain a minimum of 8 characters");
             JSvalidation++;
         } else {
-            $("#password").parent().children("div").html("");
-            $("#passwordRepeat").parent().children("div").html("");
+            if ($.trim(password) !== $.trim(passwordRepeat)) {
+                $("#passwordRepeat").parent().children("div").html("Please Write the same Password");
+                $("#password").parent().children("div").html("");
+                JSvalidation++;
+            } else {
+                $("#password").parent().children("div").html("");
+                $("#passwordRepeat").parent().children("div").html("");
+            }
         }
     }
 
 
 
     if (JSvalidation == 0) {
-        //$("#signup").submit();
+        $("#signup").submit();
     }
 }
 
@@ -184,12 +206,16 @@ function signin() {
         $("#passwordin").parent().children("div").html("Please Write something for Password");
         JSvalidationIn++;
     } else {
-        $("#passwordin").parent().children("div").html("");
+        if (passwordin.length < 8) {
+            $("#passwordin").parent().children("div").html("The password must contain a minimum of 8 characters");
+            JSvalidationIn++;
+        } else {
+            $("#passwordin").parent().children("div").html("");
+        }
     }
 
-
     if (JSvalidationIn == 0) {
-
+        $("#signin").submit();
     }
 }
 
@@ -202,23 +228,30 @@ function changeInUp() {
 
         $("#signin").hide(400);
         $("#signup").show(400);
-        $("#buttonChange").html("Sign up");
-
-        //Remove errors when changing
-        $("#emailin").parent().children("div").html("");
-        $("#passwordin").parent().children("div").html("");
-    } else {
-        SignIn = true;
-
-        $("#signup").hide(400);
-        $("#signin").show(400);
         $("#buttonChange").html("Sign in");
 
-        //Remove errors when changing
+        //Remove errors and clearing inputs when changing
+        $("#emailin").parent().children("div").html("");
+        $("#emailin").val("");
+        $("#passwordin").parent().children("div").html("");
+        $("#passwordin").val("");
+    } else {
+        SignIn = true;
+        $("#signin").show(400);
+        $("#signup").hide(400);
+
+        $("#buttonChange").html("Sign up");
+
+        //Remove errors and clearing inputs when changing
         $("#firstName").parent().children("div").html("");
+        $("#firstName").val("");
         $("#lastName").parent().children("div").html("");
+        $("#lastName").val("");
         $("#email").parent().children("div").html("");
+        $("#email").val("");
         $("#password").parent().children("div").html("");
+        $("#password").val("");
         $("#passwordRepeat").parent().children("div").html("");
+        $("#passwordRepeat").val("");
     }
 }

@@ -1,3 +1,7 @@
+<?php
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,7 +38,7 @@
                                         <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
                                             <label class="form-label">Email</label>
-                                            <input type="email" id="emailin" class="form-control" />
+                                            <input maxlength="320" type="email" id="emailin" class="form-control" />
                                             <div style="color: red;"></div>
                                         </div>
                                     </div>
@@ -44,15 +48,14 @@
                                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
                                             <label class="form-label">Password</label>
-                                            <input type="password" id="passwordin" class="form-control" />
+                                            <input minlength="8" type="password" id="passwordin" class="form-control" />
                                             <div style="color: red;"></div>
                                         </div>
                                     </div>
 
 
                                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                        <button onclick="signin();" type="button"
-                                            class="btn btn-dark btn-lg">Login</button>
+                                        <button onclick="signin();" type="button" class="btn btn-dark btn-lg">Login</button>
                                     </div>
                                 </form>
 
@@ -66,7 +69,7 @@
                                         <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
                                             <label class="form-label">First Name</label>
-                                            <input type="text" id="firstName" class="form-control" />
+                                            <input maxlength="250" type="text" id="firstName" class="form-control" />
                                             <div style="color: red;"></div>
                                         </div>
                                     </div>
@@ -75,7 +78,7 @@
                                         <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
                                             <label class="form-label">Last Name</label>
-                                            <input type="text" id="lastName" class="form-control" />
+                                            <input maxlength="250" type="text" id="lastName" class="form-control" />
                                             <div style="color: red;"></div>
                                         </div>
                                     </div>
@@ -84,7 +87,7 @@
                                         <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
                                             <label class="form-label">Email</label>
-                                            <input type="email" id="email" class="form-control" />
+                                            <input maxlength="320" type="email" id="email" class="form-control" />
                                             <div style="color: red;"></div>
                                         </div>
                                     </div>
@@ -93,7 +96,7 @@
                                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
                                             <label class="form-label">Password</label>
-                                            <input type="password" id="password" class="form-control" />
+                                            <input minlength="8" type="password" id="password" class="form-control" />
                                             <div style="color: red;"></div>
                                         </div>
                                     </div>
@@ -102,15 +105,14 @@
                                         <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
                                             <label class="form-label">Repeat your password</label>
-                                            <input type="password" id="passwordRepeat" class="form-control" />
+                                            <input minlength="8" type="password" id="passwordRepeat" class="form-control" />
                                             <div style="color: red;"></div>
                                         </div>
                                     </div>
 
 
                                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                        <button onclick="signup();" type="button"
-                                            class="btn btn-dark btn-lg">Register</button>
+                                        <button onclick="signup();" type="button" class="btn btn-dark btn-lg">Register</button>
                                     </div>
 
                                 </form>
@@ -124,7 +126,7 @@
                         </div>
                         <div class="text-end">
                             <button id="buttonChange" onclick="changeInUp();" class="btn btn-secondary btn-lg">Sign
-                                In</button>
+                                up</button>
                         </div>
                     </div>
                 </div>
