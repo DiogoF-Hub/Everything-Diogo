@@ -12,18 +12,22 @@ CREATE TABLE `Groups_permissions`(
     `open_door_available` INT NOT NULL
 );
 
+INSERT INTO `Groups_permissions` (`name`, `admin`, `schedule`, `view_sensitive_data`, `open_door_available`) VALUES ('Admin', 1, 1, 1, 1);
+INSERT INTO `Groups_permissions` (`name`, `admin`, `schedule`, `view_sensitive_data`, `open_door_available`) VALUES ('Employee', 0, 1, 1, 1);
+
 
 CREATE TABLE `Users`(
-    `name` VARCHAR(255) NOT NULL,
-    `surname` VARCHAR(255) NOT NULL,
+    `firstname` VARCHAR(255) NOT NULL,
+    `lastname` VARCHAR(255) NOT NULL,
     `email_id` VARCHAR(255) NOT NULL PRIMARY KEY,
-    `password` VARCHAR(255) NOT NULL,
+    `Userpassword` VARCHAR(255) NOT NULL,
     `batch_number_id` INT NOT NULL UNIQUE,
     `group_id` INT NOT NULL,
     `verified_email` INT NOT NULL,
     `verified_email_code` INT NOT NULL
 );
 
+INSERT INTO `Users` (`firstname`, `lastname`, `email_id`, `Userpassword`, `batch_number_id`, `group_id`) VALUES ("Diogo", "Fernandes", "bla@gmail.com", "123", 2, 1);
 
 CREATE TABLE `Rooms`(
     `room_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -31,7 +35,7 @@ CREATE TABLE `Rooms`(
     `capacity` INT NOT NULL,
     `description` TEXT NOT NULL
 );
-
+INSERT INTO `Rooms` (`number`, `capacity`, `description`) VALUES ("A22", 20, "This is the room A22");
 
 CREATE TABLE `Booking_info`(
     `room_id` INT NOT NULL,
@@ -53,6 +57,10 @@ CREATE TABLE `Batches`(
     `batch_number_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     `key` VARCHAR(255) NOT NULL UNIQUE
 );
+
+INSERT INTO `Batches` (`key`) VALUES ("sdgser3446");
+INSERT INTO `Batches` (`key`) VALUES ("sdvfedr5656");
+INSERT INTO `Batches` (`key`) VALUES ("sdkfjerj4748");
 
 
 CREATE TABLE `Booking_list`(
@@ -85,3 +93,13 @@ INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALU
 INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALUES (NULL, '14', '15');
 INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALUES (NULL, '15', '16');
 INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALUES (NULL, '16', '17');
+
+
+
+
+/*Create View*/
+CREATE VIEW AvailableBatches AS SELECT * FROM Batches WHERE batch_number_id NOT IN(SELECT batch_number_id FROM Users);
+
+
+
+

@@ -4,3 +4,16 @@ body {
     background-attachment: fixed;
     background-size: 100% 100%;
 }
+
+
+.test {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    backdrop-filter: blur(4px);
+    /*background-color: rgba(0, 0, 0, 0.5);*/
+    z-index: 30px;
+    height: 90%;
+    width: 40%;
+}

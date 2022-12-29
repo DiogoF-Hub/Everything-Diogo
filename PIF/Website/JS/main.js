@@ -27,10 +27,15 @@ function Start() {
             return;
         }
 
+
         if (checkEmail($.trim(a)) == false) {
             $(this).parent().children("div").html("Please write a valid Email");
         } else {
-            $(this).parent().children("div").html("");
+            if (emailtaken(a) == false) {
+                $(this).parent().children("div").html("This email is already taken");
+            } else {
+                $(this).parent().children("div").html("");
+            }
         }
     });
 
@@ -49,15 +54,30 @@ function Start() {
         } else {
             $(this).parent().children("div").html("");
         }
+
+
     });
 
 
 
-    /*$("#passwordin").bind("focusout", function () { 
+    $("#passwordin, #password").bind("focusout", function () {
+        a = $(this).val();
 
+        if (!a) {
+            $(this).parent().children("div").html("");
+            return;
+        }
 
-    });*/
+        if (a.length < 8) {
+            $(this).parent().children("div").html("The password must contain a minimum of 8 characters");
+        } else {
+            $(this).parent().children("div").html("");
+        }
+    });
 
+    $("#SigninButton").bind("click", signin);
+    $("#SignupButton").bind("click", signup);
+    $("#buttonChange").bind("click", changeInUp);
 
     $("#signup").hide();
 }
@@ -73,6 +93,35 @@ function checkNames(a) {
 function checkEmail(a) {
     if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(a)) {
         return false;
+    }
+}
+
+async function emailtaken(a) {//
+    let free = true; //flag for the return
+    async function test(a) { //func inside a func bcs we need the return    // This one just goes on only after the whole ajax fun as finished
+        await $.ajax({
+            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/emailTaken.php",
+            type: "POST",
+            data: ({
+                emailTaken: a,
+            }),
+            success: function (parameter) {
+                bla = parameter.data.Message;
+
+                if (bla == "1") {
+                    //$("#email").parent().children("div").html("This email is already taken");
+                    free = false;
+                }
+
+            },
+        });
+    }
+    await test(a);
+
+    if (free == false) {
+        return false;
+    } else {
+        return true;
     }
 }
 
@@ -135,7 +184,13 @@ function signup() {
             $("#email").parent().children("div").html("Please write a valid Email");
             JSvalidation++;
         } else {
-            $("#email").parent().children("div").html("");
+            emailtaken(email);
+            if (free == false) {
+                $("#email").parent().children("div").html("This email is already taken");
+                JSvalidation++;
+            } else {
+                $("#email").parent().children("div").html("");
+            }
         }
     }
 
@@ -175,7 +230,29 @@ function signup() {
 
 
     if (JSvalidation == 0) {
-        $("#signup").submit();
+        $.ajax({
+            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/SignUp.php",
+            type: "POST",
+            data: ({
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password,
+                passwordRepeat: passwordRepeat
+            }),
+            beforeSend: function () {
+                //loading ex
+                $("#reload").removeAttr("hidden");
+                $("#buttonChange").attr("disabled", true);
+            },
+            success: function (parameter) {
+                parameter.type
+                //parameter = JSON.parse(parameter);
+            },
+            error: function (parameter) {
+
+            }
+        });
     }
 }
 
@@ -215,7 +292,28 @@ function signin() {
     }
 
     if (JSvalidationIn == 0) {
-        $("#signin").submit();
+        //$("#signin").submit();
+
+        $.ajax({
+            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/SignUp.php",
+            type: "POST",
+            data: ({
+                emailin: emailin,
+                passwordin: passwordin
+            }),
+            beforeSend: function () {
+                //loading ex
+                $("#reload").removeAttr("hidden");
+                $("#buttonChange").attr("disabled", true);
+            },
+            success: function (parameter) {
+                parameter.type
+                //parameter = JSON.parse(parameter);
+            },
+            error: function (parameter) {
+
+            }
+        });
     }
 }
 
@@ -228,6 +326,7 @@ function changeInUp() {
 
         $("#signin").hide(400);
         $("#signup").show(400);
+
         $("#buttonChange").html("Sign in");
 
         //Remove errors and clearing inputs when changing
@@ -237,8 +336,9 @@ function changeInUp() {
         $("#passwordin").val("");
     } else {
         SignIn = true;
-        $("#signin").show(400);
         $("#signup").hide(400);
+        $("#signin").show(400);
+
 
         $("#buttonChange").html("Sign up");
 
