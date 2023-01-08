@@ -1,19 +1,13 @@
 <?php
 include_once("../HTML/commonCodeHTML.php");
 
-header('Content-Type: application/json; charset=utf-8');
+header('Content-Type: application/json; charset=utf-8'); //needed for ajax request
 
-/*$codes = [
-    "Success" => 200,
-    "NotFound" => 404,
-    "Created" => 201,
-    "Forbidden" => 403,
-    "BadRequest" => 400
-];*/
+$namesRegex = "/^[ a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ''\-]+$/";
+$emailRegex = "/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/";
 
-function returnRes($data = null)
+function returnRes($data = null) //func to return the result of ajax request
 {
-    //global $codes;
     http_response_code(200);
     $object = new stdClass();
     if ($data != null) {

@@ -8,8 +8,9 @@ include_once("commonCodeHTML.php");
 
 <head>
     <script src='../JS/jquery-3.6.1.min.js'></script>
-    <script src='../JS/main.js'></script>
-    <script src="../JS/JS bootstrap-5.2.3-dist/bootstrap.min.js"></script>
+    <script src='../JS/commonCode.js'></script>
+    <script src='../JS/signInUp.js'></script>
+    <script src="../JS/JS bootstrap-5.2.3-dist/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../CSS/CSS bootstrap-5.2.3-dist/bootstrap.min.css">
     <link rel="stylesheet" href="../CSS/fontawesome-free-6.2.1-web/css/all.min.css" />
     <link rel="stylesheet" href="../CSS/main.css">
@@ -47,7 +48,7 @@ include_once("commonCodeHTML.php");
                                             <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label">Email</label>
-                                                <input maxlength="320" type="email" id="emailin" class="form-control" />
+                                                <input maxlength="320" type="email" id="emailin" name="emailin" class="form-control" />
                                                 <div style="color: red;"></div>
                                             </div>
                                         </div>
@@ -57,7 +58,7 @@ include_once("commonCodeHTML.php");
                                             <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label">Password</label>
-                                                <input minlength="8" type="password" id="passwordin" class="form-control" />
+                                                <input minlength="8" type="password" id="passwordin" name="passwordin" class="form-control" />
                                                 <div style="color: red;"></div>
                                             </div>
                                         </div>
@@ -120,20 +121,23 @@ include_once("commonCodeHTML.php");
 
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-key fa-lg me-3 fa-fw"></i>
-                                            <select class="form-select">
-                                                <option selected>Select Badge Number</option>
-                                                <?php
-                                                $sqlStatement = $connection->prepare("SELECT * FROM AvailableBatches");
-                                                $sqlStatement->execute();
-                                                $result = $sqlStatement->get_result();
+                                            <div class="form-outline flex-fill mb-0">
+                                                <select name="BadgeNumber" id="BadgeNumber" class="form-select">
+                                                    <option value="-1" selected>Select Badge Number</option>
+                                                    <?php
+                                                    $sqlStatement = $connection->prepare("SELECT * FROM AvailableBatches");
+                                                    $sqlStatement->execute();
+                                                    $result = $sqlStatement->get_result();
 
-                                                while ($row = $result->fetch_assoc()) {
-                                                ?>
-                                                    <option value="<?= $row["batch_number_id"] ?>"><?= $row["batch_number_id"] ?></option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
+                                                    while ($row = $result->fetch_assoc()) {
+                                                    ?>
+                                                        <option value="<?= $row["batch_number_id"] ?>"><?= $row["batch_number_id"] ?></option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <div style="color: red;"></div>
+                                            </div>
                                         </div>
 
                                         <div class="d-flex justify-content-center mx-4 mb-2 mb-lg-4">
@@ -158,7 +162,22 @@ include_once("commonCodeHTML.php");
                 </div>
             </div>
         </div>
-    <?php } ?>
+    <?php } else {
+        nav("home", 0);
+    ?>
+        <section class="section1">
+
+
+            <div id="testh">
+                <h1>Welcome</h1>
+                <h3>This is Home page</h3>
+                <img src="../IMAGES/logo.png" alt="" width="20%" height="20%">
+            </div>
+
+        </section>
+
+    <?php
+    } ?>
 </body>
 
 </html>

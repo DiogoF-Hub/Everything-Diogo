@@ -12,8 +12,10 @@ CREATE TABLE `Groups_permissions`(
     `open_door_available` INT NOT NULL
 );
 
+INSERT INTO `Groups_permissions` (`name`, `admin`, `schedule`, `view_sensitive_data`, `open_door_available`) VALUES ('NewUser', 0, 0, 0, 0);
 INSERT INTO `Groups_permissions` (`name`, `admin`, `schedule`, `view_sensitive_data`, `open_door_available`) VALUES ('Admin', 1, 1, 1, 1);
 INSERT INTO `Groups_permissions` (`name`, `admin`, `schedule`, `view_sensitive_data`, `open_door_available`) VALUES ('Employee', 0, 1, 1, 1);
+
 
 
 CREATE TABLE `Users`(
@@ -22,12 +24,14 @@ CREATE TABLE `Users`(
     `email_id` VARCHAR(255) NOT NULL PRIMARY KEY,
     `Userpassword` VARCHAR(255) NOT NULL,
     `batch_number_id` INT NOT NULL UNIQUE,
+    `phoneNumber` INT UNIQUE,
+    `profilePic` VARCHAR(5),
     `group_id` INT NOT NULL,
     `verified_email` INT NOT NULL,
-    `verified_email_code` INT NOT NULL
+    `verified_email_code` VARCHAR(255) NOT NULL
 );
 
-INSERT INTO `Users` (`firstname`, `lastname`, `email_id`, `Userpassword`, `batch_number_id`, `group_id`) VALUES ("Diogo", "Fernandes", "bla@gmail.com", "123", 2, 1);
+INSERT INTO `Users` (`firstname`, `lastname`, `email_id`, `Userpassword`, `batch_number_id`, `group_id`, `phoneNumber`, `profilePic`) VALUES ("Diogo", "Fernandes", "bla@gmail.com", "$2y$10$y9Dttj64zc1pEIVx2.sszuKVpZylgFECOMRdwxk0fehq1DOzkwQXi", 2, 2, 0, 0);
 
 CREATE TABLE `Rooms`(
     `room_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
