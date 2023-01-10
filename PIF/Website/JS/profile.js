@@ -58,6 +58,41 @@ function Start() {
 
     });
 
+    $("#currentPswProfile, #newPswProfile").bind("focusout", function () {
+        a = $(this).val();
+
+        if (!a) {
+            $(this).parent().children("div").html("");
+            return;
+        }
+
+        if (a.length < 8) {
+            $(this).parent().children("div").html("The password must contain a minimum of 8 characters");
+        } else {
+            $(this).parent().children("div").html("");
+        }
+    });
+
+    $("#newPswRepeatProfile").bind("focusout", function () {
+        a = $(this).val();
+
+        if (!a) {
+            $(this).parent().children("div").html("");
+            return;
+        }
+
+        if (a.length < 8) {
+            $(this).parent().children("div").html("The password must contain a minimum of 8 characters");
+        } else {
+            b = $("#newPswProfile").val();
+
+            if ($.trim(a) !== $.trim(b)) {
+                $(this).parent().children("div").html("The passwords dont match");
+            } else {
+                $(this).parent().children("div").html("");
+            }
+        }
+    });
 
     $("#saveProfile").bind("click", saveProfile);
     $("#changePswButton").bind("click", changePsw);
@@ -162,8 +197,10 @@ async function saveProfile() {
                 //loading ex
             },
             success: function (parameter) {
-                // bla = parameter.data.Message;
-                // alert(bla);
+                bla = parameter.data.Message;
+                if (bla != "1") {
+                    alert(bla);
+                }
                 setTimeout(function () {
                     window.location.reload();
                 }, 500);
@@ -224,8 +261,51 @@ function changePsw() {
         JSvalidation++;
     }
 
-
     if (JSvalidation == 0) {
+        $.ajax({
+            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/EditProfile.php",
+            type: "POST",
+            data: ({
+                currentPsw: currentPsw,
+                newPsw: newPsw,
+                newPswRepeat: newPswRepeat
+            }),
+            beforeSend: function () {
+                //loading ex
+                $("#currentPswProfile").attr("disabled", true);
+                $("#newPswProfile").attr("disabled", true);
+                $("#newPswRepeatProfile").attr("disabled", true);
 
+                $("#changePswButton").attr("disabled", true);
+
+                $("#changePswButton").html("");
+
+                $("#changePswButton").append(buttonSpinner);
+            },
+            success: function (parameter) {
+                bla = parameter.data.Message;
+                if (bla != "1") {
+                    alert(bla);
+                }
+                setTimeout(function () {
+                    $("#currentPswProfile").attr("disabled", false);
+                    $("#newPswProfile").attr("disabled", false);
+                    $("#newPswRepeatProfile").attr("disabled", false);
+
+                    $("#currentPswProfile").val("");
+                    $("#newPswProfile").val("");
+                    $("#newPswRepeatProfile").val("");
+
+                    $("#changePswButton").attr("disabled", false);
+
+                    $("#changePswButton").html("Update");
+                }, 1000);
+
+            },
+            error: function (parameter) {
+                bla = parameter.data.Message;
+                alert(bla);
+            }
+        });
     }
 }

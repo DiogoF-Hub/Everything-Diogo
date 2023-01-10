@@ -35,12 +35,6 @@ include_once("commonCodeHTML.php");
                             <div class="row justify-content-center">
                                 <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                                    <div id="reload" class="test" hidden="hidden">
-                                        <div class="spinner-border" role="status">
-                                            <span class="sr-only"></span>
-                                        </div>
-                                    </div>
-
                                     <form method="post" id="signin" class="mx-1 mx-md-4">
                                         <p class="h1 fw-bold mb-3 mx-1 mx-md-3">Sign in</p>
 

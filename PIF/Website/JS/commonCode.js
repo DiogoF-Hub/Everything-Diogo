@@ -1,3 +1,11 @@
+let buttonSpinner = $("<span>");
+let myspan2 = $("<span>");
+myspan2.attr("class", "spinner-border spinner-border-sm");
+myspan2.attr("role", "status");
+myspan2.attr("aria-hidden", "true");
+buttonSpinner.append(myspan2);
+buttonSpinner.append("Loading...");
+
 function checkNames(a) {
     if (!/^[ a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'\-]+$/.test(a)) {
         return false;

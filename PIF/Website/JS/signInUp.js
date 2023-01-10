@@ -245,19 +245,32 @@ async function signup() {
             }),
             beforeSend: function () {
                 //loading ex
-                $("#reload").removeAttr("hidden");
+                $("#SignupButton").attr("disabled", true);
+                $("#SignupButton").html("");
+                $("#SignupButton").append(buttonSpinner);
+
                 $("#buttonChange").attr("disabled", true);
+
+                $("#firstName").attr("disabled", true);
+                $("#lastName").attr("disabled", true);
+                $("#email").attr("disabled", true);
+                $("#password").attr("disabled", true);
+                $("#passwordRepeat").attr("disabled", true);
+                $("#BadgeNumber").attr("disabled", true);
             },
             success: function (parameter) {
-                setTimeout(function () {
-                    window.location.reload();
-                }, 500);
+                bla = parameter.data.Message;
+                if (bla != "1") {
+                    alert("bla");
+                } else {
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                }
             },
             error: function (parameter) {
-                // bla = parameter.data.Message;
-
-                // alert(bla);
-
+                bla = parameter.data.Message;
+                alert(bla);
             }
         });
     }
@@ -310,13 +323,26 @@ function signin() {
             }),
             beforeSend: function () {
                 //loading ex
-                $("#reload").removeAttr("hidden");
+
+                $("#SigninButton").attr("disabled", true);
+                $("#SigninButton").html("");
+                $("#SigninButton").append(buttonSpinner);
+
                 $("#buttonChange").attr("disabled", true);
+
+
+                $("#emailin").attr("disabled", true);
+                $("#passwordin").attr("disabled", true);
             },
             success: function (parameter) {
-                setTimeout(function () {
-                    window.location.reload();
-                }, 500);
+                bla = parameter.data.Message;
+                if (bla != "1") {
+                    alert("bla");
+                } else {
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                }
             },
             error: function (parameter) {
                 bla = parameter.data.Message;

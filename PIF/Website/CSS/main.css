@@ -6,19 +6,6 @@ body {
 }
 
 
-.test {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    backdrop-filter: blur(4px);
-    /*background-color: rgba(0, 0, 0, 0.5);*/
-    z-index: 30;
-    height: 90%;
-    width: 40%;
-}
-
-
 .active1,
 .hoverLink:hover,
 .dropdownSelect:hover {
@@ -68,11 +55,4 @@ body {
 
 .labels {
     font-size: 14px
-}
-
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
 }

@@ -3,17 +3,17 @@
 require "commonCode.php";
 
 
-if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], /*$_POST["emailProfile"],*/ $_POST["PhoneNumberProfile"], $_POST["BadgeNumber"], $_SESSION["email"])) {
+if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], /*$_POST["emailProfile"],*/ $_POST["PhoneNumberProfile"], $_POST["BadgeNumber"]) && $_SESSION["userloggedIn"] == true) {
     $Response = new stdClass();
 
     if (!empty($_POST["firstNameProfile"]) || !empty($_POST["lastNameProfile"]) || !empty($_POST["emailProfile"]) || !empty($_POST["PhoneNumberProfile"]) || !empty($_POST["BadgeNumber"])) {
 
         if (!preg_match($namesRegex, $_POST["firstNameProfile"]) || !preg_match($namesRegex, $_POST["lastNameProfile"])) {
-            $Response->Message = "Name regex";
+            $Response->Message = "1";
             returnRes(data: $Response);
         } else {
             if (strlen($_POST["firstNameProfile"]) > 255 || strlen($_POST["lastNameProfile"]) > 255) {
-                $Response->Message = "Name too big";
+                $Response->Message = "1";
                 returnRes(data: $Response);
             }
         }
@@ -37,7 +37,7 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], /*$_POST["email
 
         if ($_POST["PhoneNumberProfile"] != "-1") {
             if (!preg_match($phoneRegex, $_POST["PhoneNumberProfile"])) {
-                $Response->Message = "Phone Number regex";
+                $Response->Message = "1";
                 returnRes(data: $Response);
             }
         }
@@ -50,7 +50,7 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], /*$_POST["email
             $badgeexists = $result->num_rows;
 
             if ($badgeexists == 0) {
-                $Response->Message = "The badge doesnt exist";
+                $Response->Message = "1";
                 returnRes(data: $Response);
             }
 
@@ -61,12 +61,12 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], /*$_POST["email
             $badgeNumberTaken = $result2->num_rows;
 
             if ($badgeNumberTaken > 0) {
-                $Response->Message = "Badge Number is already taken";
+                $Response->Message = "1";
                 returnRes(data: $Response);
             }
         }
     } else {
-        $Response->Message = "Something empty";
+        $Response->Message = "1";
         returnRes(data: $Response);
     }
 
@@ -115,10 +115,56 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], /*$_POST["email
             $sqlUpdate->execute();
         }
 
-        $Response->Message = "Everything updated";
+        $Response->Message = "Profile saved";
         returnRes(data: $Response);
     } else {
         $Response->Message = "Users does not exist";
+        returnRes(data: $Response);
+    }
+}
+
+
+
+
+if (isset($_POST["currentPsw"], $_POST["newPsw"], $_POST["newPswRepeat"]) && $_SESSION["userloggedIn"] == true) {
+    $Response = new stdClass();
+
+    $sqlStatement2 = $connection->prepare("SELECT * FROM Users WHERE email_id=?");
+    $sqlStatement2->bind_param("s", $_SESSION["email"]);
+    $sqlStatement2->execute();
+    $result2 = $sqlStatement2->get_result();
+    $userExist = $result2->num_rows;
+
+    if ($userExist > 0) {
+        $row = $result2->fetch_assoc();
+
+
+        if (strlen(trim($_POST["currentPsw"])) > 8 || strlen(trim($_POST["newPsw"])) > 8 || strlen(trim($_POST["newPswRepeat"])) > 8) {
+            if (!password_verify(trim($_POST["newPsw"]), $row["Userpassword"])) {
+                if (password_verify(trim($_POST["currentPsw"]), $row["Userpassword"])) {
+                    $newPsw = trim($_POST["newPsw"]);
+                    $hashPSW = password_hash($newPsw, PASSWORD_DEFAULT);
+
+                    $sqlUpdate = $connection->prepare("UPDATE Users SET Userpassword=? WHERE email_id=?");
+                    $sqlUpdate->bind_param("ss", $hashPSW, $_SESSION["email"]);
+                    $sqlUpdate->execute();
+
+                    $Response->Message = "1";
+                    returnRes(data: $Response);
+                } else {
+                    $Response->Message = "The current password dont match";
+                    returnRes(data: $Response);
+                }
+            } else {
+                $Response->Message = "The new password is the same as the current password";
+                returnRes(data: $Response);
+            }
+        } else {
+            $Response->Message = "1";
+            returnRes(data: $Response);
+        }
+    } else {
+        $Response->Message = "1";
         returnRes(data: $Response);
     }
 }
