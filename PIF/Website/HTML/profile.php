@@ -5,6 +5,12 @@ if (!$_SESSION["userloggedIn"]) {
     header("Location: index.php");
     die();
 }
+
+$sqlSelectUserData = $connection->prepare("SELECT * FROM Users WHERE email_id=?");
+$sqlSelectUserData->bind_param("s", $_SESSION["email"]);
+$sqlSelectUserData->execute();
+$result = $sqlSelectUserData->get_result();
+$row = $result->fetch_assoc()
 ?>
 
 <!DOCTYPE html>
@@ -12,10 +18,12 @@ if (!$_SESSION["userloggedIn"]) {
 
 <head>
     <script src='../JS/jquery-3.6.1.min.js'></script>
+    <!-- <script src="../JS/popper.min.js"></script> -->
     <script src='../JS/commonCode.js'></script>
     <script src='../JS/profile.js'></script>
     <script>
         sessionEmail = "<?= $_SESSION["email"] ?>";
+        sessionBadge = "<?= $row["batch_number_id"] ?>";
     </script>
     <script src="../JS/JS bootstrap-5.2.3-dist/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../CSS/CSS bootstrap-5.2.3-dist/bootstrap.min5.0.css">
@@ -31,12 +39,6 @@ if (!$_SESSION["userloggedIn"]) {
 <body>
     <?php
     nav("profile", "profile1");
-
-    $sqlSelectUserData = $connection->prepare("SELECT * FROM Users WHERE email_id=?");
-    $sqlSelectUserData->bind_param("s", $_SESSION["email"]);
-    $sqlSelectUserData->execute();
-    $result = $sqlSelectUserData->get_result();
-    $row = $result->fetch_assoc()
     ?>
 
     <section class="section1">
@@ -50,7 +52,7 @@ if (!$_SESSION["userloggedIn"]) {
                     </div>
                 </div>
                 <div class="col-md-5 border-right">
-                    <form method="POST">
+                    <form method="POST" id="editProfileForm">
                         <div class="p-3 py-5">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h3 class="text-right">Profile Settings</h3>
@@ -67,22 +69,17 @@ if (!$_SESSION["userloggedIn"]) {
                                 </div>
                             </div>
                             <div class="mt-3">
-                                <div class="col-md-12"><label class="labels">Email</label>
-                                    <input id="emailProfile" name="emailProfile" type="text" class="form-control" placeholder="Email" value="<?= $row["email_id"] ?>">
-                                    <div style="color: red;"></div>
-                                </div>
-
                                 <div class="row">
-                                    <div class="col-md-3"><label class="labels">Country Code</label>
-                                        <input id="CountryCodeProfile" name="CountryCodeProfile" type="text" class="form-control" placeholder="Country Code" value="<?php if ($row["phoneNumber"] != 0) {
-                                                                                                                                                                        print $row["phoneNumber"];
-                                                                                                                                                                    } ?>">
+                                    <div class="col-md-12"><label class="labels">Email</label>
+                                        <input disabled id="emailProfile" name="emailProfile" type="text" class="form-control" placeholder="Email" value="<?= $row["email_id"] ?>">
                                         <div style="color: red;"></div>
                                     </div>
-                                    <div class="col-md-9"><label class="labels">Mobile Number</label>
-                                        <input id="PhoneNumberProfile" name="PhoneNumberProfile" type="number" class="form-control" placeholder="Mobile Number" value="<?php if ($row["phoneNumber"] != 0) {
-                                                                                                                                                                            print $row["phoneNumber"];
-                                                                                                                                                                        } ?>">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12"><label class="labels">Mobile Number</label>
+                                        <input id="PhoneNumberProfile" name="PhoneNumberProfile" type="tel" class="form-control" placeholder="Mobile Number" value="<?php if ($row["phoneNumber"] != 0) {
+                                                                                                                                                                        print $row["phoneNumber"];
+                                                                                                                                                                    } ?>">
                                         <div style="color: red;"></div>
                                     </div>
                                 </div>
@@ -102,7 +99,6 @@ if (!$_SESSION["userloggedIn"]) {
                                         }
                                         ?>
                                     </select>
-                                    <div style="color: red;"></div>
                                 </div>
 
                             </div>
@@ -111,14 +107,21 @@ if (!$_SESSION["userloggedIn"]) {
                     </form>
                 </div>
                 <div class="col-md-4">
-                    <div class="p-2 py-3">
-                        <div class="d-flex justify-content-between align-items-center experience"><span class="h5">Change your current password</span></div><br>
-                        <div class="col-md-12"><label class="labels">Current Password</label><input type="text" class="form-control" placeholder="Current Password" value=""></div>
-                        <div class="col-md-12"><label class="labels">New password</label><input type="text" class="form-control" placeholder="New password" value=""></div>
-                        <div class="col-md-12"><label class="labels">Repeat New password</label><input type="text" class="form-control" placeholder="Repeat New password" value=""></div>
-                        <div class="mt-3"><button class="btn btn-info profile-button" type="button">Update</button></div>
-                    </div>
-
+                    <form method="POST">
+                        <div class="p-2 py-3">
+                            <div class="d-flex justify-content-between align-items-center experience"><span class="h5">Change your current password</span></div><br>
+                            <div class="col-md-12"><label class="labels">Current Password</label><input id="currentPswProfile" type="password" class="form-control" placeholder="Current Password" value="">
+                                <div style="color: red;"></div>
+                            </div>
+                            <div class="col-md-12"><label class="labels">New password</label><input id="newPswProfile" type="password" class="form-control" placeholder="New password" value="">
+                                <div style="color: red;"></div>
+                            </div>
+                            <div class="col-md-12"><label class="labels">Repeat New password</label><input id="newPswRepeatProfile" type="password" class="form-control" placeholder="Repeat New password" value="">
+                                <div style="color: red;"></div>
+                            </div>
+                            <div class="mt-3"><button id="changePswButton" class="btn btn-info profile-button" type="button">Update</button></div>
+                        </div>
+                    </form>
                     <div class="p-2 py-3">
 
                         <div class="d-flex justify-content-between align-items-center experience"><span class="h5">Verify Email</span></div><br>

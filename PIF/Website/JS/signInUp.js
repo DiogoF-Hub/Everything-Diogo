@@ -180,7 +180,7 @@ async function signup() {
             $("#email").parent().children("div").html("Please write a valid Email");
             JSvalidation++;
         } else {
-            if (await emailtaken(a) == false) {
+            if (await emailtaken(email) == false) {
                 $("#email").parent().children("div").html("This email is already taken");
                 JSvalidation++;
             } else {
@@ -230,11 +230,10 @@ async function signup() {
         JSvalidation++;
     }
 
-    JSvalidation = 0;
 
     if (JSvalidation == 0) {
         $.ajax({
-            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/SignUp.php",
+            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/SignInUp.php",
             type: "POST",
             data: ({
                 firstName: firstName,
@@ -303,7 +302,7 @@ function signin() {
         //$("#signin").submit();
 
         $.ajax({
-            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/SignIn.php",
+            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/SignInUp.php",
             type: "POST",
             data: ({
                 emailin: emailin,

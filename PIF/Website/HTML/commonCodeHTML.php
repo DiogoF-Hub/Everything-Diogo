@@ -27,7 +27,7 @@ function nav($ActivePage, $ActiveDropdown)
 ?>
     <nav id="navboot" class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="Home.php">
+            <a class="navbar-brand" href="index.php">
                 <img src="../IMAGES/logo.png" alt="Logo" width="150px" height="65px">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
