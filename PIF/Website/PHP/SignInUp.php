@@ -4,22 +4,29 @@ require "commonCode.php";
 
 if (isset($_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["password"], $_POST["passwordRepeat"], $_POST["BadgeNumber"])) {
 
+    $firstNameSignUp = trim($_POST["firstName"]);
+    $lastNameSignUp = trim($_POST["lastName"]);
+    $emailSignUp = trim($_POST["email"]);
+    $passwordSignUp = trim($_POST["password"]);
+    $passwordRepeatSignUp = trim($_POST["passwordRepeat"]);
+    $badgeNumberSignUp = trim($_POST["BadgeNumber"]);
+
     $Response = new stdClass();
 
 
-    if (!empty($_POST["firstName"]) || !empty($_POST["lastName"]) || !empty($_POST["email"]) || !empty($_POST["password"]) || !empty($_POST["passwordRepeat"]) || !empty($_POST["BadgeNumber"])) {
+    if (!empty($firstNameSignUp) || !empty($lastNameSignUp) || !empty($emailSignUp) || !empty($passwordSignUp) || !empty($passwordRepeatSignUp) || !empty($badgeNumberSignUp)) {
 
-        if (!preg_match($namesRegex, $_POST["firstName"]) || !preg_match($namesRegex, $_POST["lastName"])) {
+        if (!preg_match($namesRegex, $firstNameSignUp) || !preg_match($namesRegex, $lastNameSignUp)) {
             $Response->Message = "1";
             returnRes(data: $Response);
         }
 
-        if (!preg_match($emailRegex, $_POST["email"])) {
+        if (!preg_match($emailRegex, $emailSignUp)) {
             $Response->Message = "1";
             returnRes(data: $Response);
         } else {
             $sqlStatement = $connection->prepare("SELECT * from Users WHERE email_id=?");
-            $sqlStatement->bind_param("s", $_POST["email"]);
+            $sqlStatement->bind_param("s", $emailSignUp);
             $sqlStatement->execute();
             $result = $sqlStatement->get_result();
             $userexists = $result->num_rows;
@@ -30,22 +37,22 @@ if (isset($_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["pass
             }
         }
 
-        if (trim($_POST["password"]) !== trim($_POST["passwordRepeat"])) {
+        if ($passwordSignUp !== $passwordRepeatSignUp) {
             $Response->Message = "1";
             returnRes(data: $Response);
         } else {
-            if (strlen(trim($_POST["password"])) < 8) {
+            if (strlen($passwordSignUp) < 8) {
                 $Response->Message = "1";
                 returnRes(data: $Response);
             }
         }
 
-        if ($_POST["BadgeNumber"] == "-1") {
+        if ($badgeNumberSignUp == "-1") {
             $Response->Message = "1";
             returnRes(data: $Response);
         } else {
             $sqlStatement2 = $connection->prepare("SELECT batch_number_id FROM Users WHERE batch_number_id=?");
-            $sqlStatement2->bind_param("s", $_POST["BadgeNumber"]);
+            $sqlStatement2->bind_param("s", $badgeNumberSignUp);
             $sqlStatement2->execute();
             $result2 = $sqlStatement2->get_result();
             $badgeNumberTaken = $result2->num_rows;
@@ -60,27 +67,33 @@ if (isset($_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["pass
         returnRes(data: $Response);
     }
 
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < 10; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
+    // $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    // $charactersLength = strlen($characters);
+    // $randomString = '';
+    // for ($i = 0; $i < 10; $i++) {
+    //     $randomString .= $characters[rand(0, $charactersLength - 1)];
+    // }
 
-    $pswSignup = trim($_POST["password"]);
-    $hashPSW = password_hash($pswSignup, PASSWORD_DEFAULT);
+    $hashPSW = password_hash($passwordSignUp, PASSWORD_DEFAULT);
 
 
     $A0 = 0;
     $A1 = 1;
-    $userIn = $connection->prepare("INSERT INTO Users (firstname, lastname, email_id, Userpassword, batch_number_id, group_id, verified_email, verified_email_code, phoneNumber, profilePic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $userIn->bind_param("ssssiiisis", trim($_POST["firstName"]), trim($_POST["lastName"]), $_POST["email"], $hashPSW, $_POST["BadgeNumber"], $A1, $A0, $randomString, $A0, $A0);
+    $userIn = $connection->prepare("INSERT INTO Users (firstname, lastname, email_id, Userpassword, batch_number_id, group_id, phoneNumber, profilePic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $userIn->bind_param("ssssiiii", $firstNameSignUp, $lastNameSignUp, $emailSignUp, $hashPSW, $badgeNumberSignUp, $A1, $A0, $A0);
 
     if ($userIn->execute()) {
+        $sqlStatement = $connection->prepare("SELECT user_id FROM Users WHERE email_id=?");
+        $sqlStatement->bind_param("s", $emailSignUp);
+        $sqlStatement->execute();
+        $result = $sqlStatement->get_result();
+        $row = $result->fetch_assoc();
+
+        $_SESSION["user_id"] = $row["user_id"];
         $_SESSION["userloggedIn"] = true;
-        $_SESSION["firstname"] = $_POST["firstName"];
-        $_SESSION["lastname"] = $_POST["lastName"];
-        $_SESSION["email"] = $_POST["email"];
+        $_SESSION["firstname"] = $firstNameSignUp;
+        $_SESSION["lastname"] = $lastNameSignUp;
+        $_SESSION["email"] = $emailSignUp;
         $_SESSION["group_id"] = 1;
 
         $Response->Message = "1";
@@ -128,6 +141,7 @@ if (isset($_POST["emailin"], $_POST["passwordin"])) {
 
                 if (password_verify(trim($_POST["passwordin"]), $row["Userpassword"])) {
                     $_SESSION["userloggedIn"] = true;
+                    $_SESSION["user_id"] = $row["user_id"];
                     $_SESSION["firstname"] = $row["firstname"];
                     $_SESSION["lastname"] = $row["lastname"];
                     $_SESSION["email"] = $row["email_id"];

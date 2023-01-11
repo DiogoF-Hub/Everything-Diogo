@@ -27,9 +27,7 @@ CREATE TABLE `Users`(
     `batch_number_id` INT NOT NULL UNIQUE,
     `phoneNumber` VARCHAR(16) UNIQUE,
     `profilePic` INT NOT NULL,
-    `group_id` INT NOT NULL,
-    `verified_email` INT NOT NULL,
-    `verified_email_code` VARCHAR(255) NOT NULL
+    `group_id` INT NOT NULL
 );
 
 INSERT INTO `Users` (`firstname`, `lastname`, `email_id`, `Userpassword`, `batch_number_id`, `group_id`, `phoneNumber`, `profilePic`) VALUES ("Diogo", "Fernandes", "bla@gmail.com", "$2y$10$y9Dttj64zc1pEIVx2.sszuKVpZylgFECOMRdwxk0fehq1DOzkwQXi", 2, 2, "+352661650012", 0);

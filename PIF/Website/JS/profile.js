@@ -2,6 +2,12 @@ $(Start);
 
 sessionEmail = "";
 
+firstNameProfileAjax = "";
+lastNameProfileAjax = "";
+emailProfileAjax = "";
+PhoneNumberProfileAjax = "";
+BadgeNumberProfileAjax = "";
+
 function Start() {
     $("#emailProfile").bind("focusout", async function () {
         a = $(this).val();
@@ -98,37 +104,63 @@ function Start() {
     $("#changePswButton").bind("click", changePsw);
 }
 
-firstNameProfileAjax = "";
-lastNameProfileAjax = "";
-
 async function getProfileData() {
-    async function test(a) {
+    async function test() {
         await $.ajax({
             url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/EditProfile.php",
             type: "POST",
             data: ({
                 getProfileData: true,
             }),
-            beforeSend: function () {
-                //loading ex
+            success: async function (parameter) {
+                firstNameProfileAjax = parameter.data.Message.firstname;
+                lastNameProfileAjax = parameter.data.Message.lastname;
+                emailProfileAjax = parameter.data.Message.email_id;
+                PhoneNumberProfileAjax = parameter.data.Message.phoneNumber;
+                BadgeNumberProfileAjax = parameter.data.Message.batch_number_id;
+
+                $("#firstNameProfile").val(firstNameProfileAjax);
+                $("#lastNameProfile").val(lastNameProfileAjax);
+                $("#emailProfile").val(emailProfileAjax);
+                $("#PhoneNumberProfile").val(PhoneNumberProfileAjax);
+                await getOptionsBadge();
+                // $("#BadgeNumber.option[value=" + BadgeNumberProfileAjax + "]").attr("selected", true);
+                // $("#BadgeNumber.option[value=" + BadgeNumberProfileAjax + "]").html("Your badge")
+
             },
-            success: function (parameter) {
-                // bla = parameter.data.Message;
-                // if (bla != "1") {
-                //     alert(bla);
-                // }
-                // setTimeout(function () {
-                //     window.location.reload();
-                // }, 500);
-            },
-            error: function (parameter) {
-                // bla = parameter.data.Message;
-                // alert(bla);
-            }
         });
     }
-    await test(a);
+    await test();
 }
+
+
+// async function getOptionsBadge() {
+//     async function test() {
+//         await $.ajax({
+//             url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/EditProfile.php",
+//             type: "POST",
+//             data: ({
+//                 getBadgeOptions: true,
+//             }),
+//             success: function (parameter) {
+//                 result = [];
+//                 for (var i in parameter) {
+//                     result.push([i, parameter[i]]);
+//                 }
+
+
+//                 $("#BadgeNumber").html("");
+//                 $.each(result, function (index, value) {
+//                     let myoption = $("<option>");
+//                     myoption.html(value);
+//                     myoption.val(value);
+//                     $("#BadgeNumber").append(myoption);
+//                 });
+//             },
+//         });
+//     }
+//     await test();
+// }
 
 
 async function saveProfile() {
@@ -179,24 +211,24 @@ async function saveProfile() {
     }
 
 
-    // if (!emailProfile) {
-    //     $("#emailProfile").parent().children("div").html("Please Write something for Email");
-    //     JSvalidation++;
-    // } else {
+    if (!emailProfile) {
+        $("#emailProfile").parent().children("div").html("Please Write something for Email");
+        JSvalidation++;
+    } else {
 
-    //     if (checkEmail(emailProfile) == false) {
-    //         $("#emailProfile").parent().children("div").html("Please write a valid Email");
-    //         JSvalidation++;
-    //     } else {
-    //         if (emailProfile != sessionEmail && await emailtaken(emailProfile) == false) {
-    //             $("#emailProfile").parent().children("div").html("This email is already taken");
-    //             JSvalidation++;
-    //         } else {
-    //             $("#emailProfile").parent().children("div").html("");
-    //         }
-    //     }
+        if (checkEmail(emailProfile) == false) {
+            $("#emailProfile").parent().children("div").html("Please write a valid Email");
+            JSvalidation++;
+        } else {
+            if (emailProfile != sessionEmail && await emailtaken(emailProfile) == false) {
+                $("#emailProfile").parent().children("div").html("This email is already taken");
+                JSvalidation++;
+            } else {
+                $("#emailProfile").parent().children("div").html("");
+            }
+        }
 
-    // }
+    }
 
 
     if (PhoneNumberProfile) {
@@ -221,21 +253,56 @@ async function saveProfile() {
             data: ({
                 firstNameProfile: firstNameProfile,
                 lastNameProfile: lastNameProfile,
-                // emailProfile: emailProfile,
+                emailProfile: emailProfile,
                 PhoneNumberProfile: PhoneNumberProfile,
                 BadgeNumber: BadgeNumber
             }),
             beforeSend: function () {
                 //loading ex
+                $("#firstNameProfile").attr("disabled", true);
+                $("#lastNameProfile").attr("disabled", true);
+                $("#emailProfile").attr("disabled", true);
+                $("#PhoneNumberProfile").attr("disabled", true);
+                $("#BadgeNumber").attr("disabled", true);
+                $("#saveProfile").attr("disabled", true);
+
+                $("#saveProfile").html("");
+
+                $("#saveProfile").append(buttonSpinner);
             },
             success: function (parameter) {
                 bla = parameter.data.Message;
                 if (bla != "1") {
                     alert(bla);
                 }
+
                 setTimeout(function () {
-                    window.location.reload();
-                }, 500);
+                    $("#firstNameProfile").attr("disabled", false);
+                    $("#lastNameProfile").attr("disabled", false);
+                    $("#emailProfile").attr("disabled", false);
+                    $("#PhoneNumberProfile").attr("disabled", false);
+                    $("#BadgeNumber").attr("disabled", false);
+                    $("#saveProfile").attr("disabled", false);
+
+                    if (BadgeNumber != "-1") {
+                        $("#badgeOptionID" + BadgeNumber).html("Your badge: " + BadgeNumber);
+                        $("#badgeOptionID" + sessionBadge).html("");
+                        $("#badgeOptionID" + sessionBadge).append(sessionBadge);
+                        sessionBadge = BadgeNumber;
+                    }
+
+                    if (sessionEmail != emailProfile) {
+                        $("#emailSpanProfile").html(emailProfile);
+                        sessionEmail = emailProfile;
+                    }
+
+
+                    $("#spanFullNameProfile").html(firstNameProfile + " " + lastNameProfile);
+                    $("#navbarDropdown").html(firstNameProfile + " " + lastNameProfile);
+
+                    $("#saveProfile").html("Save Profile");
+                }, 1000);
+
             },
             error: function (parameter) {
                 bla = parameter.data.Message;

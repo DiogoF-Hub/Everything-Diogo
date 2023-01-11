@@ -5,9 +5,10 @@ if (!$_SESSION["userloggedIn"]) {
     header("Location: index.php");
     die();
 }
+//print("<script>alert('" . $_SESSION["user_id"] . "');</script>");
 
-$sqlSelectUserData = $connection->prepare("SELECT * FROM Users WHERE email_id=?");
-$sqlSelectUserData->bind_param("s", $_SESSION["email"]);
+$sqlSelectUserData = $connection->prepare("SELECT * FROM Users WHERE user_id=?");
+$sqlSelectUserData->bind_param("s", $_SESSION["user_id"]);
 $sqlSelectUserData->execute();
 $result = $sqlSelectUserData->get_result();
 $row = $result->fetch_assoc();
@@ -46,8 +47,8 @@ $row = $result->fetch_assoc();
                 <div class="col-md-3 border-right">
                     <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                         <img class="rounded-circle mt-5" width="150px" src="../IMAGES/profile.jpg">
-                        <span class="font-weight-bold"><?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></span>
-                        <span class="text-black-50"><?= $_SESSION["email"] ?></span>
+                        <span id="spanFullNameProfile" class="font-weight-bold"><?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></span>
+                        <span id="emailSpanProfile" class="text-black-50"><?= $_SESSION["email"] ?></span>
                     </div>
                 </div>
                 <div class="col-md-5 border-right">
@@ -70,7 +71,7 @@ $row = $result->fetch_assoc();
                             <div class="mt-3">
                                 <div class="row">
                                     <div class="col-md-12"><label class="labels">Email</label>
-                                        <input disabled id="emailProfile" name="emailProfile" type="text" class="form-control" placeholder="Email" value="<?= $row["email_id"] ?>">
+                                        <input id="emailProfile" name="emailProfile" type="text" class="form-control" placeholder="Email" value="<?= $row["email_id"] ?>">
                                         <div style="color: red;"></div>
                                     </div>
                                 </div>
@@ -85,7 +86,7 @@ $row = $result->fetch_assoc();
 
                                 <div class="col-md-12"><label class="labels">Badge</label>
                                     <select id="BadgeNumber" name="BadgeNumber" class="form-select">
-                                        <option selected value="<?= $row["batch_number_id"] ?>">Your badge: <?= $row["batch_number_id"] ?></option>
+                                        <option id="badgeOptionID<?= $row["batch_number_id"] ?>" selected value="<?= $row["batch_number_id"] ?>">Your badge: <?= $row["batch_number_id"] ?></option>
                                         <?php
                                         $sqlStatement = $connection->prepare("SELECT * FROM AvailableBatches");
                                         $sqlStatement->execute();
@@ -93,7 +94,7 @@ $row = $result->fetch_assoc();
 
                                         while ($row2 = $result2->fetch_assoc()) {
                                         ?>
-                                            <option value="<?= $row2["batch_number_id"] ?>"><?= $row2["batch_number_id"] ?></option>
+                                            <option id="badgeOptionID<?= $row2["batch_number_id"] ?>" value="<?= $row2["batch_number_id"] ?>"><?= $row2["batch_number_id"] ?></option>
                                         <?php
                                         }
                                         ?>
@@ -121,7 +122,7 @@ $row = $result->fetch_assoc();
                             <div class="mt-3"><button id="changePswButton" class="btn btn-info profile-button" type="button">Update</button></div>
                         </div>
                     </form>
-                    <div class="p-2 py-3">
+                    <!-- <div class="p-2 py-3">
 
                         <div class="d-flex justify-content-between align-items-center experience"><span class="h5">Verify Email</span></div><br>
                         <div class="row mt-2">
@@ -131,7 +132,7 @@ $row = $result->fetch_assoc();
                             </div>
                         </div>
                         <div class="mt-3"><button class="btn btn-info profile-button" type="button">Verify Email</button></div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
