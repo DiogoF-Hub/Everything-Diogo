@@ -19,9 +19,10 @@ INSERT INTO `Groups_permissions` (`name`, `admin`, `schedule`, `view_sensitive_d
 
 
 CREATE TABLE `Users`(
+    `user_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `firstname` VARCHAR(255) NOT NULL,
     `lastname` VARCHAR(255) NOT NULL,
-    `email_id` VARCHAR(255) NOT NULL PRIMARY KEY,
+    `email_id` VARCHAR(255) NOT NULL UNIQUE,
     `Userpassword` VARCHAR(255) NOT NULL,
     `batch_number_id` INT NOT NULL UNIQUE,
     `phoneNumber` VARCHAR(16) UNIQUE,

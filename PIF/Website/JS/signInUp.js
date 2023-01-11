@@ -261,7 +261,19 @@ async function signup() {
             success: function (parameter) {
                 bla = parameter.data.Message;
                 if (bla != "1") {
-                    alert("bla");
+                    alert(bla);
+
+                    $("#SignupButton").attr("disabled", false);
+                    $("#SignupButton").html("Register");
+
+                    $("#buttonChange").attr("disabled", false);
+
+                    $("#firstName").attr("disabled", false);
+                    $("#lastName").attr("disabled", false);
+                    $("#email").attr("disabled", false);
+                    $("#password").attr("disabled", false);
+                    $("#passwordRepeat").attr("disabled", false);
+                    $("#BadgeNumber").attr("disabled", false);
                 } else {
                     setTimeout(function () {
                         window.location.reload();
@@ -337,7 +349,17 @@ function signin() {
             success: function (parameter) {
                 bla = parameter.data.Message;
                 if (bla != "1") {
-                    alert("bla");
+                    alert(bla);
+
+                    $("#SigninButton").attr("disabled", false);
+                    $("#SigninButton").html("Login");
+
+                    $("#buttonChange").attr("disabled", false);
+
+                    $("#passwordin").val("");
+
+                    $("#emailin").attr("disabled", false);
+                    $("#passwordin").attr("disabled", false);
                 } else {
                     setTimeout(function () {
                         window.location.reload();

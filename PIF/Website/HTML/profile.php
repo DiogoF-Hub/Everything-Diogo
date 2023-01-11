@@ -10,7 +10,7 @@ $sqlSelectUserData = $connection->prepare("SELECT * FROM Users WHERE email_id=?"
 $sqlSelectUserData->bind_param("s", $_SESSION["email"]);
 $sqlSelectUserData->execute();
 $result = $sqlSelectUserData->get_result();
-$row = $result->fetch_assoc()
+$row = $result->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -75,8 +75,8 @@ $row = $result->fetch_assoc()
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12"><label class="labels">Mobile Number</label>
-                                        <input id="PhoneNumberProfile" name="PhoneNumberProfile" type="tel" class="form-control" placeholder="Mobile Number" value="<?php if ($row["phoneNumber"] != 0) {
+                                    <div class="col-md-12"><label class="labels">Phone Number</label>
+                                        <input id="PhoneNumberProfile" name="PhoneNumberProfile" type="tel" class="form-control" placeholder="Phone Number" value="<?php if ($row["phoneNumber"] != 0) {
                                                                                                                                                                         print $row["phoneNumber"];
                                                                                                                                                                     } ?>">
                                         <div style="color: red;"></div>

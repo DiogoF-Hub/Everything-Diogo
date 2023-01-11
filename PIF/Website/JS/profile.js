@@ -98,6 +98,38 @@ function Start() {
     $("#changePswButton").bind("click", changePsw);
 }
 
+firstNameProfileAjax = "";
+lastNameProfileAjax = "";
+
+async function getProfileData() {
+    async function test(a) {
+        await $.ajax({
+            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/EditProfile.php",
+            type: "POST",
+            data: ({
+                getProfileData: true,
+            }),
+            beforeSend: function () {
+                //loading ex
+            },
+            success: function (parameter) {
+                // bla = parameter.data.Message;
+                // if (bla != "1") {
+                //     alert(bla);
+                // }
+                // setTimeout(function () {
+                //     window.location.reload();
+                // }, 500);
+            },
+            error: function (parameter) {
+                // bla = parameter.data.Message;
+                // alert(bla);
+            }
+        });
+    }
+    await test(a);
+}
+
 
 async function saveProfile() {
     JSvalidation = 0;

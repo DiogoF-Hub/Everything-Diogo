@@ -3,6 +3,24 @@
 require "commonCode.php";
 
 
+if (isset($_POST["getProfileData"]) && $_SESSION["userloggedIn"] == true) {
+    $sqlSelectUserData = $connection->prepare("SELECT * FROM Users WHERE email_id=?");
+    $sqlSelectUserData->bind_param("s", $_SESSION["email"]);
+    $sqlSelectUserData->execute();
+    $result = $sqlSelectUserData->get_result();
+    $row = $result->fetch_assoc();
+
+    unset($row['Userpassword']);
+    unset($row['Userpassword']);
+    unset($row["verified_email"]);
+    unset($row["verified_email_code"]);
+
+
+    $Response->json_encode($arr);
+    returnRes(data: $Response);
+}
+
+
 if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], /*$_POST["emailProfile"],*/ $_POST["PhoneNumberProfile"], $_POST["BadgeNumber"]) && $_SESSION["userloggedIn"] == true) {
     $Response = new stdClass();
 
