@@ -5,16 +5,18 @@ use PIFDatabase;
 
 CREATE TABLE `Groups_permissions`(
     `group_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    `name` VARCHAR(255) NOT NULL,
+    `group_name` VARCHAR(255) NOT NULL,
     `admin` INT NOT NULL,
     `schedule` INT NOT NULL,
     `view_sensitive_data` INT NOT NULL,
+    `open_door_any_time` INT NOT NULL,
     `open_door_available` INT NOT NULL
 );
 
-INSERT INTO `Groups_permissions` (`name`, `admin`, `schedule`, `view_sensitive_data`, `open_door_available`) VALUES ('NewUser', 0, 0, 0, 0);
-INSERT INTO `Groups_permissions` (`name`, `admin`, `schedule`, `view_sensitive_data`, `open_door_available`) VALUES ('Admin', 1, 1, 1, 1);
-INSERT INTO `Groups_permissions` (`name`, `admin`, `schedule`, `view_sensitive_data`, `open_door_available`) VALUES ('Employee', 0, 1, 1, 1);
+INSERT INTO `Groups_permissions` (`group_name`, `admin`, `schedule`, `view_sensitive_data`, `open_door_any_time`, `open_door_available`) VALUES ('New User', 0, 0, 0, 0, 0);
+INSERT INTO `Groups_permissions` (`group_name`, `admin`, `schedule`, `view_sensitive_data`, `open_door_any_time`, `open_door_available`) VALUES ('Admin', 1, 1, 1, 1, 1);
+INSERT INTO `Groups_permissions` (`group_name`, `admin`, `schedule`, `view_sensitive_data`, `open_door_any_time`, `open_door_available`) VALUES ('Employee', 0, 1, 1, 0, 1);
+INSERT INTO `Groups_permissions` (`group_name`, `admin`, `schedule`, `view_sensitive_data`, `open_door_any_time`, `open_door_available`) VALUES ('Cleaning Staff', 0, 0, 0, 0, 1);
 
 
 
@@ -25,12 +27,13 @@ CREATE TABLE `Users`(
     `email_id` VARCHAR(255) NOT NULL UNIQUE,
     `Userpassword` VARCHAR(255) NOT NULL,
     `batch_number_id` INT NOT NULL UNIQUE,
-    `phoneNumber` VARCHAR(16) UNIQUE,
     `profilePic` INT NOT NULL,
     `group_id` INT NOT NULL
 );
 
-INSERT INTO `Users` (`firstname`, `lastname`, `email_id`, `Userpassword`, `batch_number_id`, `group_id`, `phoneNumber`, `profilePic`) VALUES ("Diogo", "Fernandes", "bla@gmail.com", "$2y$10$y9Dttj64zc1pEIVx2.sszuKVpZylgFECOMRdwxk0fehq1DOzkwQXi", 2, 2, "+352661650012", 0);
+INSERT INTO `Users` (`firstname`, `lastname`, `email_id`, `Userpassword`, `batch_number_id`, `group_id`, `profilePic`) VALUES ("Diogo", "Fernandes", "bla@gmail.com", "$2y$10$y9Dttj64zc1pEIVx2.sszuKVpZylgFECOMRdwxk0fehq1DOzkwQXi", 2, 2, 0);
+INSERT INTO `Users` (`firstname`, `lastname`, `email_id`, `Userpassword`, `batch_number_id`, `group_id`, `profilePic`) VALUES ("Diogo2", "Fernandes2", "bla2@gmail.com", "$2y$10$y9Dttj64zc1pEIVx2.sszuKVpZylgFECOMRdwxk0fehq1DOzkwQXi", 1, 1, 0);
+INSERT INTO `Users` (`firstname`, `lastname`, `email_id`, `Userpassword`, `batch_number_id`, `group_id`, `profilePic`) VALUES ("Diogo3", "Fernandes3", "bla3@gmail.com", "$2y$10$y9Dttj64zc1pEIVx2.sszuKVpZylgFECOMRdwxk0fehq1DOzkwQXi", 3, 3, 0);
 
 CREATE TABLE `Rooms`(
     `room_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -64,6 +67,10 @@ CREATE TABLE `Batches`(
 INSERT INTO `Batches` (`key`) VALUES ("sdgser3446");
 INSERT INTO `Batches` (`key`) VALUES ("sdvfedr5656");
 INSERT INTO `Batches` (`key`) VALUES ("sdkfjerj4748");
+INSERT INTO `Batches` (`key`) VALUES ("kfjergrj4748");
+INSERT INTO `Batches` (`key`) VALUES ("kfjeferj4748");
+INSERT INTO `Batches` (`key`) VALUES ("fgesjerj4748");
+
 
 
 CREATE TABLE `Booking_list`(
@@ -101,7 +108,9 @@ INSERT INTO `Schedule_Slots` (`schedule_slot_id`, `start_time`, `end_time`) VALU
 
 
 /*Create View*/
-CREATE VIEW AvailableBatches AS SELECT * FROM Batches WHERE batch_number_id NOT IN(SELECT batch_number_id FROM Users);
+CREATE VIEW AvailableBatches AS SELECT * FROM Batches WHERE batch_number_id NOT IN(SELECT batch_number_id FROM Users) ORDER BY batch_number_id;
+
+CREATE VIEW UserEditProfileJoin AS SELECT user_id, firstname, lastname, email_id, Userpassword, batch_number_id, profilePic, group_name FROM Users NATURAL JOIN Groups_permissions;
 
 
 

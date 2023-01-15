@@ -5,7 +5,6 @@ sessionEmail = "";
 firstNameProfileAjax = "";
 lastNameProfileAjax = "";
 emailProfileAjax = "";
-PhoneNumberProfileAjax = "";
 BadgeNumberProfileAjax = "";
 
 function Start() {
@@ -48,21 +47,6 @@ function Start() {
 
     });
 
-    $("#PhoneNumberProfile").bind("focusout", function () {
-        a = $(this).val();
-
-        if (!a) {
-            $(this).parent().children("div").html("");
-            return;
-        }
-
-        if (checkPhoneNumber(a) == false) {
-            $(this).parent().children("div").html("Please write a valid phone number with country code (00 or +) and no spaces");
-        } else {
-            $(this).parent().children("div").html("");
-        }
-
-    });
 
     $("#currentPswProfile, #newPswProfile").bind("focusout", function () {
         a = $(this).val();
@@ -100,67 +84,10 @@ function Start() {
         }
     });
 
+
     $("#saveProfile").bind("click", saveProfile);
     $("#changePswButton").bind("click", changePsw);
 }
-
-async function getProfileData() {
-    async function test() {
-        await $.ajax({
-            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/EditProfile.php",
-            type: "POST",
-            data: ({
-                getProfileData: true,
-            }),
-            success: async function (parameter) {
-                firstNameProfileAjax = parameter.data.Message.firstname;
-                lastNameProfileAjax = parameter.data.Message.lastname;
-                emailProfileAjax = parameter.data.Message.email_id;
-                PhoneNumberProfileAjax = parameter.data.Message.phoneNumber;
-                BadgeNumberProfileAjax = parameter.data.Message.batch_number_id;
-
-                $("#firstNameProfile").val(firstNameProfileAjax);
-                $("#lastNameProfile").val(lastNameProfileAjax);
-                $("#emailProfile").val(emailProfileAjax);
-                $("#PhoneNumberProfile").val(PhoneNumberProfileAjax);
-                await getOptionsBadge();
-                // $("#BadgeNumber.option[value=" + BadgeNumberProfileAjax + "]").attr("selected", true);
-                // $("#BadgeNumber.option[value=" + BadgeNumberProfileAjax + "]").html("Your badge")
-
-            },
-        });
-    }
-    await test();
-}
-
-
-// async function getOptionsBadge() {
-//     async function test() {
-//         await $.ajax({
-//             url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/EditProfile.php",
-//             type: "POST",
-//             data: ({
-//                 getBadgeOptions: true,
-//             }),
-//             success: function (parameter) {
-//                 result = [];
-//                 for (var i in parameter) {
-//                     result.push([i, parameter[i]]);
-//                 }
-
-
-//                 $("#BadgeNumber").html("");
-//                 $.each(result, function (index, value) {
-//                     let myoption = $("<option>");
-//                     myoption.html(value);
-//                     myoption.val(value);
-//                     $("#BadgeNumber").append(myoption);
-//                 });
-//             },
-//         });
-//     }
-//     await test();
-// }
 
 
 async function saveProfile() {
@@ -169,7 +96,6 @@ async function saveProfile() {
     firstNameProfile = $("#firstNameProfile").val();
     lastNameProfile = $("#lastNameProfile").val();
     emailProfile = $("#emailProfile").val();
-    PhoneNumberProfile = $("#PhoneNumberProfile").val();
     BadgeNumber = $("#BadgeNumber").val();
 
 
@@ -230,18 +156,6 @@ async function saveProfile() {
 
     }
 
-
-    if (PhoneNumberProfile) {
-        if (checkPhoneNumber(PhoneNumberProfile) == false) {
-            $("#PhoneNumberProfile").parent().children("div").html("Please write a valid phone number with country code (00 or +) and no spaces");
-            JSvalidation++;
-        } else {
-            $("#PhoneNumberProfile").parent().children("div").html("");
-        }
-    } else {
-        PhoneNumberProfile = -1;
-    }
-
     if (sessionBadge == BadgeNumber) {
         BadgeNumber = -1;
     }
@@ -254,7 +168,6 @@ async function saveProfile() {
                 firstNameProfile: firstNameProfile,
                 lastNameProfile: lastNameProfile,
                 emailProfile: emailProfile,
-                PhoneNumberProfile: PhoneNumberProfile,
                 BadgeNumber: BadgeNumber
             }),
             beforeSend: function () {
@@ -262,7 +175,6 @@ async function saveProfile() {
                 $("#firstNameProfile").attr("disabled", true);
                 $("#lastNameProfile").attr("disabled", true);
                 $("#emailProfile").attr("disabled", true);
-                $("#PhoneNumberProfile").attr("disabled", true);
                 $("#BadgeNumber").attr("disabled", true);
                 $("#saveProfile").attr("disabled", true);
 
@@ -280,7 +192,6 @@ async function saveProfile() {
                     $("#firstNameProfile").attr("disabled", false);
                     $("#lastNameProfile").attr("disabled", false);
                     $("#emailProfile").attr("disabled", false);
-                    $("#PhoneNumberProfile").attr("disabled", false);
                     $("#BadgeNumber").attr("disabled", false);
                     $("#saveProfile").attr("disabled", false);
 

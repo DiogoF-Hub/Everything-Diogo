@@ -6,6 +6,20 @@ myspan2.attr("aria-hidden", "true");
 buttonSpinner.append(myspan2);
 buttonSpinner.append("Loading...");
 
+$(startCommon);
+
+function startCommon() {
+    // Add slideDown animation to Bootstrap dropdown when expanding with 350ms delay.
+    $('.dropdown').on('show.bs.dropdown', function () {
+        $(this).find('.dropdown-menu').first().stop(true, true).slideDown(350);
+    });
+
+    // Add slideUp animation to Bootstrap dropdown when collapsing with 350ms delay.
+    $('.dropdown').on('hide.bs.dropdown', function () {
+        $(this).find('.dropdown-menu').first().stop(true, true).slideUp(350);
+    });
+}
+
 function checkNames(a) {
     if (!/^[ a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ'`'\-]+$/.test(a)) {
         return false;
@@ -19,12 +33,6 @@ function checkEmail(a) {
     }
 }
 
-
-function checkPhoneNumber(a) {
-    if (!/^(\+|00)]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(a)) {
-        return false;
-    }
-}
 
 async function emailtaken(a) {//this is async so just waits until the line 149 as finished that means, tun the whole test func
     let free = true; //flag for the return
@@ -50,3 +58,4 @@ async function emailtaken(a) {//this is async so just waits until the line 149 a
 
     return free;
 }
+

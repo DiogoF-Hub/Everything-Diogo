@@ -19,13 +19,12 @@ body {
 
 #navboot {
     background-color: white;
-    opacity: 85%;
     z-index: 1;
 }
 
 .section1 {
     position: relative;
-    top: 55px;
+    top: 85px;
 }
 
 #testh {
@@ -55,4 +54,16 @@ body {
 
 .labels {
     font-size: 14px
+}
+
+@media (min-width: 1200px) {
+    .responsive-font-example {
+        font-size: 50px;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .responsive-font-example {
+        font-size: 20px;
+    }
 }

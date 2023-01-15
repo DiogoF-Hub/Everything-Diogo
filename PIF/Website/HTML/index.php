@@ -7,13 +7,13 @@ include_once("commonCodeHTML.php");
 <html lang="en">
 
 <head>
-    <script src='../JS/jquery-3.6.1.min.js'></script>
-    <script src='../JS/commonCode.js'></script>
-    <script src='../JS/signInUp.js'></script>
-    <script src="../JS/JS bootstrap-5.2.3-dist/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="../CSS/CSS bootstrap-5.2.3-dist/bootstrap.min.css">
-    <link rel="stylesheet" href="../CSS/fontawesome-free-6.2.1-web/css/all.min.css" />
-    <link rel="stylesheet" href="../CSS/main.css">
+    <script src='../JS/jquery-3.6.1.min.js?t=<?= time(); ?>'></script>
+    <script src='../JS/commonCode.js?t=<?= time(); ?>'></script>
+    <script src='../JS/signInUp.js?t=<?= time(); ?>'></script>
+    <script src="../JS/JS bootstrap-5.2.3-dist/bootstrap.bundle.min.js?t=<?= time(); ?>"></script>
+    <link rel="stylesheet" href="../CSS/CSS bootstrap-5.2.3-dist/bootstrap.min.css?t=<?= time(); ?>">
+    <link rel="stylesheet" href="../CSS/fontawesome-free-6.2.1-web/css/all.min.css?t=<?= time(); ?>" />
+    <link rel="stylesheet" href="../CSS/main.css?t=<?= time(); ?>">
     <link rel="icon" type="image/x-icon" href="../IMAGES/logo.png">
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -35,7 +35,7 @@ include_once("commonCodeHTML.php");
                             <div class="row justify-content-center">
                                 <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                                    <form method="post" id="signin" class="mx-1 mx-md-4">
+                                    <div id="signin" class="mx-1 mx-md-4">
                                         <p class="h1 fw-bold mb-3 mx-1 mx-md-3">Sign in</p>
 
                                         <div class="d-flex flex-row align-items-center mb-4">
@@ -62,10 +62,10 @@ include_once("commonCodeHTML.php");
                                             <button id="SigninButton" type="button" class="btn btn-dark btn-lg">Login</button>
                                         </div>
 
-                                    </form>
+                                    </div>
 
 
-                                    <form method="post" id="signup" class="mx-1 mx-md-4">
+                                    <div id="signup" class="mx-1 mx-md-4">
                                         <p class="h1 fw-bold mb-3 mx-1 mx-md-3">Sign up</p>
 
                                         <div class="d-flex flex-row align-items-center mb-4">
@@ -138,7 +138,7 @@ include_once("commonCodeHTML.php");
                                             <button id="SignupButton" type="button" class="btn btn-dark btn-lg">Register</button>
                                         </div>
 
-                                    </form>
+                                    </div>
 
                                 </div>
 
@@ -161,12 +161,27 @@ include_once("commonCodeHTML.php");
     ?>
         <section class="section1">
 
+            <?php
+            if ($_SESSION["group_id"] == 1) {
+            ?>
+                <div class="container">
+                    <div class="row">
+                        <h1 class="container d-flex align-items-center justify-content-center text-warning bg-dark mb-0 fw-bolder responsive-font-example">Ask an Admin to give you a group</h1>
+                        <h1 class="container d-flex align-items-center justify-content-center text-warning bg-dark fw-bolder responsive-font-example">Then refresh the page</h1>
+                    </div>
+                </div>
+            <?php
+            } else {
+            ?>
+                <div id="testh">
+                    <h1>Welcome</h1>
+                    <h3>This is Home page</h3>
+                    <img src="../IMAGES/logo.png" alt="" width="20%" height="20%">
+                </div>
+            <?php
+            }
+            ?>
 
-            <div id="testh">
-                <h1>Welcome</h1>
-                <h3>This is Home page</h3>
-                <img src="../IMAGES/logo.png" alt="" width="20%" height="20%">
-            </div>
 
         </section>
 

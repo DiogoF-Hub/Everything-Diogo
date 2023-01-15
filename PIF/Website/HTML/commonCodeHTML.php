@@ -15,11 +15,20 @@ $portNo = 3306;
 $connection = new mysqli($host, $user, $psw, $database, $portNo);
 //mysqli_report(MYSQLI_REPORT_OFF);
 
+if ($_SESSION["userloggedIn"] == true) {
+    $sqlSelectGroupSession = $connection->prepare("SELECT group_id FROM Users WHERE user_id=?");
+    $sqlSelectGroupSession->bind_param("s", $_SESSION["user_id"]);
+    $sqlSelectGroupSession->execute();
+    $result = $sqlSelectGroupSession->get_result();
+    $row = $result->fetch_assoc();
+
+    $_SESSION["group_id"] = $row["group_id"];
+}
 
 if (isset($_POST["logout"])) {
     session_destroy();
     $_SESSION = array();
-    header("Refresh:0");
+    header("Location: index.php");
     die();
 }
 
@@ -42,7 +51,7 @@ function nav($ActivePage, $ActiveDropdown)
 
                     <li class="nav-item dropdown px-2">
                         <a class="nav-link active dropdown-toggle <?php if ($ActivePage == "profile") print "active1" ?>" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <ul class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item dropdownSelect <?php if ($ActiveDropdown == "profile1") print "active1" ?>" href="profile.php">Edit Profile</a></li>
                             <hr>
                             <li><a class="dropdown-item dropdownSelect <?php if ($ActiveDropdown == "profile2") print "active1" ?>" href="#">Check your reservations</a></li>
@@ -56,8 +65,13 @@ function nav($ActivePage, $ActiveDropdown)
                     <?php
                     if ($_SESSION["group_id"] == 2) {
                     ?>
-                        <li class="nav-item px-2">
-                            <a class="nav-link active dropdownSelect <?php if ($ActivePage == "admin") print "active1" ?>" aria-current="page" href="#">Admin</a>
+                        <li class="nav-item dropdown px-2">
+                            <a class="nav-link active dropdown-toggle <?php if ($ActivePage == "admin") print "active1" ?>" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
+                            <ul class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item dropdownSelect <?php if ($ActiveDropdown == "admin1") print "active1" ?>" href="admin_edituser.php">Edit User</a></li>
+                                <hr>
+                                <li><a class="dropdown-item dropdownSelect <?php if ($ActiveDropdown == "admin2") print "active1" ?>" href="admin_createGroups.php">Create groups</a></li>
+                            </ul>
                         </li>
                     <?php
                     }

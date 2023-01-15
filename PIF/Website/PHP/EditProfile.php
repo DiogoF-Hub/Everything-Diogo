@@ -3,32 +3,10 @@
 require "commonCode.php";
 
 
-if (isset($_POST["getProfileData"]) && $_SESSION["userloggedIn"] == true) {
-    $Response = new stdClass();
-
-    $sqlSelectUserData = $connection->prepare("SELECT * FROM Users WHERE email_id=?");
-    $sqlSelectUserData->bind_param("s", $_SESSION["email"]);
-    $sqlSelectUserData->execute();
-    $result = $sqlSelectUserData->get_result();
-    $row = $result->fetch_assoc();
-
-    unset($row["user_id"]);
-    unset($row["Userpassword"]);
-    unset($row["Userpassword"]);
-    unset($row["verified_email"]);
-    unset($row["verified_email_code"]);
-
-    $jsonArr = json_encode($row);
-    $Response->$jsonArr;
-    returnRes(data: $Response);
-}
-
-
-if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailProfile"], $_POST["PhoneNumberProfile"], $_POST["BadgeNumber"]) && $_SESSION["userloggedIn"] == true) {
+if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailProfile"], $_POST["BadgeNumber"]) && $_SESSION["userloggedIn"] == true) {
     $firstNameSaveProfile = trim($_POST["firstNameProfile"]);
     $lastNameSaveProfile = trim($_POST["lastNameProfile"]);
     $emailSaveProfile = trim($_POST["emailProfile"]);
-    $phoneSaveProfile = trim($_POST["PhoneNumberProfile"]);
     $badgeNumberSaveProfile = trim($_POST["BadgeNumber"]);
 
     $Response = new stdClass();
@@ -39,7 +17,7 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailPr
     $result = $sqlSelectUserData->get_result();
     $row = $result->fetch_assoc();
 
-    if (!empty($firstNameSaveProfile) || !empty($lastNameSaveProfile) || !empty($emailSaveProfile) || !empty($phoneSaveProfile) || !empty($badgeNumberSaveProfile)) {
+    if (!empty($firstNameSaveProfile) || !empty($lastNameSaveProfile) || !empty($emailSaveProfile) || !empty($badgeNumberSaveProfile)) {
 
         if (!preg_match($namesRegex, $firstNameSaveProfile) || !preg_match($namesRegex, $lastNameSaveProfile)) {
             $Response->Message = "1";
@@ -68,12 +46,6 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailPr
             }
         }
 
-        if ($phoneSaveProfile != "-1") {
-            if (!preg_match($phoneRegex, $phoneSaveProfile)) {
-                $Response->Message = "1";
-                returnRes(data: $Response);
-            }
-        }
 
         if ($badgeNumberSaveProfile != "-1") {
             $sqlStatement = $connection->prepare("SELECT * from Batches WHERE batch_number_id=?");
@@ -132,20 +104,6 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailPr
             $sqlUpdate->bind_param("ss", $lastNameSaveProfile, $_SESSION["user_id"]);
             $sqlUpdate->execute();
             $_SESSION["lastname"] = $lastNameSaveProfile;
-        }
-
-        if ($phoneSaveProfile != "-1") {
-            if ($row["phoneNumber"] != $phoneSaveProfile) {
-                $sqlUpdate = $connection->prepare("UPDATE Users SET phoneNumber=? WHERE user_id=?");
-                $sqlUpdate->bind_param("ss", $phoneSaveProfile, $_SESSION["user_id"]);
-                $sqlUpdate->execute();
-            }
-        } else {
-            $A0 = 0;
-
-            $sqlUpdate = $connection->prepare("UPDATE Users SET phoneNumber=? WHERE user_id=?");
-            $sqlUpdate->bind_param("ss", $A0, $_SESSION["user_id"]);
-            $sqlUpdate->execute();
         }
 
 

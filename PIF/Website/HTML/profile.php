@@ -5,9 +5,8 @@ if (!$_SESSION["userloggedIn"]) {
     header("Location: index.php");
     die();
 }
-//print("<script>alert('" . $_SESSION["user_id"] . "');</script>");
 
-$sqlSelectUserData = $connection->prepare("SELECT * FROM Users WHERE user_id=?");
+$sqlSelectUserData = $connection->prepare("SELECT * FROM UserEditProfileJoin WHERE user_id=?");
 $sqlSelectUserData->bind_param("s", $_SESSION["user_id"]);
 $sqlSelectUserData->execute();
 $result = $sqlSelectUserData->get_result();
@@ -18,17 +17,17 @@ $row = $result->fetch_assoc();
 <html lang="en">
 
 <head>
-    <script src='../JS/jquery-3.6.1.min.js'></script>
-    <script src='../JS/commonCode.js'></script>
-    <script src='../JS/profile.js'></script>
+    <script src='../JS/jquery-3.6.1.min.js?t=<?= time(); ?>'></script>
+    <script src='../JS/commonCode.js?t=<?= time(); ?>'></script>
+    <script src='../JS/profile.js?t=<?= time(); ?>'></script>
     <script>
         sessionEmail = "<?= $_SESSION["email"] ?>";
         sessionBadge = "<?= $row["batch_number_id"] ?>";
     </script>
-    <script src="../JS/JS bootstrap-5.2.3-dist/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="../CSS/CSS bootstrap-5.2.3-dist/bootstrap.min5.0.css">
-    <link rel="stylesheet" href="../CSS/fontawesome-free-6.2.1-web/css/all.min.css" />
-    <link rel="stylesheet" href="../CSS/main.css">
+    <script src="../JS/JS bootstrap-5.2.3-dist/bootstrap.bundle.min.js?t=<?= time(); ?>"></script>
+    <link rel="stylesheet" href="../CSS/CSS bootstrap-5.2.3-dist/bootstrap.min5.0.css?t=<?= time(); ?>">
+    <link rel="stylesheet" href="../CSS/fontawesome-free-6.2.1-web/css/all.min.css?t=<?= time(); ?>" />
+    <link rel="stylesheet" href="../CSS/main.css?t=<?= time(); ?>">
     <link rel="icon" type="image/x-icon" href="../IMAGES/logo.png">
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -42,11 +41,11 @@ $row = $result->fetch_assoc();
     ?>
 
     <section class="section1">
-        <div class="container rounded bg-white mb-5">
+        <div class="container rounded bg-white mb-5 border border-dark rounded-3">
             <div class="row">
                 <div class="col-md-3 border-right">
                     <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                        <img class="rounded-circle mt-5" width="150px" src="../IMAGES/profile.jpg">
+                        <img class="rounded-circle mt-5" width="150px" src="../IMAGES/user.png">
                         <span id="spanFullNameProfile" class="font-weight-bold"><?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></span>
                         <span id="emailSpanProfile" class="text-black-50"><?= $_SESSION["email"] ?></span>
                     </div>
@@ -75,14 +74,6 @@ $row = $result->fetch_assoc();
                                         <div style="color: red;"></div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12"><label class="labels">Phone Number</label>
-                                        <input id="PhoneNumberProfile" name="PhoneNumberProfile" type="tel" class="form-control" placeholder="Phone Number" value="<?php if ($row["phoneNumber"] != 0) {
-                                                                                                                                                                        print $row["phoneNumber"];
-                                                                                                                                                                    } ?>">
-                                        <div style="color: red;"></div>
-                                    </div>
-                                </div>
 
                                 <div class="col-md-12"><label class="labels">Badge</label>
                                     <select id="BadgeNumber" name="BadgeNumber" class="form-select">
@@ -99,6 +90,12 @@ $row = $result->fetch_assoc();
                                         }
                                         ?>
                                     </select>
+
+                                    <div class="row">
+                                        <div class="col-md-12"><label class="labels">Group Name</label>
+                                            <input type="text" class="form-control" value="<?= $row["group_name"] ?>" disabled>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
