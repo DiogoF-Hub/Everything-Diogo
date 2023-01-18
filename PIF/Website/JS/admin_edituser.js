@@ -8,7 +8,7 @@ function start() {
 
         if ($.isNumeric(newgroup)) {
             $.ajax({
-                url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/admin.php",
+                url: "../PHP/admin.php",
                 type: "POST",
                 data: ({
                     userid: userid,

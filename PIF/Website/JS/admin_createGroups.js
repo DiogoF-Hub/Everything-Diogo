@@ -30,12 +30,31 @@ function start() {
         }
     });
 
+    $("#ScheduleSwitch").bind("change", function () {
+        ScheduleSwitch = $("#ScheduleSwitch").is(':checked');
+        view_scheduleSwitch = $("#view_scheduleSwitch").is(':checked');
+
+        if (ScheduleSwitch == true) {
+            $("#view_scheduleSwitch").prop('checked', true);
+            $("#view_scheduleSwitch").attr("disabled", true);
+        } else {
+            $("#view_scheduleSwitch").attr("disabled", false);
+        }
+    });
+
     $("#createGroupBtn").bind("click", async function () {
         JSvalidation = 0;
+
+        Schedule = 0;
+        view_schedule = 0;
+        view_sensitive_data = 0;
+        open_door_any_time = 0;
+        open_door_when_its_available = 0;
 
         groupName = $("#groupName").val();
 
         ScheduleSwitch = $("#ScheduleSwitch").is(':checked');
+        view_scheduleSwitch = $("#view_scheduleSwitch").is(':checked');
         view_sensitive_dataSwitch = $("#view_sensitive_dataSwitch").is(':checked');
         open_door_any_timeSwitch = $("#open_door_any_timeSwitch").is(':checked');
         open_door_when_its_availableSwitch = $("#open_door_when_its_availableSwitch").is(':checked');
@@ -52,16 +71,39 @@ function start() {
             }
         }
 
+        if (ScheduleSwitch == true) {
+            Schedule = 1;
+            view_schedule = 1;
+        } else {
+            if (view_scheduleSwitch == true) {
+                view_schedule = 1;
+            }
+        }
+
+        if (view_sensitive_dataSwitch == true) {
+            view_sensitive_data = 1;
+        }
+
+        if (open_door_any_timeSwitch == true) {
+            open_door_any_time = 1;
+            open_door_when_its_available = 1;
+        } else {
+            if (open_door_when_its_availableSwitch == true) {
+                open_door_when_its_available = 1;
+            }
+        }
+
         if (JSvalidation == 0) {
             $.ajax({
-                url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/admin.php",
+                url: "../PHP/admin.php",
                 type: "POST",
                 data: ({
                     groupName: groupName,
-                    ScheduleSwitch: ScheduleSwitch,
-                    view_sensitive_dataSwitch: view_sensitive_dataSwitch,
-                    open_door_any_timeSwitch: open_door_any_timeSwitch,
-                    open_door_when_its_availableSwitch: open_door_when_its_availableSwitch
+                    Schedule: Schedule,
+                    view_schedule: view_schedule,
+                    view_sensitive_data: view_sensitive_data,
+                    open_door_any_time: open_door_any_time,
+                    open_door_when_its_available: open_door_when_its_available
                 }),
                 beforeSend: function () {
                     //loading ex
@@ -106,7 +148,7 @@ async function groupNametaken(a) {//this is async so just waits until the line 1
     let free = true; //flag for the return
     async function test(a) { //func inside a func bcs we need the return    // This one just goes on only after the whole ajax func as finished
         await $.ajax({
-            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/groupNameTaken.php",
+            url: "../PHP/groupNameTaken.php",
             type: "POST",
             data: ({
                 groupNametaken: a,

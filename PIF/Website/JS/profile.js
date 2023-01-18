@@ -162,7 +162,7 @@ async function saveProfile() {
 
     if (JSvalidation == 0) {
         $.ajax({
-            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/EditProfile.php",
+            url: "../PHP/EditProfile.php",
             type: "POST",
             data: ({
                 firstNameProfile: firstNameProfile,
@@ -273,7 +273,7 @@ function changePsw() {
 
     if (JSvalidation == 0) {
         $.ajax({
-            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/EditProfile.php",
+            url: "../PHP/EditProfile.php",
             type: "POST",
             data: ({
                 currentPsw: currentPsw,

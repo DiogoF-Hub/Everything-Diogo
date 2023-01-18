@@ -79,8 +79,8 @@ if (isset($_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["pass
 
     $A0 = 0;
     $A1 = 1;
-    $userIn = $connection->prepare("INSERT INTO Users (firstname, lastname, email_id, Userpassword, batch_number_id, group_id, phoneNumber, profilePic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $userIn->bind_param("ssssiiii", $firstNameSignUp, $lastNameSignUp, $emailSignUp, $hashPSW, $badgeNumberSignUp, $A1, $A0, $A0);
+    $userIn = $connection->prepare("INSERT INTO Users (firstname, lastname, email_id, Userpassword, batch_number_id, group_id, profilePic) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $userIn->bind_param("ssssiii", $firstNameSignUp, $lastNameSignUp, $emailSignUp, $hashPSW, $badgeNumberSignUp, $A1, $A0);
 
     if ($userIn->execute()) {
         $sqlStatement = $connection->prepare("SELECT user_id FROM Users WHERE email_id=?");

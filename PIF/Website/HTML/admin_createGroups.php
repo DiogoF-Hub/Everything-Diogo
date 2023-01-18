@@ -49,6 +49,11 @@ if (!$_SESSION["userloggedIn"] || $_SESSION["group_id"] != 2) {
                     </div>
 
                     <div class="form-outline mb-4 form-switch">
+                        <input class="form-check-input" type="checkbox" id="view_scheduleSwitch" name="view_scheduleSwitch">
+                        <label class="form-check-label" for="view_scheduleSwitch">View schedule</label>
+                    </div>
+
+                    <div class="form-outline mb-4 form-switch">
                         <input class="form-check-input" type="checkbox" id="view_sensitive_dataSwitch" name="view_sensitive_dataSwitch">
                         <label class="form-check-label" for="view_sensitive_dataSwitch">View Sensitive Data</label>
                     </div>
@@ -62,7 +67,6 @@ if (!$_SESSION["userloggedIn"] || $_SESSION["group_id"] != 2) {
                         <input class="form-check-input" type="checkbox" id="open_door_when_its_availableSwitch" name="open_door_when_its_availableSwitch">
                         <label class="form-check-label" for="open_door_when_its_availableSwitch">Open door when its available</label>
                     </div>
-
 
                     <div class="row form-outline">
 

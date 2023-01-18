@@ -233,7 +233,7 @@ async function signup() {
 
     if (JSvalidation == 0) {
         $.ajax({
-            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/SignInUp.php",
+            url: "../PHP/SignInUp.php",
             type: "POST",
             data: ({
                 firstName: firstName,
@@ -327,7 +327,7 @@ function signin() {
         //$("#signin").submit();
 
         $.ajax({
-            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/SignInUp.php",
+            url: "../PHP/SignInUp.php",
             type: "POST",
             data: ({
                 emailin: emailin,

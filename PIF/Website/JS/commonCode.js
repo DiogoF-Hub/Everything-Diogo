@@ -38,7 +38,7 @@ async function emailtaken(a) {//this is async so just waits until the line 149 a
     let free = true; //flag for the return
     async function test(a) { //func inside a func bcs we need the return    // This one just goes on only after the whole ajax func as finished
         await $.ajax({
-            url: "http://localhost/GitHub/Everything-Diogo/PIF/Website/PHP/emailTaken.php",
+            url: "../PHP/emailTaken.php",
             type: "POST",
             data: ({
                 emailTaken: a,
