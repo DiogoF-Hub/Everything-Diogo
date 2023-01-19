@@ -1,11 +1,12 @@
 <?php
 
-session_start();
+session_start(); //start the session
 
-if (!isset($_SESSION["userloggedIn"])) {
+if (!isset($_SESSION["userloggedIn"])) { //check if the $_SESSION["userloggedIn"] is set, and if not creates it and makes it = to false
     $_SESSION["userloggedIn"] = false;
 }
 
+//database connection
 $host = "localhost";
 $user = "root";
 $psw = "";
@@ -13,26 +14,28 @@ $database = "PIFDatabase";
 $portNo = 3306;
 
 $connection = new mysqli($host, $user, $psw, $database, $portNo);
-//mysqli_report(MYSQLI_REPORT_OFF);
+//mysqli_report(MYSQLI_REPORT_OFF); //Used to remove some mysql errors that don't change anything like notices and others, only used while debugging
 
-if ($_SESSION["userloggedIn"] == true) {
-    $sqlSelectGroupSession = $connection->prepare("SELECT group_id FROM Users WHERE user_id=?");
-    $sqlSelectGroupSession->bind_param("s", $_SESSION["user_id"]);
+if ($_SESSION["userloggedIn"] == true) { //if the user is logged in
+    $sqlSelectGroupSession = $connection->prepare("SELECT group_id FROM Users WHERE user_id=?"); //Select group_id from the looged in user
+    $sqlSelectGroupSession->bind_param("s", $_SESSION["user_id"]); //bind the user id from the session
     $sqlSelectGroupSession->execute();
     $result = $sqlSelectGroupSession->get_result();
     $row = $result->fetch_assoc();
 
-    $_SESSION["group_id"] = $row["group_id"];
+    $_SESSION["group_id"] = $row["group_id"]; //and updating into the session, so if an admin updates the group of a user, the user just needs to refresh the page bcs this will run every time he loads the page
 }
 
-if (isset($_POST["logout"])) {
-    session_destroy();
-    $_SESSION = array();
-    header("Location: index.php");
+if (isset($_POST["logout"])) { //This runs when the user presses the logout button
+    session_destroy(); //This destroys the session
+    $_SESSION = array(); //This clears the session array
+    header("Location: index.php"); //This makes the user go back to index.php
     die();
 }
 
-function nav($ActivePage, $ActiveDropdown)
+function nav($ActivePage, $ActiveDropdown) //nav bar function with 2 parameters
+//If $ActivePage is = to the one I check down with if statements, I print active1 in the class
+//If $ActiveDropdown is = to the one I check down with if statements, I print active1 in the class
 {
 ?>
     <nav id="navboot" class="navbar navbar-expand-lg navbar-light">
@@ -63,7 +66,7 @@ function nav($ActivePage, $ActiveDropdown)
                     </li>
 
                     <?php
-                    if ($_SESSION["group_id"] == 2) {
+                    if ($_SESSION["group_id"] == 2) { //This will only shows if the user is an admin
                     ?>
                         <li class="nav-item dropdown px-2">
                             <a class="nav-link active dropdown-toggle <?php if ($ActivePage == "admin") print "active1" ?>" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
@@ -78,7 +81,7 @@ function nav($ActivePage, $ActiveDropdown)
                     ?>
 
                     <li class="nav-item px-4">
-                        <a class="nav-link active dropdownSelect <?php if ($ActivePage == "logbutton") print "active1" ?>" aria-current="page" href="javascript:{}" onclick="document.getElementById('logoutform').submit();">Logout</a>
+                        <a class="nav-link active dropdownSelect" aria-current="page" href="javascript:{}" onclick="document.getElementById('logoutform').submit();">Logout</a>
                         <form method="POST" id="logoutform" hidden>
                             <input type="text" name="logout">
                         </form>

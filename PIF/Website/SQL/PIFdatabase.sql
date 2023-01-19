@@ -118,7 +118,3 @@ ALTER TABLE
 CREATE VIEW AvailableBatches AS SELECT * FROM Batches WHERE batch_number_id NOT IN(SELECT batch_number_id FROM Users) ORDER BY batch_number_id;
 
 CREATE VIEW UserEditProfileJoin AS SELECT user_id, firstname, lastname, email_id, Userpassword, batch_number_id, profilePic, group_name FROM Users NATURAL JOIN Groups_permissions;
-
-
-
-

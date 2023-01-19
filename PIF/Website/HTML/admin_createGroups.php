@@ -1,6 +1,7 @@
 <?php
-include_once("commonCodeHTML.php");
+include_once("commonCodeHTML.php"); //Here I include the common code for the pages that users see, thats why its called HTML
 
+//Here I check if the user is logged and if yes, if he is an admin
 if (!$_SESSION["userloggedIn"] || $_SESSION["group_id"] != 2) {
     header("Location: index.php");
     die();
@@ -11,6 +12,9 @@ if (!$_SESSION["userloggedIn"] || $_SESSION["group_id"] != 2) {
 <html lang="en">
 
 <head>
+    <!-- Here I put jquery file, my js and css files, bootstrap files such as css and js and fontawesome css file -->
+    <!-- bootstrap & fontawesome are css libraries -->
+    <!-- On all js and css files, I have a time stamp that makes the browser thinks that every time it reloads, there is always different files to loads that helps debugging because it doesn't allow the browser to cache the files -->
     <script src='../JS/jquery-3.6.1.min.js?t=<?= time(); ?>'></script>
     <script src='../JS/commonCode.js?t=<?= time(); ?>'></script>
     <script src='../JS/admin_createGroups.js?t=<?= time(); ?>'></script>
@@ -27,7 +31,7 @@ if (!$_SESSION["userloggedIn"] || $_SESSION["group_id"] != 2) {
 
 <body>
     <?php
-    nav("admin", "admin2");
+    nav("admin", "admin2"); //Here I call the nav bar function from the commonCodeHTML.php
     ?>
 
     <section class="section1">

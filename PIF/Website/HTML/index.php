@@ -1,5 +1,5 @@
 <?php
-include_once("commonCodeHTML.php");
+include_once("commonCodeHTML.php"); //Here I include the common code for the pages that users see, thats why its called HTML
 ?>
 
 
@@ -7,6 +7,9 @@ include_once("commonCodeHTML.php");
 <html lang="en">
 
 <head>
+    <!-- Here I put jquery file, my js and css files, bootstrap files such as css and js and fontawesome css file -->
+    <!-- bootstrap & fontawesome are css libraries -->
+    <!-- On all js and css files, I have a time stamp that makes the browser thinks that every time it reloads, there is always different files to loads that helps debugging because it doesn't allow the browser to cache the files -->
     <script src='../JS/jquery-3.6.1.min.js?t=<?= time(); ?>'></script>
     <script src='../JS/commonCode.js?t=<?= time(); ?>'></script>
     <script src='../JS/signInUp.js?t=<?= time(); ?>'></script>
@@ -24,7 +27,7 @@ include_once("commonCodeHTML.php");
 <body>
 
     <?php
-    if (!$_SESSION["userloggedIn"]) {
+    if (!$_SESSION["userloggedIn"]) { //Here I check if the user is logged, if yes does not show this one
     ?>
         <br>
         <div class="container h-100">
@@ -157,7 +160,7 @@ include_once("commonCodeHTML.php");
             </div>
         </div>
     <?php } else {
-        nav("home", 0);
+        nav("home", 0); //Here I call the nav bar function from the commonCodeHTML.php
     ?>
         <section class="section1">
 

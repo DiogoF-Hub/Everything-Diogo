@@ -1,11 +1,12 @@
 <?php
-include_once("commonCodeHTML.php");
+include_once("commonCodeHTML.php"); //Here I include the common code for the pages that users see, thats why its called HTML
 
-if (!$_SESSION["userloggedIn"]) {
+if (!$_SESSION["userloggedIn"]) { //Here I check if the user is logged in and if not I will make him go to index.php
     header("Location: index.php");
     die();
 }
 
+//Here I get the user data from a create view which joins groups table to get the group name
 $sqlSelectUserData = $connection->prepare("SELECT * FROM UserEditProfileJoin WHERE user_id=?");
 $sqlSelectUserData->bind_param("s", $_SESSION["user_id"]);
 $sqlSelectUserData->execute();
@@ -17,10 +18,14 @@ $row = $result->fetch_assoc();
 <html lang="en">
 
 <head>
+    <!-- Here I put jquery file, my js and css files, bootstrap files such as css and js and fontawesome css file -->
+    <!-- bootstrap & fontawesome are css libraries -->
+    <!-- On all js and css files, I have a time stamp that makes the browser thinks that every time it reloads, there is always different files to loads that helps debugging because it doesn't allow the browser to cache the files -->
     <script src='../JS/jquery-3.6.1.min.js?t=<?= time(); ?>'></script>
     <script src='../JS/commonCode.js?t=<?= time(); ?>'></script>
     <script src='../JS/profile.js?t=<?= time(); ?>'></script>
     <script>
+        //Here I give php the email and batch_number stored in the session to the js so I can now whenever I need to check if its  valid or taken email or badge
         sessionEmail = "<?= $_SESSION["email"] ?>";
         sessionBadge = "<?= $row["batch_number_id"] ?>";
     </script>
@@ -37,7 +42,7 @@ $row = $result->fetch_assoc();
 
 <body>
     <?php
-    nav("profile", "profile1");
+    nav("profile", "profile1"); //Here I call the nav bar function from the commonCodeHTML.php
     ?>
 
     <section class="section1">
@@ -79,6 +84,7 @@ $row = $result->fetch_assoc();
                                     <select id="BadgeNumber" name="BadgeNumber" class="form-select">
                                         <option id="badgeOptionID<?= $row["batch_number_id"] ?>" selected value="<?= $row["batch_number_id"] ?>">Your badge: <?= $row["batch_number_id"] ?></option>
                                         <?php
+                                        //Here I do a select from a create view that only shows the available batches, the ones that are not taken
                                         $sqlStatement = $connection->prepare("SELECT * FROM AvailableBatches");
                                         $sqlStatement->execute();
                                         $result2 = $sqlStatement->get_result();
@@ -104,32 +110,19 @@ $row = $result->fetch_assoc();
                     </form>
                 </div>
                 <div class="col-md-4">
-                    <form method="POST">
-                        <div class="p-2 py-3">
-                            <div class="d-flex justify-content-between align-items-center experience"><span class="h5">Change your current password</span></div><br>
-                            <div class="col-md-12"><label class="labels">Current Password</label><input id="currentPswProfile" type="password" class="form-control" placeholder="Current Password" value="">
-                                <div style="color: red;"></div>
-                            </div>
-                            <div class="col-md-12"><label class="labels">New password</label><input id="newPswProfile" type="password" class="form-control" placeholder="New password" value="">
-                                <div style="color: red;"></div>
-                            </div>
-                            <div class="col-md-12"><label class="labels">Repeat New password</label><input id="newPswRepeatProfile" type="password" class="form-control" placeholder="Repeat New password" value="">
-                                <div style="color: red;"></div>
-                            </div>
-                            <div class="mt-3"><button id="changePswButton" class="btn btn-info profile-button" type="button">Update</button></div>
+                    <div class="p-2 py-3">
+                        <div class="d-flex justify-content-between align-items-center experience"><span class="h5">Change your current password</span></div><br>
+                        <div class="col-md-12"><label class="labels">Current Password</label><input id="currentPswProfile" type="password" class="form-control" placeholder="Current Password" value="">
+                            <div style="color: red;"></div>
                         </div>
-                    </form>
-                    <!-- <div class="p-2 py-3">
-
-                        <div class="d-flex justify-content-between align-items-center experience"><span class="h5">Verify Email</span></div><br>
-                        <div class="row mt-2">
-                            <div class="col-md-6"><label class="labels">Email Code</label><input type="text" class="form-control" placeholder="Email Code" value=""></div>
-                            <div class="col-md-6">
-                                <div class="mt-4 text-center"><button class="btn btn-link profile-button" type="button">Resend Code</button></div>
-                            </div>
+                        <div class="col-md-12"><label class="labels">New password</label><input id="newPswProfile" type="password" class="form-control" placeholder="New password" value="">
+                            <div style="color: red;"></div>
                         </div>
-                        <div class="mt-3"><button class="btn btn-info profile-button" type="button">Verify Email</button></div>
-                    </div> -->
+                        <div class="col-md-12"><label class="labels">Repeat New password</label><input id="newPswRepeatProfile" type="password" class="form-control" placeholder="Repeat New password" value="">
+                            <div style="color: red;"></div>
+                        </div>
+                        <div class="mt-3"><button id="changePswButton" class="btn btn-info profile-button" type="button">Update</button></div>
+                    </div>
                 </div>
             </div>
         </div>
