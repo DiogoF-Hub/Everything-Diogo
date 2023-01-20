@@ -77,11 +77,11 @@ CREATE TABLE `Booking_list`(
 );
 
 
--- INSERT INTO  Booking_info (`room_id`, `email_id`, `date`, `purpose`) VALUES(1, "bla@gmail.com", "2023-01-16", "This is a test");
+INSERT INTO  Booking_info (`room_id`, `email_id`, `date`, `purpose`) VALUES(1, "bla@gmail.com", "2023-01-20", "This is a test");
 
--- INSERT INTO  Booking_list (`booking_id`, `schedule_slot_id`) VALUES(1, 1);
--- INSERT INTO  Booking_list (`booking_id`, `schedule_slot_id`) VALUES(1, 1);
--- INSERT INTO  Booking_list (`booking_id`, `schedule_slot_id`) VALUES(1, 2);
+INSERT INTO  Booking_list (`booking_id`, `schedule_slot_id`) VALUES(1, 1);
+--INSERT INTO  Booking_list (`booking_id`, `schedule_slot_id`) VALUES(1, 1); The user should not be able to do again this
+INSERT INTO  Booking_list (`booking_id`, `schedule_slot_id`) VALUES(1, 2);
 
 
 CREATE TABLE `Batches`(

@@ -57,12 +57,12 @@ function nav($ActivePage, $ActiveDropdown) //nav bar function with 2 parameters
                         <ul class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item dropdownSelect <?php if ($ActiveDropdown == "profile1") print "active1" ?>" href="profile.php">Edit Profile</a></li>
                             <hr>
-                            <li><a class="dropdown-item dropdownSelect <?php if ($ActiveDropdown == "profile2") print "active1" ?>" href="#">Check your reservations</a></li>
+                            <li><a class="dropdown-item dropdownSelect <?php if ($ActiveDropdown == "profile2") print "active1" ?>" href="#">My Reservations</a></li>
                         </ul>
                     </li>
 
                     <li class="nav-item px-2">
-                        <a class="nav-link active dropdownSelect <?php if ($ActivePage == "reservation") print "active1" ?>" aria-current="page" href="#">Reservation</a>
+                        <a class="nav-link active <?php if ($ActivePage == "reservation") print "active1" ?>" aria-current="page" href="reservation.php">Reservation</a>
                     </li>
 
                     <?php
@@ -81,7 +81,7 @@ function nav($ActivePage, $ActiveDropdown) //nav bar function with 2 parameters
                     ?>
 
                     <li class="nav-item px-4">
-                        <a class="nav-link active dropdownSelect" aria-current="page" href="javascript:{}" onclick="document.getElementById('logoutform').submit();">Logout</a>
+                        <a class="nav-link active" aria-current="page" href="javascript:{}" onclick="document.getElementById('logoutform').submit();">Logout</a>
                         <form method="POST" id="logoutform" hidden>
                             <input type="text" name="logout">
                         </form>

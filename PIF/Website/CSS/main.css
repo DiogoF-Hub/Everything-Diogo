@@ -8,9 +8,9 @@ body {
 
 .active1,
 .hoverLink:hover,
-.dropdownSelect:hover {
-    background-color: lightblue;
-    border-radius: 10px;
+.dropdownSelect:hover,
+.active:hover {
+    font-weight: bold;
 }
 
 .nav-link {
@@ -66,4 +66,10 @@ body {
     .responsive-font-example {
         font-size: 20px;
     }
+}
+
+
+.form-check-input:checked {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
 }

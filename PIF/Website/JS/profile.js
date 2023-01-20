@@ -1,6 +1,6 @@
-$(Start);
-
+$(Start); //This runs when the pages fully loads
 sessionEmail = "";
+sessionBadge = "";
 
 firstNameProfileAjax = "";
 lastNameProfileAjax = "";
