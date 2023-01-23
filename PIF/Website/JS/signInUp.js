@@ -3,6 +3,7 @@ $(Start);
 SignIn = true;
 
 function Start() {
+    //validation
     $("#firstName, #lastName").bind("focusout", function () {
         a = $(this).val();
 
@@ -19,6 +20,7 @@ function Start() {
 
     });
 
+    //validation
     $("#email").bind("focusout", async function () {
         a = $(this).val();
 
@@ -40,7 +42,7 @@ function Start() {
         }
     });
 
-
+    //validation
     $("#emailin").bind("focusout", function () {
         a = $(this).val();
 
@@ -59,7 +61,7 @@ function Start() {
     });
 
 
-
+    //validation
     $("#passwordin, #password").bind("focusout", function () {
         a = $(this).val();
 
@@ -75,7 +77,7 @@ function Start() {
         }
     });
 
-
+    //validation
     $("#BadgeNumber").on("change", function () {
         a = $(this).val();
 
@@ -86,7 +88,7 @@ function Start() {
         }
     });
 
-
+    //validation
     $("#passwordRepeat").bind("focusout", function () {
         a = $(this).val();
         b = $("#password").val();
@@ -103,23 +105,23 @@ function Start() {
         }
     });
 
-
+    //logout btn
     if ($("#logout").length) {
         $("#logout").bind("click", function () {
             $("#logoutForm").submit();
         });
     }
 
-
+    //bind button
     $("#SigninButton").bind("click", signin);
     $("#SignupButton").bind("click", signup);
     $("#buttonChange").bind("click", changeInUp);
 
-    $("#signup").hide();
+    $("#signup").hide(); //hide
 }
 
 
-async function signup() {
+async function signup() { //signup func
     JSvalidation = 0;
 
     firstName = $("#firstName").val();
@@ -132,7 +134,7 @@ async function signup() {
 
     BadgeNumber = $("#BadgeNumber").val();
 
-
+    //validation
     if (!firstName) {
         $("#firstName").parent().children("div").html("Please Write something for First Name");
         JSvalidation++;
@@ -152,7 +154,7 @@ async function signup() {
     }
 
 
-
+    //validation
     if (!lastName) {
         $("#lastName").parent().children("div").html("Please Write something for Last Name");
         JSvalidation++;
@@ -171,7 +173,7 @@ async function signup() {
 
     }
 
-
+    //validation
     if (!email) {
         $("#email").parent().children("div").html("Please Write something for Email");
         JSvalidation++;
@@ -189,7 +191,7 @@ async function signup() {
         }
     }
 
-
+    //validation
     if (!password) {
         $("#password").parent().children("div").html("Please Write something for Password");
         JSvalidation++;
@@ -197,7 +199,7 @@ async function signup() {
         $("#password").parent().children("div").html("");
     }
 
-
+    //validation
     if (!passwordRepeat) {
         $("#passwordRepeat").parent().children("div").html("Please Write something for Repeat Password");
         JSvalidation++;
@@ -205,7 +207,7 @@ async function signup() {
         $("#passwordRepeat").parent().children("div").html("");
     }
 
-
+    //validation
     if (password || passwordRepeat) {
         if (password.length < 8) {
             $("#password").parent().children("div").html("The password must contain a minimum of 8 characters");
@@ -222,14 +224,13 @@ async function signup() {
         }
     }
 
-
+    //validation
     if (BadgeNumber != "-1") {
 
     } else {
         $("#BadgeNumber").parent().children("div").html("Please select a Badge Number");
         JSvalidation++;
     }
-
 
     if (JSvalidation == 0) {
         $.ajax({
@@ -260,7 +261,7 @@ async function signup() {
             },
             success: function (parameter) {
                 bla = parameter.data.Message;
-                if (bla != "1") {
+                if (bla != "1") {//if its not 1
                     alert(bla);
 
                     $("#SignupButton").attr("disabled", false);
@@ -291,13 +292,13 @@ async function signup() {
 
 
 
-function signin() {
+function signin() { //sign in func
     JSvalidationIn = 0;
 
     emailin = $("#emailin").val();
     passwordin = $("#passwordin").val();
 
-
+    //validation
     if (!emailin) {
         $("#emailin").parent().children("div").html("Please Write something for Email");
         JSvalidationIn++;
@@ -310,7 +311,7 @@ function signin() {
         }
     }
 
-
+    //validation
     if (!passwordin) {
         $("#passwordin").parent().children("div").html("Please Write something for Password");
         JSvalidationIn++;
@@ -324,8 +325,6 @@ function signin() {
     }
 
     if (JSvalidationIn == 0) {
-        //$("#signin").submit();
-
         $.ajax({
             url: "../PHP/SignInUp.php",
             type: "POST",
@@ -348,7 +347,7 @@ function signin() {
             },
             success: function (parameter) {
                 bla = parameter.data.Message;
-                if (bla != "1") {
+                if (bla != "1") { //if its not 1
                     alert(bla);
 
                     $("#SigninButton").attr("disabled", false);
@@ -376,11 +375,11 @@ function signin() {
 
 
 
-function changeInUp() {
-    if (SignIn == true) {
+function changeInUp() { //switch form btn func
+    if (SignIn == true) { //toggle
         SignIn = false;
 
-
+        //animation
         $("#signin").hide(400);
         $("#signup").show(400);
 
@@ -393,6 +392,7 @@ function changeInUp() {
         $("#passwordin").val("");
     } else {
         SignIn = true;
+        //animation
         $("#signup").hide(400);
         $("#signin").show(400);
 

@@ -1,7 +1,7 @@
 <?php
 require "commonCode.php";
 
-
+//sign up submission
 if (isset($_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["password"], $_POST["passwordRepeat"], $_POST["BadgeNumber"])) {
 
     $firstNameSignUp = trim($_POST["firstName"]);
@@ -13,7 +13,7 @@ if (isset($_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["pass
 
     $Response = new stdClass();
 
-
+    //validation
     if (!empty($firstNameSignUp) || !empty($lastNameSignUp) || !empty($emailSignUp) || !empty($passwordSignUp) || !empty($passwordRepeatSignUp) || !empty($badgeNumberSignUp)) {
 
         if (!preg_match($namesRegex, $firstNameSignUp) || !preg_match($namesRegex, $lastNameSignUp)) {
@@ -67,22 +67,17 @@ if (isset($_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["pass
         returnRes(data: $Response);
     }
 
-    // $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    // $charactersLength = strlen($characters);
-    // $randomString = '';
-    // for ($i = 0; $i < 10; $i++) {
-    //     $randomString .= $characters[rand(0, $charactersLength - 1)];
-    // }
 
     $hashPSW = password_hash($passwordSignUp, PASSWORD_DEFAULT);
 
-
+    //insert new user
     $A0 = 0;
     $A1 = 1;
-    $userIn = $connection->prepare("INSERT INTO Users (firstname, lastname, email_id, Userpassword, batch_number_id, group_id, profilePic) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $userIn->bind_param("ssssiii", $firstNameSignUp, $lastNameSignUp, $emailSignUp, $hashPSW, $badgeNumberSignUp, $A1, $A0);
+    $userIn = $connection->prepare("INSERT INTO Users (firstname, lastname, email_id, Userpassword, batch_number_id, group_id) VALUES (?, ?, ?, ?, ?, ?)");
+    $userIn->bind_param("ssssii", $firstNameSignUp, $lastNameSignUp, $emailSignUp, $hashPSW, $badgeNumberSignUp, $A1);
 
     if ($userIn->execute()) {
+        //creating session vals
         $sqlStatement = $connection->prepare("SELECT user_id FROM Users WHERE email_id=?");
         $sqlStatement->bind_param("s", $emailSignUp);
         $sqlStatement->execute();
@@ -102,20 +97,17 @@ if (isset($_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["pass
         $Response->Message = "SQL error";
         returnRes(data: $Response);
     }
-
-
-    //email
-
 }
 
 
 
 
-
+//sign in submission
 if (isset($_POST["emailin"], $_POST["passwordin"])) {
 
     $Response = new stdClass();
 
+    //validation
     if (!empty($_POST["emailin"]) || !empty($_POST["passwordin"])) {
 
         if (strlen(trim($_POST["passwordin"])) < 8) {
@@ -133,13 +125,14 @@ if (isset($_POST["emailin"], $_POST["passwordin"])) {
             $result = $sqlStatement->get_result();
             $userexists = $result->num_rows;
 
-            if ($userexists < 0) {
+            if ($userexists == 0) {
                 $Response->Message = "The user does not exist in the database";
                 returnRes(data: $Response);
             } else {
                 $row = $result->fetch_assoc();
 
                 if (password_verify(trim($_POST["passwordin"]), $row["Userpassword"])) {
+                    //creating session vals
                     $_SESSION["userloggedIn"] = true;
                     $_SESSION["user_id"] = $row["user_id"];
                     $_SESSION["firstname"] = $row["firstname"];

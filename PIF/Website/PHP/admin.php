@@ -1,8 +1,11 @@
 <?php
 require "commonCode.php";
 
+//if admin gives a new group to a user
 if (isset($_POST["newgroup"], $_POST["userid"], $_SESSION["userloggedIn"]) && $_SESSION["userloggedIn"] == true && $_SESSION["group_id"] == 2) {
-    $Response = new stdClass();
+    $Response = new stdClass(); //create response
+
+    //validation
     if (is_numeric($_POST["newgroup"]) && is_numeric($_POST["userid"])) {
 
         if ($_POST["newgroup"] != 2) {
@@ -23,6 +26,7 @@ if (isset($_POST["newgroup"], $_POST["userid"], $_SESSION["userloggedIn"]) && $_
                     $row = $result->fetch_assoc();
 
                     if ($row["group_id"] != $_POST["newgroup"]) {
+                        //update
                         $sqlUpdate = $connection->prepare("UPDATE Users SET group_id=? WHERE user_id=?");
                         $sqlUpdate->bind_param("ss", $_POST["newgroup"], $_POST["userid"]);
                         $sqlUpdate->execute();
@@ -49,9 +53,9 @@ if (isset($_POST["newgroup"], $_POST["userid"], $_SESSION["userloggedIn"]) && $_
 }
 
 
-
+//if admin creates group
 if (isset($_POST["groupName"], $_POST["Schedule"], $_POST["view_schedule"], $_POST["view_sensitive_data"], $_POST["open_door_any_time"], $_POST["open_door_when_its_available"]) && $_SESSION["userloggedIn"] == true && $_SESSION["group_id"] == 2) {
-    $Response = new stdClass();
+    $Response = new stdClass(); //create response
 
 
     $ScheduleSwitch = 0;
@@ -60,6 +64,7 @@ if (isset($_POST["groupName"], $_POST["Schedule"], $_POST["view_schedule"], $_PO
     $open_door_any_timeSwitch = 0;
     $open_door_when_its_availableSwitch = 0;
 
+    //validation
     if (!empty($_POST["groupName"]) || !empty($_POST["Schedule"]) || !empty($_POST["view_sensitive_data"]) || !empty($_POST["open_door_any_time"]) || !empty($_POST["open_door_when_its_available"])) {
 
         $groupNameTaken = $connection->prepare("SELECT group_name from Groups_permissions WHERE group_name=?");
@@ -94,6 +99,7 @@ if (isset($_POST["groupName"], $_POST["Schedule"], $_POST["view_schedule"], $_PO
             }
 
 
+            //insert
             $A0 = 0;
             $userIn = $connection->prepare("INSERT INTO Groups_permissions (group_name, admin, schedule, view_schedule, view_sensitive_data, open_door_any_time, open_door_available) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $userIn->bind_param("siiiiii", $_POST["groupName"], $A0, $ScheduleSwitch, $view_scheduleSwitch, $view_sensitive_dataSwitch, $open_door_any_timeSwitch, $open_door_when_its_availableSwitch);

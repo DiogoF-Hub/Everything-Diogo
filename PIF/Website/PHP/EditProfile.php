@@ -2,7 +2,7 @@
 
 require "commonCode.php";
 
-
+//update profile info
 if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailProfile"], $_POST["BadgeNumber"]) && $_SESSION["userloggedIn"] == true) {
     $firstNameSaveProfile = trim($_POST["firstNameProfile"]);
     $lastNameSaveProfile = trim($_POST["lastNameProfile"]);
@@ -17,8 +17,10 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailPr
     $result = $sqlSelectUserData->get_result();
     $row = $result->fetch_assoc();
 
+    //validation
     if (!empty($firstNameSaveProfile) || !empty($lastNameSaveProfile) || !empty($emailSaveProfile) || !empty($badgeNumberSaveProfile)) {
 
+        //validation
         if (!preg_match($namesRegex, $firstNameSaveProfile) || !preg_match($namesRegex, $lastNameSaveProfile)) {
             $Response->Message = "1";
             returnRes(data: $Response);
@@ -29,7 +31,7 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailPr
             }
         }
 
-
+        //validation
         if (!preg_match($emailRegex, $emailSaveProfile)) {
             $Response->Message = "1";
             returnRes(data: $Response);
@@ -46,7 +48,7 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailPr
             }
         }
 
-
+        //validation
         if ($badgeNumberSaveProfile != "-1") {
             $sqlStatement = $connection->prepare("SELECT * from Batches WHERE batch_number_id=?");
             $sqlStatement->bind_param("s", $badgeNumberSaveProfile);
@@ -85,6 +87,7 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailPr
     if ($userExist > 0) {
         $row = $result2->fetch_assoc();
 
+        //update only if its different
         if ($row["email_id"] != $emailSaveProfile) {
             $sqlUpdate = $connection->prepare("UPDATE Users SET email_id=? WHERE user_id=?");
             $sqlUpdate->bind_param("ss", $emailSaveProfile, $_SESSION["user_id"]);
@@ -92,6 +95,7 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailPr
             $_SESSION["email"] = $emailSaveProfile;
         }
 
+        //update only if its different
         if ($row["firstname"] != $firstNameSaveProfile) {
             $sqlUpdate = $connection->prepare("UPDATE Users SET firstname=? WHERE user_id=?");
             $sqlUpdate->bind_param("ss", $firstNameSaveProfile, $_SESSION["user_id"]);
@@ -99,6 +103,7 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailPr
             $_SESSION["firstname"] = $firstNameSaveProfile;
         }
 
+        //update only if its different
         if ($row["lastname"] != $lastNameSaveProfile) {
             $sqlUpdate = $connection->prepare("UPDATE Users SET lastname=? WHERE user_id=?");
             $sqlUpdate->bind_param("ss", $lastNameSaveProfile, $_SESSION["user_id"]);
@@ -106,7 +111,7 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailPr
             $_SESSION["lastname"] = $lastNameSaveProfile;
         }
 
-
+        //update only if its different
         if ($badgeNumberSaveProfile != "-1" && $row["batch_number_id"] != $badgeNumberSaveProfile) {
             $sqlUpdate = $connection->prepare("UPDATE Users SET batch_number_id=? WHERE user_id=?");
             $sqlUpdate->bind_param("ss", $badgeNumberSaveProfile, $_SESSION["user_id"]);
@@ -123,7 +128,7 @@ if (isset($_POST["firstNameProfile"], $_POST["lastNameProfile"], $_POST["emailPr
 
 
 
-
+//update psw
 if (isset($_POST["currentPsw"], $_POST["newPsw"], $_POST["newPswRepeat"]) && $_SESSION["userloggedIn"] == true) {
     $Response = new stdClass();
 
@@ -133,16 +138,18 @@ if (isset($_POST["currentPsw"], $_POST["newPsw"], $_POST["newPswRepeat"]) && $_S
     $result2 = $sqlStatement2->get_result();
     $userExist = $result2->num_rows;
 
+    //validation
     if ($userExist > 0) {
         $row = $result2->fetch_assoc();
 
-
+        //validation
         if (strlen(trim($_POST["currentPsw"])) > 8 || strlen(trim($_POST["newPsw"])) > 8 || strlen(trim($_POST["newPswRepeat"])) > 8) {
             if (!password_verify(trim($_POST["newPsw"]), $row["Userpassword"])) {
                 if (password_verify(trim($_POST["currentPsw"]), $row["Userpassword"])) {
                     $newPsw = trim($_POST["newPsw"]);
                     $hashPSW = password_hash($newPsw, PASSWORD_DEFAULT);
 
+                    //hash and update
                     $sqlUpdate = $connection->prepare("UPDATE Users SET Userpassword=? WHERE email_id=?");
                     $sqlUpdate->bind_param("ss", $hashPSW, $_SESSION["email"]);
                     $sqlUpdate->execute();
