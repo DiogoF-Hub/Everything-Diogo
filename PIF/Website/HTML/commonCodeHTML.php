@@ -24,6 +24,14 @@ if ($_SESSION["userloggedIn"] == true) { //if the user is logged in
     $row = $result->fetch_assoc();
 
     $_SESSION["group_id"] = $row["group_id"]; //and updating into the session, so if an admin updates the group of a user, the user just needs to refresh the page bcs this will run every time he loads the page
+
+    $sqlSelectGroupRights = $connection->prepare("SELECT * FROM Groups_permissions WHERE group_id=?");
+    $sqlSelectGroupRights->bind_param("s", $_SESSION["group_id"]);
+    $sqlSelectGroupRights->execute();
+    $result2 = $sqlSelectGroupRights->get_result();
+    $row2 = $result2->fetch_assoc();
+
+    $_SESSION["group_right_schedule"] = $row2["schedule"];
 }
 
 if (isset($_POST["logout"])) { //This runs when the user presses the logout button
@@ -56,14 +64,19 @@ function nav($ActivePage, $ActiveDropdown) //nav bar function with 2 parameters
                         <a class="nav-link active dropdown-toggle <?php if ($ActivePage == "profile") print "active1" ?>" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></a>
                         <ul class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item dropdownSelect <?php if ($ActiveDropdown == "profile1") print "active1" ?>" href="profile.php">Edit Profile</a></li>
-                            <hr>
-                            <li><a class="dropdown-item dropdownSelect <?php if ($ActiveDropdown == "profile2") print "active1" ?>" href="#">My Reservations</a></li>
                         </ul>
                     </li>
 
-                    <li class="nav-item px-2">
-                        <a class="nav-link active <?php if ($ActivePage == "reservation") print "active1" ?>" aria-current="page" href="reservation.php">Reservation</a>
-                    </li>
+                    <?php
+                    if ($_SESSION["group_right_schedule"] == 1) {
+                    ?>
+                        <li class="nav-item px-2">
+                            <a class="nav-link active <?php if ($ActivePage == "reservation") print "active1" ?>" aria-current="page" href="reservation.php">Reservation</a>
+                        </li>
+                    <?php
+                    }
+                    ?>
+
 
                     <?php
                     if ($_SESSION["group_id"] == 2) { //This will only shows if the user is an admin

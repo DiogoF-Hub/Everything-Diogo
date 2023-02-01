@@ -2,6 +2,7 @@
 
 require "commonCode.php";
 
+//check if email is taken
 if (isset($_POST["emailTaken"])) {
     $emailTaken = $connection->prepare("SELECT * from Users WHERE email_id=?");
     $emailTaken->bind_param("s", $_POST["emailTaken"]);
@@ -12,9 +13,9 @@ if (isset($_POST["emailTaken"])) {
     $Response = new stdClass();
 
     if ($emailExist > 0) {
-        $Response->Message = "1";
+        $Response->Message = "1"; //taken
     } else {
-        $Response->Message = "0";
+        $Response->Message = "0"; //not taken
     }
     returnRes(data: $Response);
 }

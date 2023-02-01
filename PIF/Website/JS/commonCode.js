@@ -59,3 +59,8 @@ async function emailtaken(a) {//this is async func, so basically make the abilit
     return free; //and here I return true or false
 }
 
+
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n); //return true or false if is numeric
+}
+

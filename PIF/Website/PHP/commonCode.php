@@ -16,3 +16,9 @@ function returnRes($data = null) //func to return the result of ajax request
     echo json_encode($object);
     die();
 }
+
+function validateDate($date, $format = 'd-m-Y')
+{
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) === $date;
+}

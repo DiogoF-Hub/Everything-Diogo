@@ -114,7 +114,7 @@ $numberofUsers2 = $result2->num_rows;
                                         </div>
                                         <div class="col d-flex justify-content-center mb-5">
                                             <div>
-                                                <button id="saveAdminBtn<?= $row2["user_id"] ?>" class="lead btn btn-primary mt-4 buttonSave" type="button">Save</button>
+                                                <button id="saveAdminBtn<?= $row2["user_id"] ?>" class="lead btn btn-info mt-4 buttonSave" type="button">Save</button>
                                                 <input type="text" hidden value="<?= $row2["user_id"] ?>"> <!-- Here I use this hidden input to identify which user I clicked -->
                                             </div>
                                         </div>
