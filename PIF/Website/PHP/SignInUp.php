@@ -73,8 +73,8 @@ if (isset($_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["pass
     //insert new user
     $A0 = 0;
     $A1 = 1;
-    $userIn = $connection->prepare("INSERT INTO Users (firstname, lastname, email_id, Userpassword, batch_number_id, group_id) VALUES (?, ?, ?, ?, ?, ?)");
-    $userIn->bind_param("ssssii", $firstNameSignUp, $lastNameSignUp, $emailSignUp, $hashPSW, $badgeNumberSignUp, $A1);
+    $userIn = $connection->prepare("INSERT INTO Users (firstname, lastname, email_id, Userpassword, batch_number_id, group_id, ProfilePic) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $userIn->bind_param("ssssiii", $firstNameSignUp, $lastNameSignUp, $emailSignUp, $hashPSW, $badgeNumberSignUp, $A1, $A0);
 
     if ($userIn->execute()) {
         //creating session vals

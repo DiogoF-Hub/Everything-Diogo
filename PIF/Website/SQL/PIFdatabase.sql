@@ -28,10 +28,11 @@ CREATE TABLE `Users`(
     `email_id` VARCHAR(255) NOT NULL UNIQUE,
     `Userpassword` VARCHAR(255) NOT NULL,
     `batch_number_id` INT NOT NULL UNIQUE,
-    `group_id` INT NOT NULL
+    `group_id` INT NOT NULL,
+    `ProfilePic` INT NOT NULL
 );
 
-INSERT INTO `Users` (`firstname`, `lastname`, `email_id`, `Userpassword`, `batch_number_id`, `group_id`) VALUES ("Diogo", "Fernandes", "bla@gmail.com", "$2y$10$y9Dttj64zc1pEIVx2.sszuKVpZylgFECOMRdwxk0fehq1DOzkwQXi", 2, 2);
+INSERT INTO `Users` (`firstname`, `lastname`, `email_id`, `Userpassword`, `batch_number_id`, `group_id`, `ProfilePic`) VALUES ("Diogo", "Fernandes", "bla@gmail.com", "$2y$10$y9Dttj64zc1pEIVx2.sszuKVpZylgFECOMRdwxk0fehq1DOzkwQXi", 2, 2, 0);
 
 CREATE TABLE `Rooms`(
     `room_id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -90,4 +91,4 @@ ALTER TABLE
 /*Create View*/
 CREATE VIEW AvailableBatches AS SELECT * FROM Batches WHERE batch_number_id NOT IN(SELECT batch_number_id FROM Users) ORDER BY batch_number_id;
 
-CREATE VIEW UserEditProfileJoin AS SELECT user_id, firstname, lastname, email_id, Userpassword, batch_number_id, group_name FROM Users NATURAL JOIN Groups_permissions;
+CREATE VIEW UserEditProfileJoin AS SELECT user_id, firstname, lastname, email_id, Userpassword, batch_number_id, ProfilePic, group_name FROM Users NATURAL JOIN Groups_permissions;

@@ -5,6 +5,46 @@ sessionEmail = "";
 sessionBadge = "";
 
 function Start() {
+
+    $("#buttonPic").bind("click", function () {
+        myInputFile = $("#buttonPic").parent().children("input").click();
+    });
+
+
+    $("#ProfileImgInput").on("change", function (event) {
+        var output = $("#ProfileImg");
+        var file = event.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        if (!file.type.startsWith("image/") || !(/\.(jpe?g|png)$/i).test(file.name)) {
+            return;
+        }
+
+        output.attr("src", URL.createObjectURL(file));
+        output.on("load", function () {
+            URL.revokeObjectURL(output.attr("src"));
+        });
+
+        var formData = new FormData();
+        formData.append("image", file);
+
+        $.ajax({
+            url: "../PHP/EditProfile.php",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (parameter) {
+                bla = parameter.data.Message;
+            }
+        });
+    });
+
+
+
     $("#emailProfile").bind("focusout", async function () { //Here I bind the input emailProfile that when you focus out run this
         a = $(this).val(); //With this I get the val
 
@@ -85,6 +125,7 @@ function Start() {
     $("#saveProfile").bind("click", saveProfile);
     $("#changePswButton").bind("click", changePsw);
 }
+
 
 //save profile func
 async function saveProfile() {

@@ -49,8 +49,22 @@ $row = $result->fetch_assoc();
         <div class="container rounded bg-white mb-5 border border-dark rounded-3">
             <div class="row">
                 <div class="col-md-3 border-right">
-                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                        <img class="rounded-circle mt-5" width="150px" src="../IMAGES/user.png">
+                    <div class="d-flex flex-column align-items-center p-3 py-2">
+                        <div class="container2">
+                            <?php
+                            $ProfileImgPath = "";
+                            if ($row["ProfilePic"] == 0) {
+                                $ProfileImgPath = "../IMAGES/user.png";
+                            } else {
+                                $ProfileImgPath = "../IMAGES/ProfilePics/" . $_SESSION["user_id"] . ".jpeg";
+                            }
+                            ?>
+                            <img id="ProfileImg" class="rounded mt-5" src="<?= $ProfileImgPath ?>">
+                            <div class="overlayImgBtn rounded mt-5">
+                                <button id="buttonPic" class="btn textImgBtn shadow-none">Change</button>
+                                <input id="ProfileImgInput" hidden type="file" accept=".png, .jpg, .jpeg">
+                            </div>
+                        </div>
                         <span id="spanFullNameProfile" class="font-weight-bold"><?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></span>
                         <span id="emailSpanProfile" class="text-black-50"><?= $_SESSION["email"] ?></span>
                     </div>
