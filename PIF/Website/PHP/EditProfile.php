@@ -179,6 +179,7 @@ if (isset($_POST["currentPsw"], $_POST["newPsw"], $_POST["newPswRepeat"]) && $_S
 if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
     $Response = new stdClass();
 
+    //Possible upload errors associative array
     $uploadErrors = array(
         UPLOAD_ERR_INI_SIZE => "The uploaded file exceeds the upload_max_filesize directive in php.ini",
         UPLOAD_ERR_FORM_SIZE => "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form",
@@ -191,12 +192,13 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
 
     $image = $_FILES["image"];
 
-    if ($image["error"] == UPLOAD_ERR_OK) {
+    if ($image["error"] == UPLOAD_ERR_OK) { //If the upload was successful
         $tmp_name = $image["tmp_name"];
         $name = $image["name"];
 
+        //Get the extension in lower characters
         $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-        if ($extension !== "jpg" && $extension !== "jpeg" && $extension !== "png") {
+        if ($extension !== "jpg" && $extension !== "jpeg" && $extension !== "png") { //If the extension is not jpeg, jpg or png stop here
             $Response->Message = "1";
             returnRes(data: $Response);
         }
@@ -226,18 +228,18 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
 
         // Rotate the image based on the exif data
         if ($src_image !== null && function_exists('exif_read_data')) {
-            if ($extension == "jpg" || $extension == "jpeg") {
-                $exif = exif_read_data($tmp_name);
+            if ($extension == "jpg" || $extension == "jpeg") { //PNG files does not support exif metadata
+                $exif = exif_read_data($tmp_name); //Read the exif metadata of the file
                 if (!empty($exif['Orientation'])) {
                     switch ($exif['Orientation']) {
                         case 3:
-                            $src_image = imagerotate($src_image, 180, 0);
+                            $src_image = imagerotate($src_image, 180, 0); //Rotates 180° so no need to change the width and height
                             break;
                         case 6:
                             $src_image = imagerotate($src_image, -90, 0);
                             list($src_width, $src_height) = array($src_height, $src_width); // swap width and height
                             break;
-                        case 8:
+                        case 8:                                                             //The height becomes the width and the width becomes the height
                             $src_image = imagerotate($src_image, 90, 0);
                             list($src_width, $src_height) = array($src_height, $src_width); // swap width and height
                             break;
@@ -245,7 +247,8 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
                 }
             }
         } else {
-            $Response->Message = "The function exif_read_data does not exist, which means that the exif extension is not enabled";
+            //Exif extension is not enabled
+            $Response->Message = "The function exif_read_data does not exist, which means that the exif extension is not enabled on the server";
             returnRes(data: $Response);
         }
 
@@ -254,6 +257,7 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
         $dst_height = 400;
 
         //Calculate the aspect ratio of the source image and the destination image by dividing the width with the height
+        //This gives us two ratios that we can use to compare the aspect ratios of the two images.
         $src_aspect_ratio = $src_width / $src_height;
         $dst_aspect_ratio = $dst_width / $dst_height;
 
@@ -266,20 +270,31 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
         //Check if the aspect ratio of the source image is greater than or equal to the aspect ratio of the destination image
         if ($src_aspect_ratio >= $dst_aspect_ratio) {
             //The source image is wider than the destination image
+
+            //We calculate the new width of the cropped region by multiplying the height of the image by the aspect ratio of the destination image
             $crop_width = $src_height * $dst_aspect_ratio;
+
+            //We then set the x-coordinate of the cropped region to be the center of the original image minus half of the new cropped width.
             $src_x = ($src_width - $crop_width) / 2;
         } else {
             //The source image is taller than the destination image
+
+            //We calculate the new height of the cropped region by dividing the width of the image by the aspect ratio of the destination image.
             $crop_height = $src_width / $dst_aspect_ratio;
+
+            //We then set the y-coordinate of the cropped region to be the center of the original image minus half of the new cropped height.
             $src_y = ($src_height - $crop_height) / 2;
         }
 
+        //We use the imagecopyresampled() function to copy and resize the image to fit into the 400 x 400 pixel square, using the coordinates and dimensions we calculated in the previous steps.
         imagecopyresampled($new_image, $src_image, 0, 0, $src_x, $src_y, $dst_width, $dst_height, $crop_width, $crop_height);
 
 
-        //Save the image to disk
+        //Save the image with the userID as the name
         $location = "../IMAGES/ProfilePics/" . $_SESSION["user_id"] . ".jpeg";
-        if (imagejpeg($new_image, $location, 100)) {
+        if (imagejpeg($new_image, $location, 100)) { //Create jpeg file into a certain location with 100% quality
+
+            //Update the profilePic field of the user in the database to 1
             $A1 = 1;
             $sqlUpdate = $connection->prepare("UPDATE Users SET ProfilePic=? WHERE user_id=?");
             $sqlUpdate->bind_param("ss", $A1, $_SESSION["user_id"]);
@@ -288,10 +303,12 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
             $Response->Message = "1";
             returnRes(data: $Response);
         } else {
-            $Response->Message = "Something went wrong while saving the picture";
+            //Something went wrong while saving the image
+            $Response->Message = "Something went wrong while saving the image";
             returnRes(data: $Response);
         }
     } else {
+        //If the upload was not successful, we return the error to the user.
         $Response->Message = $uploadErrors[$image["error"]];
         returnRes(data: $Response);
     }
@@ -301,11 +318,13 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
 if (isset($_POST["RemoveUserPic"]) && $_SESSION["userloggedIn"] == true) {
     $Response = new stdClass();
 
+    //File location with name
     $File = "../IMAGES/ProfilePics/" . $_SESSION["user_id"] . ".jpeg";
 
-    if (file_exists($File)) {
-        unlink($File);
+    if (file_exists($File)) { //If the file exist
+        unlink($File); //Delete the file
 
+        //Update the profilePic field of the user in the database to 0
         $A0 = 0;
         $sqlUpdate = $connection->prepare("UPDATE Users SET ProfilePic=? WHERE user_id=?");
         $sqlUpdate->bind_param("ss", $A0, $_SESSION["user_id"]);
@@ -314,6 +333,7 @@ if (isset($_POST["RemoveUserPic"]) && $_SESSION["userloggedIn"] == true) {
         $Response->Message = "1";
         returnRes(data: $Response);
     } else {
+        //The file does not exist
         $Response->Message = "The File does not exist";
         returnRes(data: $Response);
     }
