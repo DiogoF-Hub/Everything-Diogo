@@ -204,8 +204,15 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
         //Get the width and height of the image
         list($src_width, $src_height) = getimagesize($tmp_name);
 
-        //Create a new true color image with the destination width and height
-        $new_image = imagecreatetruecolor(200, 200);
+
+        if (!extension_loaded('gd')) {
+            // GD extension is not enabled
+            $Response->Message = "GD extension is not enabled on the server.";
+            returnRes(data: $Response);
+        }
+
+        //Create a new true color image with the destination width and height using gd ext
+        $new_image = imagecreatetruecolor(400, 400);
 
         //Initialize the source image to null
         $src_image = null;
@@ -243,8 +250,8 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
         }
 
         //Set the destination width and height
-        $dst_width = 200;
-        $dst_height = 200;
+        $dst_width = 400;
+        $dst_height = 400;
 
         //Calculate the aspect ratio of the source image and the destination image by dividing the width with the height
         $src_aspect_ratio = $src_width / $src_height;
