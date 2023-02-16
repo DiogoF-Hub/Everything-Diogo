@@ -90,7 +90,7 @@ body {
     left: 0;
     right: 0;
     opacity: 0;
-    transition: .5s ease;
+    transition: .7s ease;
     background-color: #17a2b8;
 }
 
@@ -98,16 +98,28 @@ body {
     opacity: 1;
 }
 
-.textImgBtn {
-    color: white;
-    font-size: 20px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
+.textImgBtn,
+.textImgRemovePic {
     -webkit-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     text-align: center;
+}
+
+.textImgBtn {
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 20px;
+}
+
+.textImgRemovePic {
+    color: red;
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    font-size: 15px;
 }
 
 #ProfileImg,
@@ -115,4 +127,9 @@ body {
     width: 158px;
     height: 152px;
     object-fit: cover;
+}
+
+.UsersAdminImg {
+    width: 70%;
+    height: 70%;
 }

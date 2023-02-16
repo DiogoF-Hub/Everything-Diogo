@@ -44,7 +44,6 @@ $row = $result->fetch_assoc();
     <?php
     nav("profile", "profile1"); //Here I call the nav bar function from the commonCodeHTML.php
     ?>
-
     <section class="section1">
         <div class="container rounded bg-white mb-5 border border-dark rounded-3">
             <div class="row">
@@ -53,15 +52,19 @@ $row = $result->fetch_assoc();
                         <div class="container2">
                             <?php
                             $ProfileImgPath = "";
+                            $toggleRemovePic = "hidden";
                             if ($row["ProfilePic"] == 0) {
                                 $ProfileImgPath = "../IMAGES/user.png";
                             } else {
+                                print "<script>removePicToggle = true;</script>";
                                 $ProfileImgPath = "../IMAGES/ProfilePics/" . $_SESSION["user_id"] . ".jpeg";
+                                $toggleRemovePic = "";
                             }
                             ?>
                             <img id="ProfileImg" class="rounded mt-5" src="<?= $ProfileImgPath ?>">
                             <div class="overlayImgBtn rounded mt-5">
                                 <button id="buttonPic" class="btn textImgBtn shadow-none">Change</button>
+                                <button id="buttonRemovePic" <?= $toggleRemovePic ?> class="btn btn-sm textImgRemovePic shadow-none">Remove</button>
                                 <input id="ProfileImgInput" hidden type="file" accept=".png, .jpg, .jpeg">
                             </div>
                         </div>

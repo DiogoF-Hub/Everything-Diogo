@@ -69,7 +69,15 @@ $numberofUsers2 = $result2->num_rows;
                                 <div id="formUser<?= $row2["user_id"] ?>">
                                     <div class="row align-items-center">
                                         <div class="col d-flex justify-content-center mb-5">
-                                            <img src="../IMAGES/user.png" class="img-fluid w-75 h-75" alt="">
+                                            <?php
+                                            $ProfileImgPath = "";
+                                            if ($row2["ProfilePic"] == 0) {
+                                                $ProfileImgPath = "../IMAGES/user.png";
+                                            } else {
+                                                $ProfileImgPath = "../IMAGES/ProfilePics/" . $row2["user_id"] . ".jpeg";
+                                            }
+                                            ?>
+                                            <img src="<?= $ProfileImgPath ?>" class="UsersAdminImg img-fluid" alt="">
                                         </div>
                                         <div class="col d-flex justify-content-center mb-5">
                                             <div>

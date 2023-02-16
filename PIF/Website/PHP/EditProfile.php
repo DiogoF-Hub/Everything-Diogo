@@ -174,6 +174,8 @@ if (isset($_POST["currentPsw"], $_POST["newPsw"], $_POST["newPswRepeat"]) && $_S
     }
 }
 
+
+
 if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
     $Response = new stdClass();
 
@@ -202,29 +204,8 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
         //Get the width and height of the image
         list($src_width, $src_height) = getimagesize($tmp_name);
 
-        //Set the destination width and height
-        $dst_width = 200;
-        $dst_height = 200;
-
-        //Calculate the aspect ratio of the source image and the destination image by dividing the width with the height
-        $src_aspect_ratio = $src_width / $src_height;
-        $dst_aspect_ratio = $dst_width / $dst_height;
-
-        //Check if the aspect ratio of the source image is greater than or equal to the aspect ratio of the destination image
-        if ($src_aspect_ratio >= $dst_aspect_ratio) { //This means that the original image is wider than the destination aspect ratio, so we need to crop horizontally
-            //Calculate the source x and y coordinates and the source width
-            $src_x = ($src_width - $src_height * $dst_aspect_ratio) / 2;
-            $src_y = 0;
-            $src_width = $src_height * $dst_aspect_ratio;
-        } else { //this means the original image is taller than the destination aspect ratio, so we need to crop vertically
-            //Calculate the source x and y coordinates and the source height
-            $src_x = 0;
-            $src_y = ($src_height - $src_width / $dst_aspect_ratio) / 2;
-            $src_height = $src_width / $dst_aspect_ratio;
-        }
-
         //Create a new true color image with the destination width and height
-        $new_image = imagecreatetruecolor($dst_width, $dst_height);
+        $new_image = imagecreatetruecolor(200, 200);
 
         //Initialize the source image to null
         $src_image = null;
@@ -236,11 +217,60 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
             $src_image = imagecreatefrompng($tmp_name);
         }
 
-        //Copy and resize the source image to the new image
-        imagecopyresampled($new_image, $src_image, 0, 0, $src_x, $src_y, $dst_width, $dst_height, $src_width, $src_height);
+        // Rotate the image based on the exif data
+        if ($src_image !== null && function_exists('exif_read_data')) {
+            if ($extension == "jpg" || $extension == "jpeg") {
+                $exif = exif_read_data($tmp_name);
+                if (!empty($exif['Orientation'])) {
+                    switch ($exif['Orientation']) {
+                        case 3:
+                            $src_image = imagerotate($src_image, 180, 0);
+                            break;
+                        case 6:
+                            $src_image = imagerotate($src_image, -90, 0);
+                            list($src_width, $src_height) = array($src_height, $src_width); // swap width and height
+                            break;
+                        case 8:
+                            $src_image = imagerotate($src_image, 90, 0);
+                            list($src_width, $src_height) = array($src_height, $src_width); // swap width and height
+                            break;
+                    }
+                }
+            }
+        } else {
+            $Response->Message = "The function exif_read_data does not exist, which means that the exif extension is not enabled";
+            returnRes(data: $Response);
+        }
+
+        //Set the destination width and height
+        $dst_width = 200;
+        $dst_height = 200;
+
+        //Calculate the aspect ratio of the source image and the destination image by dividing the width with the height
+        $src_aspect_ratio = $src_width / $src_height;
+        $dst_aspect_ratio = $dst_width / $dst_height;
+
+        //Initialize the x and y coordinates of the cropped region and the width and height of the cropped image
+        $src_x = 0;
+        $src_y = 0;
+        $crop_width = $src_width;
+        $crop_height = $src_height;
+
+        //Check if the aspect ratio of the source image is greater than or equal to the aspect ratio of the destination image
+        if ($src_aspect_ratio >= $dst_aspect_ratio) {
+            //The source image is wider than the destination image
+            $crop_width = $src_height * $dst_aspect_ratio;
+            $src_x = ($src_width - $crop_width) / 2;
+        } else {
+            //The source image is taller than the destination image
+            $crop_height = $src_width / $dst_aspect_ratio;
+            $src_y = ($src_height - $crop_height) / 2;
+        }
+
+        imagecopyresampled($new_image, $src_image, 0, 0, $src_x, $src_y, $dst_width, $dst_height, $crop_width, $crop_height);
 
 
-
+        //Save the image to disk
         $location = "../IMAGES/ProfilePics/" . $_SESSION["user_id"] . ".jpeg";
         if (imagejpeg($new_image, $location, 100)) {
             $A1 = 1;
@@ -256,6 +286,28 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
         }
     } else {
         $Response->Message = $uploadErrors[$image["error"]];
+        returnRes(data: $Response);
+    }
+}
+
+
+if (isset($_POST["RemoveUserPic"]) && $_SESSION["userloggedIn"] == true) {
+    $Response = new stdClass();
+
+    $File = "../IMAGES/ProfilePics/" . $_SESSION["user_id"] . ".jpeg";
+
+    if (file_exists($File)) {
+        unlink($File);
+
+        $A0 = 0;
+        $sqlUpdate = $connection->prepare("UPDATE Users SET ProfilePic=? WHERE user_id=?");
+        $sqlUpdate->bind_param("ss", $A0, $_SESSION["user_id"]);
+        $sqlUpdate->execute();
+
+        $Response->Message = "1";
+        returnRes(data: $Response);
+    } else {
+        $Response->Message = "The File does not exist";
         returnRes(data: $Response);
     }
 }

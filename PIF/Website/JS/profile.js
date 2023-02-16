@@ -4,6 +4,11 @@ $(Start); //This runs when the pages fully loads
 sessionEmail = "";
 sessionBadge = "";
 
+removePicToggle = false;
+
+var img = new Image();
+img.src = '../IMAGES/user.png';
+
 function Start() {
 
     $("#buttonPic").bind("click", function () {
@@ -23,6 +28,12 @@ function Start() {
             return;
         }
 
+        if (file.size > 10000000) { // check if file size is larger than 5MB
+            alert("File size must be less than 10MB");
+            $("#ProfileImgInput").val("");
+            return;
+        }
+
         output.attr("src", URL.createObjectURL(file));
         output.on("load", function () {
             URL.revokeObjectURL(output.attr("src"));
@@ -39,8 +50,59 @@ function Start() {
             contentType: false,
             success: function (parameter) {
                 bla = parameter.data.Message;
+                if (bla != 1) {
+                    alert(bla);
+                } else {
+                    removePicToggle = true;
+                    //setTimeout(function () {
+                    if ($("#buttonRemovePic").is(':hidden')) {
+                        $("#buttonRemovePic").removeAttr('hidden');
+                    }
+                    // }, 600);
+                }
             }
         });
+    });
+
+
+    $("#buttonRemovePic").bind("click", function () {
+        if (removePicToggle == true) {
+            $.ajax({
+                url: "../PHP/EditProfile.php", //ajax url
+                type: "POST", //request type
+                data: ({ //the data with the val
+                    RemoveUserPic: "",
+                }),
+                beforeSend: function () { //before sending
+                    //loading ex
+                    $("#buttonPic").attr("disabled", true);
+                    $("#buttonRemovePic").attr("disabled", true);
+                },
+                success: function (parameter) { //If its good
+                    bla = parameter.data.Message; //get the message
+                    if (bla == "1") {
+                        removePicToggle = false;
+
+                        setTimeout(function () {//put fields back and save
+
+                            $("#buttonPic").attr("disabled", false);
+
+                            $("#buttonRemovePic").attr("hidden", true);
+                            $("#buttonRemovePic").attr("disabled", false);
+
+                            $("#ProfileImg").fadeOut('fast', function () {
+                                $("#ProfileImg").attr('src', img.src);
+                                $("#ProfileImg").fadeIn('fast');
+                            })
+                        }, 300);
+                    } else {
+                        alert(bla);
+                        $("#buttonPic").attr("disabled", false);
+                        $("#buttonRemovePic").attr("disabled", false);
+                    }
+                },
+            });
+        }
     });
 
 
