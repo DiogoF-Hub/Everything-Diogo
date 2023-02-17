@@ -28,7 +28,7 @@ function Start() {
             return;
         }
 
-        if (file.size > 10000000) { // check if file size is larger than 5MB
+        if (file.size > 10000000) { // check if file size is larger than 10MB
             alert("File size must be less than 10MB");
             $("#ProfileImgInput").val("");
             return;

@@ -208,7 +208,7 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
 
 
         if (!extension_loaded('gd')) {
-            // GD extension is not enabled
+            //GD extension is not enabled
             $Response->Message = "GD extension is not enabled on the server.";
             returnRes(data: $Response);
         }
@@ -257,7 +257,7 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
         $dst_height = 400;
 
         //Calculate the aspect ratio of the source image and the destination image by dividing the width with the height
-        //This gives us two ratios that we can use to compare the aspect ratios of the two images.
+        //This gives us two aspect ratios that we can use to compare the aspect ratios of the two images.
         $src_aspect_ratio = $src_width / $src_height;
         $dst_aspect_ratio = $dst_width / $dst_height;
 
