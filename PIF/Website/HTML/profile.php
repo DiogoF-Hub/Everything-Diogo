@@ -56,7 +56,11 @@ $row = $result->fetch_assoc();
                             if ($row["ProfilePic"] == 0) {
                                 $ProfileImgPath = "../IMAGES/user.png";
                             } else {
-                                print "<script>removePicToggle = true;</script>";
+                            ?>
+                                <script>
+                                    removePicToggle = true;
+                                </script>
+                            <?php
                                 $ProfileImgPath = "../IMAGES/ProfilePics/" . $_SESSION["user_id"] . ".jpeg";
                                 $toggleRemovePic = "";
                             }
