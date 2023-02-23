@@ -11,7 +11,7 @@ function start() {
 
         //Showing the reset button on the first play
         if (PlacesTaken == 0) {
-            $("#reset").show("100");
+            $("#reset").show(350);
         }
 
         //Checks if the button was already pressed
@@ -75,7 +75,7 @@ function reset() {
     turn = 1;
     PlacesTaken = 0;
     $(".buttonPlay").attr("disabled", false);
-    $("#reset").hide("100");
+    $("#reset").hide(350);
 
     // Reset Colors
     $(".sq1").css("color", "black");
