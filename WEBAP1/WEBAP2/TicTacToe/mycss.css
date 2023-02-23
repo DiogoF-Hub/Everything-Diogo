@@ -51,8 +51,8 @@
 	}
 
 	.buttonPlay:disabled {
-		background-color: #f2f2f2;
-		border-color: #f2f2f2;
+		background-color: white;
+		border-color: white;
 		color: #333;
 		cursor: default;
 	}
