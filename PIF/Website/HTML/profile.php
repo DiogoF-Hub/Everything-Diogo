@@ -67,8 +67,14 @@ $row = $result->fetch_assoc();
                             ?>
                             <img id="ProfileImg" class="rounded mt-5" src="<?= $ProfileImgPath ?>">
                             <div class="overlayImgBtn rounded mt-5">
-                                <button id="buttonPic" class="btn textImgBtn shadow-none">Change</button>
-                                <button id="buttonRemovePic" <?= $toggleRemovePic ?> class="btn btn-sm textImgRemovePic shadow-none">Remove</button>
+
+                                <div class="row d-flex justify-content-md-center">
+                                    <div class="col">
+                                        <button id="buttonPic" class="btn textImgBtn shadow-none"><i class="fas fa-file-upload"></i></button>
+                                        <button id="buttonRemovePic" <?= $toggleRemovePic ?> class="btn btn-sm textImgRemovePic shadow-none"><i class="fas fa-trash-alt"></i></i></button>
+                                    </div>
+                                </div>
+
                                 <input id="ProfileImgInput" hidden type="file" accept=".png, .jpg, .jpeg">
                             </div>
                         </div>

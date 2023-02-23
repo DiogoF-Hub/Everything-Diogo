@@ -1,0 +1,69 @@
+	body {
+		background-color: #000000;
+		overflow: hidden;
+	}
+
+
+	.buttonPlay {
+		height: 80px;
+		width: 80px;
+		background-color: white;
+		border: 0px transparent;
+		border-radius: 50%;
+		margin: 4px;
+		padding: 4px;
+	}
+
+	.fa {
+		font-size: 48px;
+		color: black;
+	}
+
+	/* .reset {
+		padding: 8px;
+	} */
+
+	.reset:hover {
+		opacity: 0.8;
+	}
+
+	/* .btn {
+		width: 10%;
+		height: 10%;
+	} */
+
+
+	.container {
+		position: relative;
+		/* create a positioning context */
+	}
+
+	.overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		/* make sure the overlay is on top of other elements */
+		background-color: rgba(0, 0, 0, 0.5);
+		/* semi-transparent black overlay */
+	}
+
+	.content {
+		position: relative;
+		/* make sure other elements stay in their original positions */
+		z-index: 2;
+		/* put other elements on top of the overlay */
+	}
+
+	.icon {
+		font-size: 2.9em;
+	}
+
+	.buttonPlay:disabled {
+		background-color: #f2f2f2;
+		border-color: #f2f2f2;
+		color: #333;
+		cursor: default;
+	}

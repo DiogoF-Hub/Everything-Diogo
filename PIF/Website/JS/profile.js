@@ -12,7 +12,7 @@ img.src = '../IMAGES/user.png';
 function Start() {
 
     $("#buttonPic").bind("click", function () {
-        myInputFile = $("#buttonPic").parent().children("input").click();
+        myInputFile = $("#ProfileImgInput").click();
     });
 
 
