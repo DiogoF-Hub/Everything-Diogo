@@ -100,26 +100,15 @@ body {
 
 .textImgBtn,
 .textImgRemovePic {
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    /* text-align: center; */
+    font-size: 25px;
 }
 
 .textImgBtn {
     color: white;
-    position: absolute;
-    top: 50%;
-    right: 10%;
-    font-size: 25px;
 }
 
 .textImgRemovePic {
     color: red;
-    position: absolute;
-    top: 50%;
-    left: 40%;
-    font-size: 25px;
 }
 
 #ProfileImg,

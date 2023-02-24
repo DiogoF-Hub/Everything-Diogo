@@ -48,13 +48,17 @@ $row = $result->fetch_assoc();
         <div class="container rounded bg-white mb-5 border border-dark rounded-3">
             <div class="row">
                 <div class="col-md-3 border-right">
-                    <div class="d-flex flex-column align-items-center p-3 py-2">
+                    <div class="d-flex flex-column align-items-center justify-content-center p-3 py-2">
                         <div class="container2">
                             <?php
                             $ProfileImgPath = "";
-                            $toggleRemovePic = "hidden";
                             if ($row["ProfilePic"] == 0) {
                                 $ProfileImgPath = "../IMAGES/user.png";
+                            ?>
+                                <script>
+                                    removePicToggle = false;
+                                </script>
+                            <?php
                             } else {
                             ?>
                                 <script>
@@ -62,19 +66,12 @@ $row = $result->fetch_assoc();
                                 </script>
                             <?php
                                 $ProfileImgPath = "../IMAGES/ProfilePics/" . $_SESSION["user_id"] . ".jpeg";
-                                $toggleRemovePic = "";
                             }
                             ?>
                             <img id="ProfileImg" class="rounded mt-5" src="<?= $ProfileImgPath ?>">
-                            <div class="overlayImgBtn rounded mt-5">
-
-                                <div class="row d-flex justify-content-md-center">
-                                    <div class="col">
-                                        <button id="buttonPic" class="btn textImgBtn shadow-none"><i class="fas fa-file-upload"></i></button>
-                                        <button id="buttonRemovePic" <?= $toggleRemovePic ?> class="btn btn-sm textImgRemovePic shadow-none"><i class="fas fa-trash-alt"></i></i></button>
-                                    </div>
-                                </div>
-
+                            <div class="overlayImgBtn rounded mt-5 d-flex justify-content-center align-items-center">
+                                <button id="buttonPic" class="btn shadow-none textImgBtn"><i class="fas fa-file-upload"></i></button>
+                                <button id="buttonRemovePic" class="btn shadow-none textImgRemovePic"><i class="fas fa-trash-alt"></i></i></button>
                                 <input id="ProfileImgInput" hidden type="file" accept=".png, .jpg, .jpeg">
                             </div>
                         </div>

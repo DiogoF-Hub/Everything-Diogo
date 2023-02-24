@@ -4,12 +4,17 @@ $(Start); //This runs when the pages fully loads
 sessionEmail = "";
 sessionBadge = "";
 
-removePicToggle = false;
-
 var img = new Image();
 img.src = '../IMAGES/user.png';
 
 function Start() {
+
+    if (removePicToggle == true) {
+        $("#buttonRemovePic").show();
+    } else {
+        $("#buttonRemovePic").hide();
+    }
+
 
     $("#buttonPic").bind("click", function () {
         myInputFile = $("#ProfileImgInput").click();
@@ -54,11 +59,10 @@ function Start() {
                     alert(bla);
                 } else {
                     removePicToggle = true;
-                    //setTimeout(function () {
                     if ($("#buttonRemovePic").is(':hidden')) {
-                        $("#buttonRemovePic").removeAttr('hidden');
+                        $("#buttonRemovePic").show(100);
                     }
-                    // }, 600);
+
                 }
             }
         });
@@ -67,41 +71,43 @@ function Start() {
 
     $("#buttonRemovePic").bind("click", function () {
         if (removePicToggle == true) {
-            $.ajax({
-                url: "../PHP/EditProfile.php", //ajax url
-                type: "POST", //request type
-                data: ({ //the data with the val
-                    RemoveUserPic: "",
-                }),
-                beforeSend: function () { //before sending
-                    //loading ex
-                    $("#buttonPic").attr("disabled", true);
-                    $("#buttonRemovePic").attr("disabled", true);
-                },
-                success: function (parameter) { //If its good
-                    bla = parameter.data.Message; //get the message
-                    if (bla == "1") {
-                        removePicToggle = false;
+            if (confirm("Are you sure that you want to delete your profile picture")) {
+                $.ajax({
+                    url: "../PHP/EditProfile.php", //ajax url
+                    type: "POST", //request type
+                    data: ({ //the data with the val
+                        RemoveUserPic: "",
+                    }),
+                    beforeSend: function () { //before sending
+                        //loading ex
+                        $("#buttonPic").attr("disabled", true);
+                        $("#buttonRemovePic").attr("disabled", true);
+                    },
+                    success: function (parameter) { //If its good
+                        bla = parameter.data.Message; //get the message
+                        if (bla == "1") {
+                            removePicToggle = false;
 
-                        setTimeout(function () {//put fields back and save
+                            setTimeout(function () {//put fields back and save
 
+                                $("#buttonPic").attr("disabled", false);
+
+                                $("#buttonRemovePic").hide(100);
+                                $("#buttonRemovePic").attr("disabled", false);
+
+                                $("#ProfileImg").fadeOut('fast', function () {
+                                    $("#ProfileImg").attr('src', img.src);
+                                    $("#ProfileImg").fadeIn('fast');
+                                })
+                            }, 300);
+                        } else {
+                            alert(bla);
                             $("#buttonPic").attr("disabled", false);
-
-                            $("#buttonRemovePic").attr("hidden", true);
                             $("#buttonRemovePic").attr("disabled", false);
-
-                            $("#ProfileImg").fadeOut('fast', function () {
-                                $("#ProfileImg").attr('src', img.src);
-                                $("#ProfileImg").fadeIn('fast');
-                            })
-                        }, 300);
-                    } else {
-                        alert(bla);
-                        $("#buttonPic").attr("disabled", false);
-                        $("#buttonRemovePic").attr("disabled", false);
-                    }
-                },
-            });
+                        }
+                    },
+                });
+            }
         }
     });
 
