@@ -9,40 +9,37 @@ img.src = '../IMAGES/user.png';
 
 function Start() {
 
+
     if (removePicToggle == true) {
         $("#buttonRemovePic").show();
     } else {
         $("#buttonRemovePic").hide();
     }
 
-
-    $("#buttonPic").bind("click", function () {
-        myInputFile = $("#ProfileImgInput").click();
+    $('.container2').on('click', "#buttonPic", function () {
+        $("#ProfileImgInput").click();
     });
 
-
     $("#ProfileImgInput").on("change", function (event) {
+
         var output = $("#ProfileImg");
         var file = event.target.files[0];
 
         if (!file) {
-            return;
-        }
-
-        if (!file.type.startsWith("image/") || !(/\.(jpe?g|png)$/i).test(file.name)) {
-            return;
-        }
-
-        if (file.size > 10000000) { // check if file size is larger than 10MB
-            alert("File size must be less than 10MB");
             $("#ProfileImgInput").val("");
             return;
         }
 
-        output.attr("src", URL.createObjectURL(file));
-        output.on("load", function () {
-            URL.revokeObjectURL(output.attr("src"));
-        });
+        if (!file.type.startsWith("image/") || !(/\.(jpe?g|png)$/i).test(file.name)) {
+            $("#ProfileImgInput").val("");
+            return;
+        }
+
+        if (file.size > 10000000) {
+            alert("File size must be less than 10MB");
+            $("#ProfileImgInput").val("");
+            return;
+        }
 
         var formData = new FormData();
         formData.append("image", file);
@@ -54,22 +51,42 @@ function Start() {
             processData: false,
             contentType: false,
             success: function (parameter) {
-                bla = parameter.data.Message;
+                var bla = parameter.data.Message;
                 if (bla != 1) {
                     alert(bla);
                 } else {
+
+                    output.fadeOut("fast", function () {
+                        output.attr("src", URL.createObjectURL(file));
+                        output.on("load", function () {
+                            URL.revokeObjectURL(output.attr("src"));
+                        });
+                        output.fadeIn("fast");
+                    });
+
                     removePicToggle = true;
-                    if ($("#buttonRemovePic").is(':hidden')) {
+                    if ($("#buttonRemovePic").is(":hidden")) {
                         $("#buttonRemovePic").show(100);
                     }
-
                 }
-            }
+
+                $("#ProfileImgInput").val("");
+            },
         });
     });
 
 
-    $("#buttonRemovePic").bind("click", function () {
+
+
+
+
+
+
+
+
+
+
+    $('.container2').on('click', '#buttonRemovePic', function () {
         if (removePicToggle == true) {
             if (confirm("Are you sure that you want to delete your profile picture")) {
                 $.ajax({

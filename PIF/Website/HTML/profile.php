@@ -69,12 +69,14 @@ $row = $result->fetch_assoc();
                             }
                             ?>
                             <img id="ProfileImg" class="rounded mt-5" src="<?= $ProfileImgPath ?>">
-                            <div class="overlayImgBtn rounded mt-5 d-flex justify-content-center align-items-center">
+                            <div id="DivOverlay" class="overlayImgBtn rounded mt-5 d-flex justify-content-center align-items-center">
                                 <button id="buttonPic" class="btn shadow-none textImgBtn"><i class="fas fa-file-upload"></i></button>
                                 <button id="buttonRemovePic" class="btn shadow-none textImgRemovePic"><i class="fas fa-trash-alt"></i></i></button>
-                                <input id="ProfileImgInput" hidden type="file" accept=".png, .jpg, .jpeg">
                             </div>
                         </div>
+
+                        <input id="ProfileImgInput" hidden type="file" accept=".png, .jpg, .jpeg">
+
                         <span id="spanFullNameProfile" class="font-weight-bold"><?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></span>
                         <span id="emailSpanProfile" class="text-black-50"><?= $_SESSION["email"] ?></span>
                     </div>
