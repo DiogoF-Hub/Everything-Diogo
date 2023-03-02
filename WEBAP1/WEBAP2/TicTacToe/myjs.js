@@ -20,7 +20,7 @@ function start() {
     $('#modal').modal('show');
 
 
-    $(".buttonPlay").click(function () {
+    $(".buttonPlay").click(async function () {
 
         //Showing the reset button on the first play
         if (PlacesTaken == 0) {
@@ -84,14 +84,16 @@ function start() {
             if (indexToRemove !== -1) { // if the value exists in the array
                 arrPlaces.splice(indexToRemove, 1); // remove it using splice()
             }
-            console.log(arrPlaces);
+            //console.log(arrPlaces);
 
 
             if (check("far fa-circle fa-lg icon") == true) {//Player 1 won the game
                 win("1");
             } else {
-                const timeoutId = setTimeout(() => {
+                var timeoutId = setTimeout(() => {
                     $("#screen").text("PLAYER 1 TURN FOLLOWS");
+
+                    PlacesTaken++;
 
                     randomNum = getRandomInt();
 
@@ -110,10 +112,15 @@ function start() {
                     console.log(arrPlaces);
                     */
 
+                    if (check() === "draw") {
+                        clearTimeout(timeoutId);
+                    }
+
                     if (check("fa fa-times") == true) {
                         win("BOT");
                         clearTimeout(timeoutId);
                     }
+
 
                     $(".r").attr("disabled", false);
                 }, 1000);
@@ -232,9 +239,11 @@ function check(symbol) {
 
         if (PlacesTaken == 9) { //check if the game draw
             $(".buttonPlay").attr("disabled", true);
+            reset();
             setTimeout(() => {
                 alert("Draw");
                 reset();
+                //return "draw";
             }, 200);
         } else {
             return false;
