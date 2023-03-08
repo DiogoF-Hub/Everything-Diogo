@@ -7,8 +7,6 @@ arrPlaces = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 var turn = 1;
 PlacesTaken = 0;
 
-
-
 function start() {
 
     document.querySelector('#modal .modal-footer button').addEventListener('click', function () {
@@ -62,6 +60,10 @@ function start() {
                     win("2");
                 }
             }
+            if (PlacesTaken == 9 && check() == "tie") {
+                draw();
+                return;
+            }
         } else {
             $(".r").attr("disabled", true);
             $("#screen").text("BOT TURN FOLLOWS");
@@ -84,16 +86,22 @@ function start() {
             if (indexToRemove !== -1) { // if the value exists in the array
                 arrPlaces.splice(indexToRemove, 1); // remove it using splice()
             }
-            //console.log(arrPlaces);
+            console.log(arrPlaces);
 
 
             if (check("far fa-circle fa-lg icon") == true) {//Player 1 won the game
                 win("1");
             } else {
-                var timeoutId = setTimeout(() => {
-                    $("#screen").text("PLAYER 1 TURN FOLLOWS");
 
-                    PlacesTaken++;
+                if (PlacesTaken == 9 && check() == "tie") {//check before the bot plays if draw
+                    draw();
+                    return;
+                }
+
+                PlacesTaken++;
+
+                timeoutId = setTimeout(() => {
+                    $("#screen").text("PLAYER 1 TURN FOLLOWS");
 
                     randomNum = getRandomInt();
 
@@ -106,24 +114,20 @@ function start() {
                         arrPlaces.splice(indexToRemove, 1); // remove it using splice()
                     }
 
-                    /*
+
                     console.log("ramdomNumber: " + randomNum);
                     console.log("indexToRemove: " + indexToRemove);
                     console.log(arrPlaces);
-                    */
-
-                    if (check() === "draw") {
-                        clearTimeout(timeoutId);
-                    }
-
-                    if (check("fa fa-times") == true) {
-                        win("BOT");
-                        clearTimeout(timeoutId);
-                    }
 
 
                     $(".r").attr("disabled", false);
                 }, 1000);
+
+
+                if (check("fa fa-times") == true) {
+                    win("BOT");
+                    clearTimeout(timeoutId);
+                }
             }
         }
     });
@@ -132,6 +136,11 @@ function start() {
     $("#reset").bind("click", function () {
         reset();
     });
+
+}
+
+
+function botPlay() {
 
 }
 
@@ -147,6 +156,16 @@ function GameModeFunc(mode) {
     if (GameMode == "") {
         GameMode = mode;
     }
+}
+
+
+function draw() {
+    $(".buttonPlay").attr("disabled", true);
+    reset();
+    setTimeout(() => {
+        alert("Draw");
+        reset();
+    }, 275);
 }
 
 
@@ -236,15 +255,8 @@ function check(symbol) {
         $(".sq7").css("color", "green");
         return true;
     } else {
-
         if (PlacesTaken == 9) { //check if the game draw
-            $(".buttonPlay").attr("disabled", true);
-            reset();
-            setTimeout(() => {
-                alert("Draw");
-                reset();
-                //return "draw";
-            }, 200);
+            return "tie";
         } else {
             return false;
         }
