@@ -50,6 +50,8 @@
 
 
     <br>
+
+
     <div class="container2">
         <div class="overlay text-center"></div>
         <div class="content">
@@ -107,7 +109,9 @@
                     </td>
                 </tr>
             </table>
+
             <br><br>
+
             <div class="d-flex justify-content-center">
                 <button id="reset" class="reset btn btn-lg btn-danger">Reset</button>
             </div>

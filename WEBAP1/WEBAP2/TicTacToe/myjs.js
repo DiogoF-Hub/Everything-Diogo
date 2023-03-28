@@ -60,7 +60,7 @@ function start() {
                     win("2");
                 }
             }
-            if (PlacesTaken == 9 && check() == "tie") {
+            if (check() == "tie") {
                 draw();
                 return;
             }
