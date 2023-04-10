@@ -75,10 +75,7 @@ function start() {
                     Message = parameter.Message;
 
                     $("#ResultOperation").html(Message);
-
-                    if (Message == "This is your new balance") {
-                        $("#AmountInAccount").html(parameter.Balance);
-                    }
+                    $("#AmountInAccount").html(parameter.Balance);
                 },
             });
         }

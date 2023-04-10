@@ -1,3 +1,7 @@
+<?php
+include_once("API.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +18,7 @@
 
     <link rel="stylesheet" href="fontawesome/css/all.min.css" />
 
-    <script src="myjs.js?t=<?= time(); ?>"></script>
+    <script src="game.js?t=<?= time(); ?>"></script>
     <link rel="stylesheet" href="mycss.css?t=<?= time(); ?>">
 
     <script src="confetti.js?t=<?= time(); ?>"></script>
@@ -29,20 +33,25 @@
                     <h3 class="text-center">Choose mode</h3>
                 </div>
                 <div class="modal-body">
-                    <h5 class="mb-4">Choose who you want to play against.</h5>
+                    <h5 class="mb-4">Choose who you want to play against:</h5>
                     <div class="d-flex align-items-center mb-2">
                         <i class="fas fa-robot me-2 icon1"></i>
-                        <h6 class="mb-0">You play against the code.</h6>
+                        <h6 class="mb-0"><span> &zwnj; </span>You play against the code.</h6>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-user-friends me-2 icon1"></i>
+                        <h6 class="mb-0"><span> &zwnj; </span>You play against a real player on the same computer.</h6>
                     </div>
                     <div class="d-flex align-items-center">
-                        <i class="fas fa-user-friends me-2 icon1"></i>
-                        <h6 class="mb-0">You play against a real player.</h6>
+                        <i class="fas fa-globe me-2 icon1 globeText"></i>
+                        <h6 class="mb-0"><span> &zwnj; </span>You play against a real player over the network.</h6>
                     </div>
                 </div>
 
                 <div class="modal-footer d-grid justify-content-center">
-                    <button onclick="GameModeFunc('bot')" type="button" class="btn btn-secondary btn-lg mx-2" data-bs-dismiss="modal"><i class="fas fa-robot"></i></button>
-                    <button onclick="GameModeFunc('user')" type="button" class="btn btn-primary btn-lg mx-2" data-bs-dismiss="modal"><i class="fas fa-user-friends"></i></button>
+                    <button onclick="GameModeFunc('bot')" type="button" class="btn btn-secondary btn-lg mx-2 btnModal" data-bs-dismiss="modal"><i class="fas fa-robot"></i></button>
+                    <button onclick="GameModeFunc('user')" type="button" class="btn btn-primary btn-lg mx-2 btnModal" data-bs-dismiss="modal"><i class="fas fa-user-friends"></i></button>
+                    <button onclick="GameModeFunc('online')" type="button" class="btn btn-success btn-lg mx-2 btnModal" data-bs-dismiss="modal"><i class="fas fa-thin fa-globe globeButton"></i></button>
                 </div>
             </div>
         </div>

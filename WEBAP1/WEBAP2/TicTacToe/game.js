@@ -7,14 +7,18 @@ arrPlaces = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 var turn = 1;
 PlacesTaken = 0;
 
+
+
 function start() {
 
-    document.querySelector('#modal .modal-footer button').addEventListener('click', function () {
-        $('#modal').modal('hide');
-    });
     $("#reset").hide();
+    $(".buttonPlay").attr("disabled", true);
 
-    $('#modal').modal({ backdrop: 'static', keyboard: false }, 'show');
+    // document.querySelector('#modal .modal-footer button').addEventListener('click', function () {
+    //     $('#modal').modal('hide');
+    // });
+
+    $('#modal').modal({ backdrop: 'static', keyboard: false }, 'show'); //Modal stays in place until user clicks in of the buttons
     $('#modal').modal('show');
 
 
@@ -47,6 +51,7 @@ function start() {
 
                 if (check("far fa-circle fa-lg icon") == true) {//Player 1 won the game
                     win("1");
+                    return;
                 }
             }
             else {
@@ -58,8 +63,10 @@ function start() {
 
                 if (check("fa fa-times") == true) {//Player 2 won the game
                     win("2");
+                    return;
                 }
             }
+
             if (check() == "tie") {
                 draw();
                 return;
@@ -123,26 +130,27 @@ function start() {
                     $(".r").attr("disabled", false);
                 }, 1000);
 
-
-                if (check("fa fa-times") == true) {
-                    win("BOT");
-                    clearTimeout(timeoutId);
-                }
+                setTimeout(() => {
+                    if (check("fa fa-times") == true) {
+                        clearTimeout(timeoutId);
+                        win("BOT");
+                    }
+                }, 1010);
             }
         }
     });
 
 
     $("#reset").bind("click", function () {
+        if (GameMode == "bot") {
+            clearTimeout(timeoutId);
+        }
+        $(".buttonPlay").attr("disabled", true);
         reset();
     });
 
 }
 
-
-function botPlay() {
-
-}
 
 
 function getRandomInt() {
@@ -153,20 +161,46 @@ function getRandomInt() {
 
 
 function GameModeFunc(mode) {
+    $(".btnModal").attr("disabled", true);
     if (GameMode == "") {
         GameMode = mode;
     }
+
+    if (GameMode == "online") {
+        $.ajax({
+            url: "API.php",
+            type: "POST",
+            dataType: 'json',
+            data: ({
+                CheckUserLoggedIn: "",
+            }),
+            success: function (parameter) {
+                Message = parameter.Message;
+
+                if (Message == false) {
+                    $(".container2").fadeOut(370);
+                }
+            }
+        });
+
+    }
+
+    setTimeout(() => {
+        $(".buttonPlay").attr("disabled", false);
+    }, 375);
 }
+
 
 
 function draw() {
     $(".buttonPlay").attr("disabled", true);
-    reset();
+    //reset();
     setTimeout(() => {
         alert("Draw");
         reset();
     }, 275);
 }
+
 
 
 function win(player) {
@@ -188,6 +222,8 @@ function win(player) {
 
 }
 
+
+
 //reset everything
 function reset() {
     arrPlaces = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -195,9 +231,9 @@ function reset() {
     $("#screen").css("background-color", "transparent");
     $(".r").removeClass("far fa-circle fa-lg icon");
     $(".r").removeClass("fa fa-times");
+    $(".buttonPlay").attr("disabled", false);
     turn = 1;
     PlacesTaken = 0;
-    $(".buttonPlay").attr("disabled", false);
     $("#reset").hide(350);
 
     // Reset Colors
@@ -211,6 +247,8 @@ function reset() {
     $(".sq8").css("color", "black");
     $(".sq9").css("color", "black");
 }
+
+
 
 //Function to check the winning move
 function check(symbol) {

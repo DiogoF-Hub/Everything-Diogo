@@ -21,18 +21,18 @@ if (isset($_GET["user"], $_GET["action"], $_GET["amount"])) {
     if ($userExists > 0) {
         $row = $result->fetch_assoc();
 
-        $NewBalance = 0;
-        if ($_GET["action"] == "Deposit") {
+        $NewBalance = $row["Balance"];
+
+        if ($_GET["action"] == "Deposit") { //Deposit
             $NewBalance = $row["Balance"] + $_GET["amount"];
             $Response->Message = "Hopefully, we saved your money. Rest assured that you are safe with us!";
         } else {
+            //Withdraw
             if ($row["Balance"] >= $_GET["amount"]) {
                 $NewBalance = $row["Balance"] - $_GET["amount"];
                 $Response->Message = "Your transaction has been recorded!";
             } else {
                 $Response->Message = "You can’t have that";
-                echo json_encode($Response);
-                die();
             }
         }
     } else {

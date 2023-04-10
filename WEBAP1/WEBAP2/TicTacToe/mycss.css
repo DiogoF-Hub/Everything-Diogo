@@ -47,7 +47,7 @@
 	}
 
 	.icon {
-		font-size: 2.9em;
+		font-size: 3em;
 	}
 
 	.buttonPlay:disabled {
@@ -77,4 +77,17 @@
 
 	.icon1 {
 		font-size: 135%;
+	}
+
+
+	.globeButton {
+		width: 25px;
+		height: 20px;
+		font-size: 22.5px;
+	}
+
+	.globeText {
+		width: 27px;
+		height: 21.59px;
+		font-size: 24.5px;
 	}
