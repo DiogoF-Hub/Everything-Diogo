@@ -12,11 +12,16 @@ include_once("API.php");
     <link rel="icon" type="image/x-icon" href="icon.png">
     <script src="jquery-3.6.3.min.js"></script>
 
-    <script src="Bootstrap/JS bootstrap-5.2.3-dist/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="Bootstrap/CSS bootstrap-5.2.3-dist/bootstrap.min5.0.css">
+    <script src="Bootstrap/JS bootstrap-5.2.3-dist/bootstrap.bundle.min.js"></script>
+    <!-- <link rel="stylesheet" href="Bootstrap/CSS bootstrap-5.2.3-dist/bootstrap.min5.0.css"> -->
+    <link rel="stylesheet" href="Bootstrap/CSS bootstrap-5.2.3-dist/bootstrap.min.css">
 
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
 
     <link rel="stylesheet" href="fontawesome/css/all.min.css" />
+
+    <script src="signInUp.js?t=<?= time(); ?>"></script>
 
     <script src="game.js?t=<?= time(); ?>"></script>
     <link rel="stylesheet" href="mycss.css?t=<?= time(); ?>">
@@ -49,9 +54,15 @@ include_once("API.php");
                 </div>
 
                 <div class="modal-footer d-grid justify-content-center">
-                    <button onclick="GameModeFunc('bot')" type="button" class="btn btn-secondary btn-lg mx-2 btnModal" data-bs-dismiss="modal"><i class="fas fa-robot"></i></button>
-                    <button onclick="GameModeFunc('user')" type="button" class="btn btn-primary btn-lg mx-2 btnModal" data-bs-dismiss="modal"><i class="fas fa-user-friends"></i></button>
-                    <button onclick="GameModeFunc('online')" type="button" class="btn btn-success btn-lg mx-2 btnModal" data-bs-dismiss="modal"><i class="fas fa-thin fa-globe globeButton"></i></button>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <button onclick="GameModeFunc('bot')" type="button" class="btn btn-secondary btn-lg mx-2 btnModal" data-bs-dismiss="modal"><i class="fas fa-robot"></i></button>
+                                <button onclick="GameModeFunc('user')" type="button" class="btn btn-primary btn-lg mx-2 btnModal" data-bs-dismiss="modal"><i class="fas fa-user-friends"></i></button>
+                                <button onclick="GameModeFunc('online')" type="button" class="btn btn-success btn-lg mx-2 btnModal" data-bs-dismiss="modal"><i class="fas fa-thin fa-globe globeButton"></i></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -125,6 +136,107 @@ include_once("API.php");
                 <button id="reset" class="reset btn btn-lg btn-danger">Reset</button>
             </div>
         </div>
+    </div>
+
+
+    <div id="sectionTest">
+        <section class="text-center">
+            <div class="card mx-auto" style="max-width: 500px;">
+                <div class="card-body">
+
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-lg-10">
+
+
+
+                            <div id="signInInput">
+                                <h2 class="fw-bold mb-5">Sign in</h2>
+                                <div class="form-floating mb-4">
+                                    <input type="email" id="emailUsernameInputIn" class="form-control mx-auto" placeholder="1" />
+                                    <label class="form-label" for="emailInputUp">Email address</label>
+                                    <div style="color: red;"></div>
+                                </div>
+
+
+                                <div class="form-floating mb-4">
+                                    <input type="password" id="passwordInputIn" class="form-control mx-auto" placeholder="1" />
+                                    <label class="form-label" for="passwordInputIn">Password</label>
+                                    <div style="color: red;"></div>
+                                </div>
+                            </div>
+
+
+
+
+                            <div id="signUpInput">
+                                <h2 class="fw-bold mb-5">Sign up</h2>
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating">
+                                            <input type="text" id="firstNameInputUp" class="form-control mx-auto" placeholder="1" />
+                                            <label class="form-label" for="firstNameInputUp">First name</label>
+                                            <div style="color: red;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating">
+                                            <input type="text" id="lastNameInputUp" class="form-control mx-auto" placeholder="1" />
+                                            <label class="form-label" for="lastNameInputUp">Last name</label>
+                                            <div style="color: red;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-floating mb-4">
+                                    <input type="text" id="usernameInputUp" class="form-control mx-auto" placeholder="1" />
+                                    <label class="form-label" for="usernameInputUp">Username</label>
+                                    <div style="color: red;"></div>
+                                </div>
+
+                                <div class="form-floating mb-4">
+                                    <input type="email" id="emailInputUp" class="form-control mx-auto" placeholder="1" />
+                                    <label class="form-label" for="emailInputUp">Email address</label>
+                                    <div style="color: red;"></div>
+                                </div>
+
+
+                                <div class="form-floating mb-4">
+                                    <input type="password" id="passwordInputUp" class="form-control mx-auto" placeholder="1" />
+                                    <label class="form-label" for="passwordInputUp">Password</label>
+                                    <div style="color: red;"></div>
+                                </div>
+
+
+                                <div class="form-floating mb-4">
+                                    <input type="password" id="passwordRepeatInputUp" class="form-control mx-auto" placeholder="1" />
+                                    <label class="form-label" for="passwordRepeatInputUp">Repeat Password</label>
+                                    <div style="color: red;"></div>
+                                </div>
+
+
+                            </div>
+
+
+
+                            <button id="SignButton" class="btn btn-primary btn-block mb-2">Sign In</button>
+
+
+
+                            <hr>
+
+
+
+                            <div class="text-center">
+                                <p>Dont have an account yet?</p>
+                                <button id="changeSign" type="button" class="btn btn-outline-info">Sign Up</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </div>
 </body>
 

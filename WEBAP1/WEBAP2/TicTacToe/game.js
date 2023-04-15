@@ -26,7 +26,7 @@ function start() {
 
         //Showing the reset button on the first play
         if (PlacesTaken == 0) {
-            $("#reset").show(350);
+            $("#reset").fadeIn(350);
         }
 
         //Checks if the button was already pressed
@@ -178,7 +178,8 @@ function GameModeFunc(mode) {
                 Message = parameter.Message;
 
                 if (Message == false) {
-                    $(".container2").fadeOut(370);
+                    $(".container2").fadeOut(55);
+                    $("#sectionTest").fadeIn(1500, 'linear');
                 }
             }
         });
@@ -234,7 +235,7 @@ function reset() {
     $(".buttonPlay").attr("disabled", false);
     turn = 1;
     PlacesTaken = 0;
-    $("#reset").hide(350);
+    $("#reset").fadeOut(350, 'linear');
 
     // Reset Colors
     $(".sq1").css("color", "black");
