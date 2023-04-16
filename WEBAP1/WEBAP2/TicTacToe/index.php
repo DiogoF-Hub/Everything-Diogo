@@ -188,7 +188,7 @@ include_once("API.php");
                                 </div>
 
                                 <div class="form-floating mb-4">
-                                    <input type="text" id="usernameInputUp" class="form-control mx-auto" placeholder="1" />
+                                    <input type="text" id="usernameInputUp" class="form-control mx-auto" placeholder="1" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="top" title="The Username must be: &lt;br&gt; 3-15 characters long &lt;br&gt; a-z  A-Z  0-9 and  -  _" />
                                     <label class="form-label" for="usernameInputUp">Username</label>
                                     <div style="color: red;"></div>
                                 </div>

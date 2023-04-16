@@ -7,5 +7,8 @@ CREATE TABLE Users(
     email_id VARCHAR(255) NOT NULL UNIQUE,
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
-    Userpassword VARCHAR(255) NOT NULL
+    userpassword VARCHAR(255) NOT NULL
 );
+
+
+INSERT INTO Users ( userName, email_id, firstname, lastname, userpassword ) VALUES("Lil", "bla@gmail.com", "Diogo", "Fernandes", "123456");
