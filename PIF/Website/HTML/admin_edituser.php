@@ -10,7 +10,7 @@ if (!$_SESSION["userloggedIn"] || $_SESSION["group_id"] != 2) {
 /*Here I do the select to get the group info once and push into an array*/
 $arrGroups = [];
 
-$sqlGroups = $connection->prepare("SELECT group_id, group_name FROM groups_permissions WHERE group_id!=2");
+$sqlGroups = $connection->prepare("SELECT group_id, group_name FROM Groups_permissions WHERE group_id!=2");
 $sqlGroups->execute();
 $result = $sqlGroups->get_result();
 while ($row = $result->fetch_assoc()) {

@@ -36,7 +36,7 @@ INSERT INTO `Users` (`firstname`, `lastname`, `email_id`, `Userpassword`, `batch
 
 CREATE TABLE `Rooms`(
     `room_id` INT AUTO_INCREMENT PRIMARY KEY,
-    `number` VARCHAR(255) NOT NULL,
+    `number` VARCHAR(255) NOT NULL UNIQUE,
     `capacity` INT NOT NULL,
     `description` TEXT NOT NULL
 );
@@ -52,6 +52,7 @@ INSERT INTO `Rooms` (`number`, `capacity`, `description`) VALUES ("A08", 16, "Th
 INSERT INTO `Rooms` (`number`, `capacity`, `description`) VALUES ("A09", 32, "This is the room A09");
 INSERT INTO `Rooms` (`number`, `capacity`, `description`) VALUES ("A10", 23, "This is the room A10");
 
+INSERT INTO `Rooms` (`number`, `capacity`, `description`) VALUES ("CarDi782", "782", "This is the physical room");
 
 CREATE TABLE `Booking_info`(
     `booking_id` INT AUTO_INCREMENT PRIMARY KEY,
