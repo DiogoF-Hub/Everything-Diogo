@@ -6,8 +6,8 @@ require "commonCode.php";
 if (isset($_GET["hostname"], $_GET["rfid"])) {
 
     $HoursArr = [ //slots
-        "8" => "1",
-        "9" => "2",
+        "08" => "1",
+        "09" => "2",
         "10" => "3",
         "11" => "4",
         "12" => "5",
@@ -18,8 +18,10 @@ if (isset($_GET["hostname"], $_GET["rfid"])) {
         "17" => "10"
     ];
 
+
     $HourNow = date("H"); //hour now
     $dateNow = date('Y-m-d'); //date now
+
 
     //what user tried to open
     $sqlUserKeyMatch = $connection->prepare("SELECT * FROM Users NATURAL JOIN Batches WHERE badge_key=?");
