@@ -16,7 +16,7 @@ CREATE TABLE `Groups_permissions`(
 
 INSERT INTO `Groups_permissions` (`group_name`, `admin`, `schedule`, `view_schedule`, `view_sensitive_data`, `open_door_any_time`, `open_door_available`) VALUES ('New User', 0, 0, 0, 0, 0, 0);
 INSERT INTO `Groups_permissions` (`group_name`, `admin`, `schedule`, `view_schedule`, `view_sensitive_data`, `open_door_any_time`, `open_door_available`) VALUES ('Admin', 1, 1, 1, 1, 1, 1);
-INSERT INTO `Groups_permissions` (`group_name`, `admin`, `schedule`, `view_schedule`, `view_sensitive_data`, `open_door_any_time`, `open_door_available`) VALUES ('Employee', 0, 1, 1, 1, 0, 1);
+INSERT INTO `Groups_permissions` (`group_name`, `admin`, `schedule`, `view_schedule`, `view_sensitive_data`, `open_door_any_time`, `open_door_available`) VALUES ('Employee', 0, 1, 1, 1, 0, 0);
 INSERT INTO `Groups_permissions` (`group_name`, `admin`, `schedule`, `view_schedule`, `view_sensitive_data`, `open_door_any_time`, `open_door_available`) VALUES ('Cleaning Staff', 0, 0, 1, 0, 0, 1);
 
 
