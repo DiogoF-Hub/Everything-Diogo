@@ -7,10 +7,9 @@ arrPlaces = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 var turn = 1;
 PlacesTaken = 0;
 
-
+GameStarted = false;
 
 function start() {
-
     $("#reset").hide();
     $(".buttonPlay").attr("disabled", true);
 
@@ -21,12 +20,21 @@ function start() {
     $('#modal').modal({ backdrop: 'static', keyboard: false }, 'show'); //Modal stays in place until user clicks in of the buttons
     $('#modal').modal('show');
 
+    $("#changeModeBtn").bind("click", function () {
+        if (GameStarted == true) {
+            $("#ButtonContinue").show();
+        }
+        $('#modal').modal('show');
+    });
+
+    $("#ButtonContinue").hide();
 
     $(".buttonPlay").click(async function () {
 
         //Showing the reset button on the first play
         if (PlacesTaken == 0) {
             $("#reset").fadeIn(350);
+            GameStarted = true;
         }
 
         //Checks if the button was already pressed
@@ -141,6 +149,7 @@ function start() {
     });
 
 
+
     $("#reset").bind("click", function () {
         if (GameMode == "bot") {
             clearTimeout(timeoutId);
@@ -161,33 +170,45 @@ function getRandomInt() {
 
 
 function GameModeFunc(mode) {
+
+    if (GameStarted == true) {
+        GameStarted = false;
+        $("#ButtonContinue").hide();
+    }
+
     $(".btnModal").attr("disabled", true);
-    if (GameMode == "") {
-        GameMode = mode;
-    }
 
-    if (GameMode == "online") {
-        $.ajax({
-            url: "API.php",
-            type: "POST",
-            dataType: 'json',
-            data: ({
-                CheckUserLoggedIn: "",
-            }),
-            success: function (parameter) {
-                Message = parameter.Message;
+    GameMode = mode;
 
-                if (Message == false) {
-                    $(".container2").fadeOut(55);
-                    $("#sectionTest").fadeIn(1500, 'linear');
+
+    if (GameMode == "online" && userLoggedInCheck == 0) {
+        if (userLoggedIn == false) {
+            $.ajax({
+                url: "../PHP/API.php",
+                type: "POST",
+                dataType: 'json',
+                data: ({
+                    CheckUserLoggedIn: "",
+                }),
+                success: function (parameter) {
+                    Message = parameter.Message;
+
+                    if (Message == false) {
+                        $(".container2").fadeOut(55);
+                        $("#sectionTest").fadeIn(1500, 'linear');
+                    } else {
+                        userLoggedIn = true;
+                    }
                 }
-            }
-        });
-
+            });
+        }
     }
+
+    reset();
 
     setTimeout(() => {
         $(".buttonPlay").attr("disabled", false);
+        $(".btnModal").attr("disabled", false);
     }, 375);
 }
 
@@ -220,13 +241,14 @@ function win(player) {
             reset();
         }, 2200);
     }
-
 }
 
 
 
 //reset everything
 function reset() {
+    GameStarted = false;
+    $("#ButtonContinue").hide();
     arrPlaces = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     $("#screen").text("PLAYER 1 TURN FOLLOWS");
     $("#screen").css("background-color", "transparent");

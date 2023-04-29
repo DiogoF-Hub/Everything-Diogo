@@ -1,5 +1,5 @@
 <?php
-include_once("API.php");
+include_once("../PHP/API.php");
 ?>
 
 <!DOCTYPE html>
@@ -9,24 +9,20 @@ include_once("API.php");
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="icon.png">
-    <script src="jquery-3.6.3.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="../IMAGES/icon.png">
+    <script src="../JS/jquery-3.6.3.min.js"></script>
 
-    <script src="Bootstrap/JS bootstrap-5.2.3-dist/bootstrap.bundle.min.js"></script>
-    <!-- <link rel="stylesheet" href="Bootstrap/CSS bootstrap-5.2.3-dist/bootstrap.min5.0.css"> -->
-    <link rel="stylesheet" href="Bootstrap/CSS bootstrap-5.2.3-dist/bootstrap.min.css">
+    <script src="../JS/JS bootstrap-5.2.3-dist/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../CSS/CSS bootstrap-5.2.3-dist/bootstrap.min.css">
 
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
+    <link rel="stylesheet" href="../CSS/fontawesome/css/all.min.css" />
 
-    <link rel="stylesheet" href="fontawesome/css/all.min.css" />
+    <script src="../JS/signInUp.js?t=<?= time(); ?>"></script>
 
-    <script src="signInUp.js?t=<?= time(); ?>"></script>
+    <script src="../JS/game.js?t=<?= time(); ?>"></script>
+    <link rel="stylesheet" href="../CSS/mycss.css?t=<?= time(); ?>">
 
-    <script src="game.js?t=<?= time(); ?>"></script>
-    <link rel="stylesheet" href="mycss.css?t=<?= time(); ?>">
-
-    <script src="confetti.js?t=<?= time(); ?>"></script>
+    <script src="../JS/confetti.js?t=<?= time(); ?>"></script>
     <title>Tic-Tac-Toe</title>
 </head>
 
@@ -52,7 +48,6 @@ include_once("API.php");
                         <h6 class="mb-0"><span> &zwnj; </span>You play against a real player over the network.</h6>
                     </div>
                 </div>
-
                 <div class="modal-footer d-grid justify-content-center">
                     <div class="container">
                         <div class="row">
@@ -63,10 +58,12 @@ include_once("API.php");
                             </div>
                         </div>
                     </div>
+                    <button id="ButtonContinue" type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Continue <i class="fas fa-thin fa-arrow-right-to-bracket"></i></button>
                 </div>
             </div>
         </div>
     </div>
+
 
 
     <br>
@@ -79,7 +76,11 @@ include_once("API.php");
                 <h1 style="color: white;">TIC-TAC-TOE</h1>
             </div>
 
-            <br><br>
+            <div class="text-center">
+                <button id="changeModeBtn" type="button" class="btn btn-sm btn-outline-light">Change game mode</button>
+            </div>
+
+            <br>
 
             <div class="text-center">
                 <!-- Inform area for player's turn -->
@@ -145,15 +146,16 @@ include_once("API.php");
                 <div class="card-body">
 
                     <div class="row d-flex justify-content-center">
+                        <div class="d-flex justify-content-end">
+                            <button id="returnGame" type="button" class="btn btn-sm btn-outline-dark">Return <i class="fas fa-thin fa-arrow-right-to-bracket"></i></button>
+                        </div>
                         <div class="col-lg-10">
-
-
 
                             <div id="signInInput">
                                 <h2 class="fw-bold mb-5">Sign in</h2>
                                 <div class="form-floating mb-4">
                                     <input type="email" id="emailUsernameInputIn" class="form-control mx-auto" placeholder="1" />
-                                    <label class="form-label" for="emailInputUp">Email address</label>
+                                    <label class="form-label" for="emailInputUp">Email address / Username</label>
                                     <div style="color: red;"></div>
                                 </div>
 
@@ -188,13 +190,13 @@ include_once("API.php");
                                 </div>
 
                                 <div class="form-floating mb-4">
-                                    <input type="text" id="usernameInputUp" class="form-control mx-auto" placeholder="1" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="top" title="The Username must be: &lt;br&gt; 3-15 characters long &lt;br&gt; a-z  A-Z  0-9 and  -  _" />
+                                    <input type="text" maxlength="15" id="usernameInputUp" class="form-control mx-auto" placeholder="1" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="top" title="The Username must be: &lt;br&gt; 3-15 characters long &lt;br&gt; a-z  A-Z  0-9 and  -  _" />
                                     <label class="form-label" for="usernameInputUp">Username</label>
                                     <div style="color: red;"></div>
                                 </div>
 
                                 <div class="form-floating mb-4">
-                                    <input type="email" id="emailInputUp" class="form-control mx-auto" placeholder="1" />
+                                    <input type="email" id="emailInputUp" class="form-control mx-auto" placeholder="1" autocomplete="off" />
                                     <label class="form-label" for="emailInputUp">Email address</label>
                                     <div style="color: red;"></div>
                                 </div>

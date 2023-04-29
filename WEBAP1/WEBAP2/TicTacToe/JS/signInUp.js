@@ -2,6 +2,11 @@ $(start);
 
 sign = 1;
 
+latestEmail = "";
+lastestUsername = "";
+
+userLoggedInCheck = 0;
+userLoggedIn = false;
 
 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -38,7 +43,7 @@ async function usernameTaken(a) {
     let free = true;
     async function test(a) {
         await $.ajax({
-            url: "API.php",
+            url: "../PHP/API.php",
             type: "POST",
             dataType: 'json',
             data: ({
@@ -61,7 +66,7 @@ async function emailTaken(a) {
     let free = true;
     async function test(a) {
         await $.ajax({
-            url: "API.php",
+            url: "../PHP/API.php",
             type: "POST",
             dataType: 'json',
             data: ({
@@ -78,9 +83,20 @@ async function emailTaken(a) {
     return free;
 }
 
-
+function returnToGame() {
+    $("#sectionTest").fadeOut(50, 'linear');
+    setTimeout(function () {
+        $(".container2").fadeIn(1500);
+        setTimeout(function () {
+            $('#modal').modal('show');
+        }, 800);
+    }, 725);
+}
 
 function start() {
+    $("#returnGame").bind("click", function () {
+        returnToGame();
+    });
 
     $("#usernameInputUp").tooltip();
 
@@ -133,7 +149,7 @@ function start() {
 
     $("#SignButton").bind("click", async function () {
         checksbol = true;
-        if (sign == 1) {
+        if (sign == 1) { //Sign In
             emailUsernameIn = $("#emailUsernameInputIn");
             passwordIn = $("#passwordInputIn");
 
@@ -163,9 +179,31 @@ function start() {
 
 
             if (checksbol == true) {
-                alert("gay");
+                $.ajax({
+                    url: "../PHP/API.php",
+                    type: "POST",
+                    dataType: 'json',
+                    data: ({
+                        emailUsernameIn: emailUsernameIn.val(),
+                        passwordIn: passwordIn.val(),
+                    }),
+                    success: function (parameter) {
+                        Message = parameter.Message;
+
+                        if (Message == true) {
+                            alert("nice");
+                        } else {
+                            if (Message != false) {
+                                alert(Message);
+                            }
+                        }
+                    }
+                });
             }
-        } else {
+
+
+        } else { //Sign up
+
             firstNameInputUp = $("#firstNameInputUp");
             lastNameInputUp = $("#lastNameInputUp");
 
@@ -215,11 +253,15 @@ function start() {
                         usernameInputUp.parent().children("div").html("Username must be 3-15 characters long");
                         checksbol = false;
                     } else {
-                        if (await usernameTaken(usernameInputUp.val()) == true) {
-                            usernameInputUp.parent().children("div").html("This username is already being used");
-                            checksbol = false;
-                        } else {
-                            usernameInputUp.parent().children("div").html("");
+                        if (lastestUsername != usernameInputUp.val()) {
+                            if (await usernameTaken(usernameInputUp.val()) == true) {
+                                usernameInputUp.parent().children("div").html("This username is already being used");
+                                checksbol = false;
+
+                                lastestUsername = usernameInputUp.val();
+                            } else {
+                                usernameInputUp.parent().children("div").html("");
+                            }
                         }
                     }
                 }
@@ -234,9 +276,11 @@ function start() {
                     emailInputUp.parent().children("div").html("The email is not valid");
                     checksbol = false;
                 } else {
-                    if (await emailTaken(emailInputUp.val()) == true) {
+                    if (latestEmail != emailInputUp.val() && await emailTaken(emailInputUp.val()) == true) {
                         emailInputUp.parent().children("div").html("This email is already being used");
                         checksbol = false;
+
+                        latestEmail = emailInputUp.val();
                     } else {
                         emailInputUp.parent().children("div").html("");
                     }
@@ -283,6 +327,7 @@ function start() {
 
 
 
+
     $("#firstNameInputUp").on("focusout input", function () {
         firstNameInputUp = $("#firstNameInputUp");
         if (firstNameInputUp.val() === "") {
@@ -295,6 +340,7 @@ function start() {
             }
         }
     });
+
 
 
 
@@ -313,6 +359,7 @@ function start() {
 
 
 
+
     $("#usernameInputUp").on("focusout input", async function () {
         usernameInputUp = $("#usernameInputUp");
         if (usernameInputUp.val() === "") {
@@ -324,10 +371,13 @@ function start() {
                 if (usernameInputUp.val().length < 3 || usernameInputUp.val().length > 15) {
                     usernameInputUp.parent().children("div").html("Username must be 3-15 characters long");
                 } else {
-                    if (await usernameTaken(usernameInputUp.val()) == true) {
-                        usernameInputUp.parent().children("div").html("This username is already being used");
-                    } else {
-                        usernameInputUp.parent().children("div").html("");
+                    if (lastestUsername !== usernameInputUp.val()) {
+                        lastestUsername = usernameInputUp.val();
+                        if (await usernameTaken(usernameInputUp.val()) == true) {
+                            usernameInputUp.parent().children("div").html("This username is already being used");
+                        } else {
+                            usernameInputUp.parent().children("div").html("");
+                        }
                     }
                 }
             }
@@ -336,7 +386,7 @@ function start() {
 
 
 
-    $("#emailInputUp").on("focusout input", async function () {
+    $("#emailInputUp").on('focusout input', async function () {
         emailInputUp = $("#emailInputUp");
         if (emailInputUp.val() === "") {
             emailInputUp.parent().children("div").html("This field must be filled");
@@ -344,15 +394,18 @@ function start() {
             if (checkEmail(emailInputUp.val()) == false) {
                 emailInputUp.parent().children("div").html("The email is not valid");
             } else {
-                if (await emailTaken(emailInputUp.val()) == true) {
-                    emailInputUp.parent().children("div").html("This email is already being used");
-                    checksbol = false;
-                } else {
-                    emailInputUp.parent().children("div").html("");
+                if (latestEmail !== emailInputUp.val()) {
+                    latestEmail = emailInputUp.val();
+                    if (await emailTaken(emailInputUp.val()) == true) {
+                        emailInputUp.parent().children("div").html("This email is already being used");
+                    } else {
+                        emailInputUp.parent().children("div").html("");
+                    }
                 }
             }
         }
     });
+
 
 
 
@@ -368,6 +421,7 @@ function start() {
             }
         }
     });
+
 
 
 
@@ -405,6 +459,7 @@ function start() {
             }
         }
     });
+
 
 
 
