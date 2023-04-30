@@ -7,18 +7,10 @@ arrPlaces = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 var turn = 1;
 PlacesTaken = 0;
 
-GameStarted = false;
-
 function start() {
     $("#reset").hide();
     $(".buttonPlay").attr("disabled", true);
 
-    // document.querySelector('#modal .modal-footer button').addEventListener('click', function () {
-    //     $('#modal').modal('hide');
-    // });
-
-    $('#modal').modal({ backdrop: 'static', keyboard: false }, 'show'); //Modal stays in place until user clicks in of the buttons
-    $('#modal').modal('show');
 
     $("#changeModeBtn").bind("click", function () {
         if (GameStarted == true) {
@@ -27,9 +19,12 @@ function start() {
         $('#modal').modal('show');
     });
 
+
     $("#ButtonContinue").hide();
 
-    $(".buttonPlay").click(async function () {
+
+
+    $(".buttonPlay").click(function () {
 
         //Showing the reset button on the first play
         if (PlacesTaken == 0) {
@@ -169,51 +164,6 @@ function getRandomInt() {
 
 
 
-function GameModeFunc(mode) {
-
-    if (GameStarted == true) {
-        GameStarted = false;
-        $("#ButtonContinue").hide();
-    }
-
-    $(".btnModal").attr("disabled", true);
-
-    GameMode = mode;
-
-
-    if (GameMode == "online" && userLoggedInCheck == 0) {
-        if (userLoggedIn == false) {
-            $.ajax({
-                url: "../PHP/API.php",
-                type: "POST",
-                dataType: 'json',
-                data: ({
-                    CheckUserLoggedIn: "",
-                }),
-                success: function (parameter) {
-                    Message = parameter.Message;
-
-                    if (Message == false) {
-                        $(".container2").fadeOut(55);
-                        $("#sectionTest").fadeIn(1500, 'linear');
-                    } else {
-                        userLoggedIn = true;
-                    }
-                }
-            });
-        }
-    }
-
-    reset();
-
-    setTimeout(() => {
-        $(".buttonPlay").attr("disabled", false);
-        $(".btnModal").attr("disabled", false);
-    }, 375);
-}
-
-
-
 function draw() {
     $(".buttonPlay").attr("disabled", true);
     //reset();
@@ -248,27 +198,23 @@ function win(player) {
 //reset everything
 function reset() {
     GameStarted = false;
-    $("#ButtonContinue").hide();
     arrPlaces = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    $("#screen").text("PLAYER 1 TURN FOLLOWS");
-    $("#screen").css("background-color", "transparent");
-    $(".r").removeClass("far fa-circle fa-lg icon");
-    $(".r").removeClass("fa fa-times");
-    $(".buttonPlay").attr("disabled", false);
     turn = 1;
     PlacesTaken = 0;
+
+    $("#ButtonContinue").hide();
+
+    $("#screen").html("PLAYER 1 TURN FOLLOWS");
+
+    $(".r").removeClass("far fa-circle fa-lg icon");
+    $(".r").removeClass("fa fa-times");
+
+    $(".buttonPlay").attr("disabled", false);
+
     $("#reset").fadeOut(350, 'linear');
 
     // Reset Colors
-    $(".sq1").css("color", "black");
-    $(".sq2").css("color", "black");
-    $(".sq3").css("color", "black");
-    $(".sq4").css("color", "black");
-    $(".sq5").css("color", "black");
-    $(".sq6").css("color", "black");
-    $(".sq7").css("color", "black");
-    $(".sq8").css("color", "black");
-    $(".sq9").css("color", "black");
+    $(".sq1, .sq2, .sq3, .sq4, .sq5, .sq6, .sq7, .sq8, .sq9").css("color", "black");
 }
 
 
@@ -276,44 +222,28 @@ function reset() {
 //Function to check the winning move
 function check(symbol) {
     if ($(".sq1").hasClass(symbol) && $(".sq2").hasClass(symbol) && $(".sq3").hasClass(symbol)) {
-        $(".sq1").css("color", "green");
-        $(".sq2").css("color", "green");
-        $(".sq3").css("color", "green");
+        $(".sq1, .sq2, .sq3").css("color", "green");
         return true;
     } else if ($(".sq4").hasClass(symbol) && $(".sq5").hasClass(symbol) && $(".sq6").hasClass(symbol)) {
-        $(".sq4").css("color", "green");
-        $(".sq5").css("color", "green");
-        $(".sq6").css("color", "green");
+        $(".sq4, .sq5, .sq6").css("color", "green");
         return true;
     } else if ($(".sq7").hasClass(symbol) && $(".sq8").hasClass(symbol) && $(".sq9").hasClass(symbol)) {
-        $(".sq7").css("color", "green");
-        $(".sq8").css("color", "green");
-        $(".sq9").css("color", "green");
+        $(".sq7, .sq8, .sq9").css("color", "green");
         return true;
     } else if ($(".sq1").hasClass(symbol) && $(".sq4").hasClass(symbol) && $(".sq7").hasClass(symbol)) {
-        $(".sq1").css("color", "green");
-        $(".sq4").css("color", "green");
-        $(".sq7").css("color", "green");
+        $(".sq1, .sq4, .sq7").css("color", "green");
         return true;
     } else if ($(".sq2").hasClass(symbol) && $(".sq5").hasClass(symbol) && $(".sq8").hasClass(symbol)) {
-        $(".sq2").css("color", "green");
-        $(".sq5").css("color", "green");
-        $(".sq8").css("color", "green");
+        $(".sq2, .sq5, .sq8").css("color", "green");
         return true;
     } else if ($(".sq3").hasClass(symbol) && $(".sq6").hasClass(symbol) && $(".sq9").hasClass(symbol)) {
-        $(".sq3").css("color", "green");
-        $(".sq6").css("color", "green");
-        $(".sq9").css("color", "green");
+        $(".sq3, .sq6, .sq9").css("color", "green");
         return true;
     } else if ($(".sq1").hasClass(symbol) && $(".sq5").hasClass(symbol) && $(".sq9").hasClass(symbol)) {
-        $(".sq1").css("color", "green");
-        $(".sq5").css("color", "green");
-        $(".sq9").css("color", "green");
+        $(".sq1, .sq5, .sq9").css("color", "green");
         return true;
     } else if ($(".sq3").hasClass(symbol) && $(".sq5").hasClass(symbol) && $(".sq7").hasClass(symbol)) {
-        $(".sq3").css("color", "green");
-        $(".sq5").css("color", "green");
-        $(".sq7").css("color", "green");
+        $(".sq3, .sq5, .sq7").css("color", "green");
         return true;
     } else {
         if (PlacesTaken == 9) { //check if the game draw
@@ -322,6 +252,5 @@ function check(symbol) {
             return false;
         }
     }
-
 }
 

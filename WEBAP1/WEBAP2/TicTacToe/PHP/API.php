@@ -14,6 +14,7 @@ $connection = new mysqli($host, $user, $psw, $database, $portNo);
 
 $namesRegex = "/^[ a-zA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ''\-]+$/";
 $emailRegex = "/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/";
+$userNameRegex = "/^[A-Za-z0-9_-]+$/";
 
 
 if (!isset($_SESSION["UserLoggedIn"])) {
@@ -72,7 +73,7 @@ if (isset($_POST["emailTaken"])) {
 if (isset($_POST["emailUsernameIn"], $_POST["passwordIn"])) {
     $Response = new stdClass();
 
-    if (!empty($_POST["emailUsernameIn"]) || !empty($_POST["passwordIn"])) {
+    if (!empty($_POST["emailUsernameIn"]) && !empty($_POST["passwordIn"])) {
 
         if (strlen(trim($_POST["passwordIn"])) < 6) {
             $Response->Message = false;
@@ -80,7 +81,16 @@ if (isset($_POST["emailUsernameIn"], $_POST["passwordIn"])) {
             die();
         }
 
+
         if (!preg_match($emailRegex, $_POST["emailUsernameIn"])) {
+
+            //If its not an email, it must be an username, so if does not match with the username regex something is wrong
+            if (!preg_match($userNameRegex, $_POST["emailUsernameIn"])) {
+                $Response->Message = false;
+                echo json_encode($Response);
+                die();
+            }
+
             $sqlFindUser = $connection->prepare("SELECT * from Users WHERE userName=?");
             $sqlFindUser->bind_param("s", $_POST["emailUsernameIn"]);
             $sqlFindUser->execute();
@@ -120,4 +130,86 @@ if (isset($_POST["emailUsernameIn"], $_POST["passwordIn"])) {
 
 
     echo json_encode($Response);
+    die();
+}
+
+
+
+
+if (isset($_POST["firstNameInputUp"], $_POST["lastNameInputUp"], $_POST["usernameInputUp"], $_POST["emailInputUp"], $_POST["passwordInputUp"], $_POST["passwordRepeatInputUp"])) {
+    $Response = new stdClass();
+
+    if (!empty($_POST["firstNameInputUp"]) && !empty($_POST["lastNameInputUp"]) && !empty($_POST["usernameInputUp"]) && !empty($_POST["emailInputUp"]) && !empty($_POST["passwordInputUp"]) && !empty($_POST["passwordRepeatInputUp"])) {
+
+        if (strlen(trim($_POST["firstNameInputUp"])) > 25 || strlen(trim($_POST["firstNameInputUp"])) < 1 || strlen(trim($_POST["lastNameInputUp"])) > 25 || strlen(trim($_POST["lastNameInputUp"])) < 1 || !preg_match($namesRegex, $_POST["firstNameInputUp"]) || !preg_match($namesRegex, $_POST["lastNameInputUp"])) {
+            $Response->Message = false;
+            echo json_encode($Response);
+            die();
+        }
+
+
+
+        if (strlen(trim($_POST["usernameInputUp"])) < 3 || strlen(trim($_POST["usernameInputUp"])) > 15 || !preg_match($userNameRegex, $_POST["usernameInputUp"])) {
+            $Response->Message = false;
+            echo json_encode($Response);
+            die();
+        }
+
+
+
+        if (strlen(trim($_POST["emailInputUp"])) > 320 || !preg_match($emailRegex, $_POST["emailInputUp"])) {
+            $Response->Message = false;
+            echo json_encode($Response);
+            die();
+        }
+
+
+
+        if (trim($_POST["passwordInputUp"]) !== trim($_POST["passwordRepeatInputUp"]) || strlen(trim($_POST["passwordInputUp"])) < 6 || strlen(trim($_POST["passwordRepeatInputUp"])) < 6) {
+            $Response->Message = false;
+            echo json_encode($Response);
+            die();
+        }
+
+
+
+        $hashPSW = password_hash(trim($_POST["passwordInputUp"]), PASSWORD_DEFAULT);
+
+
+        $sqlInsertUser = $connection->prepare("INSERT INTO Users (userName, email_id, firstname, lastname, userpassword) VALUES (?, ?, ?, ?, ?)");
+        $sqlInsertUser->bind_param("sssss", $_POST["usernameInputUp"], $_POST["emailInputUp"], $_POST["firstNameInputUp"], $_POST["lastNameInputUp"], $hashPSW);
+
+        if ($sqlInsertUser->execute()) {
+            $_SESSION["UserLoggedIn"] = true;
+            $_SESSION["UserName"] = $_POST["usernameInputUp"];
+            $_SESSION["email"] = $_POST["emailInputUp"];
+            $_SESSION["firstname"] = $_POST["firstNameInputUp"];
+            $_SESSION["lastname"] = $_POST["lastNameInputUp"];
+
+            $Response->Message = true;
+        } else {
+            $Response->Message = "Something went wrong while inserting the user";
+        }
+    } else {
+        $Response->Message = false;
+    }
+
+    echo json_encode($Response);
+    die();
+}
+
+
+
+if (isset($_POST["logout"])) {
+    $Response = new stdClass();
+
+    session_destroy(); //This destroys the session
+    $_SESSION = array(); //This clears the session array
+
+    $_SESSION["UserLoggedIn"] = false;
+
+    $Response->Message = true;
+
+    echo json_encode($Response);
+    die();
 }

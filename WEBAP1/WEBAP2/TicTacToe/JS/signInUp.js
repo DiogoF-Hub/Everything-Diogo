@@ -5,8 +5,6 @@ sign = 1;
 latestEmail = "";
 lastestUsername = "";
 
-userLoggedInCheck = 0;
-userLoggedIn = false;
 
 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -83,15 +81,29 @@ async function emailTaken(a) {
     return free;
 }
 
+
+
+function clearForm() {
+    $inputs = $("#emailUsernameInputIn, #passwordInputIn, #firstNameInputUp, #lastNameInputUp, #usernameInputUp, #emailInputUp, #passwordInputUp, #passwordRepeatInputUp");
+    $inputs.parent().children("div").html("");
+    $inputs.val("");
+}
+
+
+
 function returnToGame() {
     $("#sectionTest").fadeOut(50, 'linear');
     setTimeout(function () {
         $(".container2").fadeIn(1500);
         setTimeout(function () {
             $('#modal').modal('show');
+            clearForm();
         }, 800);
     }, 725);
 }
+
+
+
 
 function start() {
     $("#returnGame").bind("click", function () {
@@ -104,26 +116,7 @@ function start() {
     $("#signUpInput").hide();
 
     $("#changeSign").bind("click", function () {
-        $("#emailUsernameInputIn").parent().children("div").html("");
-        $("#passwordInputIn").parent().children("div").html("");
-
-        $("#emailUsernameInputIn").val("");
-        $("#passwordInputIn").val("");
-
-        $("#firstNameInputUp").parent().children("div").html("");
-        $("#lastNameInputUp").parent().children("div").html("");
-        $("#usernameInputUp").parent().children("div").html("");
-        $("#emailInputUp").parent().children("div").html("");
-        $("#passwordInputUp").parent().children("div").html("");
-        $("#passwordRepeatInputUp").parent().children("div").html("");
-
-        $("#firstNameInputUp").val("");
-        $("#lastNameInputUp").val("");
-        $("#usernameInputUp").val("");
-        $("#emailInputUp").val("");
-        $("#passwordInputUp").val("");
-        $("#passwordRepeatInputUp").val("");
-
+        clearForm();
         if (sign == 1) {
             $("#signInInput").hide(350);
             $("#signUpInput").show(350);
@@ -191,6 +184,8 @@ function start() {
                         Message = parameter.Message;
 
                         if (Message == true) {
+                            $("#logoutButton").show();
+                            clearForm();
                             alert("nice");
                         } else {
                             if (Message != false) {
@@ -200,7 +195,6 @@ function start() {
                     }
                 });
             }
-
 
         } else { //Sign up
 
@@ -320,7 +314,32 @@ function start() {
 
 
             if (checksbol == true) {
-                alert("gay");
+                $.ajax({
+                    url: "../PHP/API.php",
+                    type: "POST",
+                    dataType: 'json',
+                    data: ({
+                        firstNameInputUp: firstNameInputUp.val(),
+                        lastNameInputUp: lastNameInputUp.val(),
+                        usernameInputUp: usernameInputUp.val(),
+                        emailInputUp: emailInputUp.val(),
+                        passwordInputUp: passwordInputUp.val(),
+                        passwordRepeatInputUp: passwordRepeatInputUp.val()
+                    }),
+                    success: function (parameter) {
+                        Message = parameter.Message;
+
+                        if (Message == true) {
+                            $("#logoutButton").show();
+                            clearForm();
+                            alert("nice");
+                        } else {
+                            if (Message != false) {
+                                alert(Message);
+                            }
+                        }
+                    }
+                });
             }
         }
     });
@@ -476,3 +495,4 @@ function start() {
         }
     });
 }
+

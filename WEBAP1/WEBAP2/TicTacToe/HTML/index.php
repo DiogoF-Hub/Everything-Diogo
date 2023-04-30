@@ -17,6 +17,8 @@ include_once("../PHP/API.php");
 
     <link rel="stylesheet" href="../CSS/fontawesome/css/all.min.css" />
 
+    <script src="../JS/commonCode.js?t=<?= time(); ?>"></script>
+
     <script src="../JS/signInUp.js?t=<?= time(); ?>"></script>
 
     <script src="../JS/game.js?t=<?= time(); ?>"></script>
@@ -30,9 +32,11 @@ include_once("../PHP/API.php");
     <div id="modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header d-flex justify-content-center">
+                <div class="modal-header d-flex justify-content-between align-items-center">
                     <h3 class="text-center">Choose mode</h3>
+                    <button id="logoutButton" type="button" class="btn btn-sm btn-outline-dark">Logout <i class="fas fa-light fa-right-from-bracket"></i></i></i></button>
                 </div>
+
                 <div class="modal-body">
                     <h5 class="mb-4">Choose who you want to play against:</h5>
                     <div class="d-flex align-items-center mb-2">
@@ -175,14 +179,14 @@ include_once("../PHP/API.php");
                                 <div class="row">
                                     <div class="col-md-6 mb-4">
                                         <div class="form-floating">
-                                            <input type="text" id="firstNameInputUp" class="form-control mx-auto" placeholder="1" />
+                                            <input type="text" maxlength="25" id="firstNameInputUp" class="form-control mx-auto" placeholder="1" />
                                             <label class="form-label" for="firstNameInputUp">First name</label>
                                             <div style="color: red;"></div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-4">
                                         <div class="form-floating">
-                                            <input type="text" id="lastNameInputUp" class="form-control mx-auto" placeholder="1" />
+                                            <input type="text" maxlength="25" id="lastNameInputUp" class="form-control mx-auto" placeholder="1" />
                                             <label class="form-label" for="lastNameInputUp">Last name</label>
                                             <div style="color: red;"></div>
                                         </div>

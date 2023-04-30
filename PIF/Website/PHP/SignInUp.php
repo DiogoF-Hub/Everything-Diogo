@@ -14,7 +14,7 @@ if (isset($_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["pass
     $Response = new stdClass();
 
     //validation
-    if (!empty($firstNameSignUp) || !empty($lastNameSignUp) || !empty($emailSignUp) || !empty($passwordSignUp) || !empty($passwordRepeatSignUp) || !empty($badgeNumberSignUp)) {
+    if (!empty($firstNameSignUp) && !empty($lastNameSignUp) && !empty($emailSignUp) && !empty($passwordSignUp) && !empty($passwordRepeatSignUp) && !empty($badgeNumberSignUp)) {
 
         if (!preg_match($namesRegex, $firstNameSignUp) || !preg_match($namesRegex, $lastNameSignUp)) {
             $Response->Message = "1";
@@ -108,7 +108,7 @@ if (isset($_POST["emailin"], $_POST["passwordin"])) {
     $Response = new stdClass();
 
     //validation
-    if (!empty($_POST["emailin"]) || !empty($_POST["passwordin"])) {
+    if (!empty($_POST["emailin"]) && !empty($_POST["passwordin"])) {
 
         if (strlen(trim($_POST["passwordin"])) < 8) {
             $Response->Message = "1";
