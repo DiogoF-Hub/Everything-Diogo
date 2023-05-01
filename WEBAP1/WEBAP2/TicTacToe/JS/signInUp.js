@@ -95,6 +95,9 @@ function returnToGame() {
     $("#sectionTest").fadeOut(50, 'linear');
     setTimeout(function () {
         $(".container2").fadeIn(1500);
+        if ($('#gameTable').css('display') == 'none') {
+            $("#gameTable").fadeIn(500);
+        }
         setTimeout(function () {
             $('#modal').modal('show');
             clearForm();
@@ -186,7 +189,16 @@ function start() {
                         if (Message == true) {
                             $("#logoutButton").show();
                             clearForm();
-                            alert("nice");
+                            userLoggedIn = true;
+
+
+                            $("#sectionTest").fadeOut(50, 'linear');
+                            setTimeout(function () {
+                                $("#GameContainer").fadeIn(1500);
+                                $("#gameTable").fadeOut(400);
+                                $("#onlineModeChoose2").fadeIn(550);
+                            }, 725);
+
                         } else {
                             if (Message != false) {
                                 alert(Message);
@@ -332,7 +344,16 @@ function start() {
                         if (Message == true) {
                             $("#logoutButton").show();
                             clearForm();
-                            alert("nice");
+                            userLoggedIn = true;
+
+
+                            $("#sectionTest").fadeOut(50, 'linear');
+                            setTimeout(function () {
+                                $("#GameContainer").fadeIn(1500);
+                                $("#gameTable").fadeOut(400);
+                                $("#onlineModeChoose2").fadeIn(550);
+                            }, 725);
+
                         } else {
                             if (Message != false) {
                                 alert(Message);

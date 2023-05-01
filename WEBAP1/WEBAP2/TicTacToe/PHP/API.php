@@ -213,3 +213,36 @@ if (isset($_POST["logout"])) {
     echo json_encode($Response);
     die();
 }
+
+
+
+if (isset($_POST["getavailableGames"])) {
+    $data = array();
+
+    $A0 = 0;
+    $A1 = 1;
+
+    $sqlgetavailableGames = $connection->prepare("SELECT GameID, FirstPlayerID FROM Games WHERE GameStatus=? AND SecondPlayerID=?");
+    $sqlgetavailableGames->bind_param("ii", $A1, $A0);
+    $sqlgetavailableGames->execute();
+    $result = $sqlgetavailableGames->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+        $sqlGetUserDataGame = $connection->prepare("SELECT userName FROM Users WHERE UserID=?");
+        $sqlGetUserDataGame->bind_param("i", $row["FirstPlayerID"]);
+        $sqlGetUserDataGame->execute();
+        $result2 = $sqlGetUserDataGame->get_result();
+        $row2 = $result2->fetch_assoc();
+
+        $data[$row["GameID"]] = $row2["userName"];
+    }
+
+    echo json_encode($data);
+    die();
+}
+
+
+
+
+if (isset($_POST["createGame"])) {
+}

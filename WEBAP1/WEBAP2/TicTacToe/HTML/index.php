@@ -73,76 +73,103 @@ include_once("../PHP/API.php");
     <br>
 
 
-    <div class="container2">
+    <div id="GameContainer" class="container2">
         <div class="overlay text-center"></div>
         <div class="content">
-            <div class="d-flex justify-content-center">
-                <h1 style="color: white;">TIC-TAC-TOE</h1>
+
+
+            <div id="gameTitle">
+                <div class="d-flex justify-content-center">
+                    <h1 style="color: white;">TIC-TAC-TOE</h1>
+                </div>
+
+                <div class="text-center">
+                    <button id="changeModeBtn" type="button" class="btn btn-sm btn-outline-light">Change game mode</button>
+                </div>
             </div>
-
-            <div class="text-center">
-                <button id="changeModeBtn" type="button" class="btn btn-sm btn-outline-light">Change game mode</button>
-            </div>
-
-            <br>
-
-            <div class="text-center">
-                <!-- Inform area for player's turn -->
-                <h4 id="screen" style="color: white;">
-                    PLAYER 1 TURN FOLLOWS
-                </h4>
-            </div>
-
-            <br>
-
-            <!-- Playing Canvas -->
-            <table class="d-flex justify-content-center">
-                <tr>
-                    <td colspan="3">
-                </tr>
-                <tr>
-                    <td>
-                        <button class="buttonPlay sq1 r"></button>
-                    </td>
-                    <td>
-                        <button class="buttonPlay sq2 r"></button>
-                    </td>
-                    <td>
-                        <button class="buttonPlay sq3 r"></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button class="buttonPlay sq4 r"></button>
-                    </td>
-                    <td>
-                        <button class="buttonPlay sq5 r"></button>
-                    </td>
-                    <td>
-                        <button class="buttonPlay sq6 r"></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button class="buttonPlay sq7 r"></button>
-                    </td>
-                    <td>
-                        <button class="buttonPlay sq8 r"></button>
-                    </td>
-                    <td>
-                        <button class="buttonPlay sq9 r"></button>
-                    </td>
-                </tr>
-            </table>
 
             <br><br>
 
-            <div class="d-flex justify-content-center">
-                <button id="reset" class="reset btn btn-lg btn-danger">Reset</button>
+            <div id="onlineModeChoose2">
+                <div class="container d-flex justify-content-center">
+                    <div class="row">
+                        <div class="col">
+                            <button id="CreateGameBTN" type="button" class="btn btn-outline-light btn-sm">Create</button>
+                        </div>
+                    </div>
+                </div>
+
+                <br><br>
+
+                <div class="text-center">
+                    <div class="card mx-auto" style="max-width: 640px;">
+                        <div id="AvailablesGamesContainer" class="container card-body"></div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div id="gameTable">
+                <div class="text-center">
+                    <!-- Inform area for player's turn -->
+                    <h4 id="screen" style="color: white;">
+                        PLAYER 1 TURN FOLLOWS
+                    </h4>
+                </div>
+
+                <br>
+
+                <!-- Playing Canvas -->
+                <table class="d-flex justify-content-center">
+                    <tr>
+                        <td colspan="3">
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="buttonPlay sq1 r"></button>
+                        </td>
+                        <td>
+                            <button class="buttonPlay sq2 r"></button>
+                        </td>
+                        <td>
+                            <button class="buttonPlay sq3 r"></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="buttonPlay sq4 r"></button>
+                        </td>
+                        <td>
+                            <button class="buttonPlay sq5 r"></button>
+                        </td>
+                        <td>
+                            <button class="buttonPlay sq6 r"></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="buttonPlay sq7 r"></button>
+                        </td>
+                        <td>
+                            <button class="buttonPlay sq8 r"></button>
+                        </td>
+                        <td>
+                            <button class="buttonPlay sq9 r"></button>
+                        </td>
+                    </tr>
+                </table>
+
+                <br><br>
+
+                <div class="d-flex justify-content-center">
+                    <button id="reset" class="reset btn btn-lg btn-danger">Reset</button>
+                </div>
+
             </div>
         </div>
     </div>
-
 
     <div id="sectionTest">
         <section class="text-center">
@@ -242,8 +269,8 @@ include_once("../PHP/API.php");
                 </div>
             </div>
         </section>
-
     </div>
+
 </body>
 
 </html>
