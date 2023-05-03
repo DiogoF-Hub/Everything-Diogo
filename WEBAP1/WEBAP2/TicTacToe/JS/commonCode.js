@@ -5,6 +5,10 @@ GameStarted = false;
 userLoggedInCheck = 0;
 userLoggedIn = false;
 
+existantGames = [];
+
+let GetGamesInterval;
+
 
 async function checkUserLoggedIn() {
     let anwser = false;
@@ -28,8 +32,6 @@ async function checkUserLoggedIn() {
     return anwser;
 }
 
-
-
 function getavailableGames() {
     $.ajax({
         url: "../PHP/API.php",
@@ -39,29 +41,45 @@ function getavailableGames() {
             getavailableGames: "",
         }),
         success: function (parameter) {
-            $.each(parameter, function (key, value) {
-                var $template = $('<div class="row justify-content-between">' +
-                    '<div class="col">' +
-                    '<div class="d-inline-block">GameID: <span class="fw-bold">' + key + '</span></div>' +
-                    '</div>' +
-                    '<div class="col">' +
-                    '<div class="d-inline-block">Session: <span class="fw-bold">' + value + '</span></div>' +
-                    '</div>' +
-                    '<div class="col">' +
-                    '<button type="button" class="btn btn-outline-dark btn-sm">Join</button>' +
-                    '</div>' +
-                    '</div>');
+            var existantGamesJSON = JSON.stringify(existantGames);
+            var phpArrayJSON = JSON.stringify(parameter);
 
-                $('#AvailablesGamesContainer').append($template);
+            // compare the two strings
+            if (existantGamesJSON !== phpArrayJSON) {
+                existantGames = parameter;
+                console.log("not the same");
+                $('#AvailablesGamesContainer').html("");
+                $.each(parameter, function (key, value) {
+                    var $template = $('<div class="row justify-content-between">' +
+                        '<div class="col">' +
+                        '<div class="d-inline-block">GameID: <span class="fw-bold">' + key + '</span></div>' +
+                        '</div>' +
+                        '<div class="col">' +
+                        '<div class="d-inline-block">Session: <span class="fw-bold">' + value + '</span></div>' +
+                        '</div>' +
+                        '<div class="col">' +
+                        '<button type="button" class="btn btn-outline-dark btn-sm">Join</button>' +
+                        '</div>' +
+                        '</div>');
 
-                if (key != Object.keys(parameter)[Object.keys(parameter).length - 1]) {
-                    $template.after('<hr>');
-                }
+                    $('#AvailablesGamesContainer').append($template);
 
-            });
-
+                    if (key != Object.keys(parameter)[Object.keys(parameter).length - 1]) {
+                        $('#AvailablesGamesContainer').append('<hr>');
+                    }
+                });
+            } else {
+                console.log("the same");
+            }
         }
+
     });
+}
+
+function getavailableGamesEvery2s() {
+    GetGamesInterval = setInterval(() => {
+        getavailableGames();
+    }, 2000);
 }
 
 async function start() {
@@ -143,24 +161,30 @@ async function GameModeFunc(mode) {
 
     if (GameStarted == true) {
         GameStarted = false;
-        $("#ButtonContinue").hide();
     }
+
 
     $(".btnModal").attr("disabled", true);
 
 
     if (GameMode == "online") {
-        getavailableGames();
         if (userLoggedIn == false) {
             $("#GameContainer").fadeOut(55);
             $("#sectionTest").fadeIn(1500, 'linear');
         } else {
+            GameStarted = true;
+            getavailableGames();
+            getavailableGamesEvery2s();
+
             $("#gameTable").fadeOut(250);
             setTimeout(() => {
                 $("#onlineModeChoose2").fadeIn(650);
             }, 375);
         }
+    } else {
+        clearInterval(GetGamesInterval);
     }
+
 
     reset();
 

@@ -91,6 +91,10 @@ include_once("../PHP/API.php");
             <br><br>
 
             <div id="onlineModeChoose2">
+                <div class="d-flex justify-content-center">
+                    <h5 style="color: white;">Here you may create a game or join one</h5>
+                </div>
+
                 <div class="container d-flex justify-content-center">
                     <div class="row">
                         <div class="col">

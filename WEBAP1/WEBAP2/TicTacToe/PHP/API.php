@@ -115,6 +115,7 @@ if (isset($_POST["emailUsernameIn"], $_POST["passwordIn"])) {
                 $_SESSION["email"] = $row["email_id"];
                 $_SESSION["firstname"] = $row["firstname"];
                 $_SESSION["lastname"] = $row["lastname"];
+                $_SESSION["userID"] = $row["UserID"];
 
                 $Response->Message = true;
             } else {
@@ -186,6 +187,15 @@ if (isset($_POST["firstNameInputUp"], $_POST["lastNameInputUp"], $_POST["usernam
             $_SESSION["firstname"] = $_POST["firstNameInputUp"];
             $_SESSION["lastname"] = $_POST["lastNameInputUp"];
 
+
+            $sqlFindUserID = $connection->prepare("SELECT UserID from Users WHERE userName=?");
+            $sqlFindUserID->bind_param("s", $_SESSION["UserName"]);
+            $sqlFindUserID->execute();
+            $result2 = $sqlFindUserID->get_result();
+            $row2 = $result2->fetch_assoc();
+
+            $_SESSION["userID"] = $row2["UserID"];
+
             $Response->Message = true;
         } else {
             $Response->Message = "Something went wrong while inserting the user";
@@ -222,8 +232,8 @@ if (isset($_POST["getavailableGames"])) {
     $A0 = 0;
     $A1 = 1;
 
-    $sqlgetavailableGames = $connection->prepare("SELECT GameID, FirstPlayerID FROM Games WHERE GameStatus=? AND SecondPlayerID=?");
-    $sqlgetavailableGames->bind_param("ii", $A1, $A0);
+    $sqlgetavailableGames = $connection->prepare("SELECT GameID, FirstPlayerID FROM Games WHERE GameStatus=? AND SecondPlayerID=? AND FirstPlayerID!=?");
+    $sqlgetavailableGames->bind_param("iis", $A1, $A0, $_SESSION["userID"]);
     $sqlgetavailableGames->execute();
     $result = $sqlgetavailableGames->get_result();
 

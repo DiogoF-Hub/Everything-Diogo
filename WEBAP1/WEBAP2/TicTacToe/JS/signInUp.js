@@ -92,6 +92,7 @@ function clearForm() {
 
 
 function returnToGame() {
+    GameStarted = false;
     $("#sectionTest").fadeOut(50, 'linear');
     setTimeout(function () {
         $(".container2").fadeIn(1500);
@@ -190,7 +191,9 @@ function start() {
                             $("#logoutButton").show();
                             clearForm();
                             userLoggedIn = true;
-
+                            GameStarted = true;
+                            getavailableGames();
+                            getavailableGamesEvery2s();
 
                             $("#sectionTest").fadeOut(50, 'linear');
                             setTimeout(function () {
@@ -345,7 +348,9 @@ function start() {
                             $("#logoutButton").show();
                             clearForm();
                             userLoggedIn = true;
-
+                            GameStarted = true;
+                            getavailableGames();
+                            getavailableGamesEvery2s();
 
                             $("#sectionTest").fadeOut(50, 'linear');
                             setTimeout(function () {

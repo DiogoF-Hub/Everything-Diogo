@@ -146,6 +146,7 @@ function start() {
 
 
     $("#reset").bind("click", function () {
+        GameStarted = false;
         if (GameMode == "bot") {
             clearTimeout(timeoutId);
         }
@@ -197,7 +198,6 @@ function win(player) {
 
 //reset everything
 function reset() {
-    GameStarted = false;
     arrPlaces = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     turn = 1;
     PlacesTaken = 0;
