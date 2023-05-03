@@ -9,6 +9,10 @@ existantGames = [];
 
 let GetGamesInterval;
 
+onlineUser = 2;
+
+let myInterval;
+
 
 async function checkUserLoggedIn() {
     let anwser = false;
@@ -32,55 +36,6 @@ async function checkUserLoggedIn() {
     return anwser;
 }
 
-function getavailableGames() {
-    $.ajax({
-        url: "../PHP/API.php",
-        type: "POST",
-        dataType: 'json',
-        data: ({
-            getavailableGames: "",
-        }),
-        success: function (parameter) {
-            var existantGamesJSON = JSON.stringify(existantGames);
-            var phpArrayJSON = JSON.stringify(parameter);
-
-            // compare the two strings
-            if (existantGamesJSON !== phpArrayJSON) {
-                existantGames = parameter;
-                console.log("not the same");
-                $('#AvailablesGamesContainer').html("");
-                $.each(parameter, function (key, value) {
-                    var $template = $('<div class="row justify-content-between">' +
-                        '<div class="col">' +
-                        '<div class="d-inline-block">GameID: <span class="fw-bold">' + key + '</span></div>' +
-                        '</div>' +
-                        '<div class="col">' +
-                        '<div class="d-inline-block">Session: <span class="fw-bold">' + value + '</span></div>' +
-                        '</div>' +
-                        '<div class="col">' +
-                        '<button type="button" class="btn btn-outline-dark btn-sm">Join</button>' +
-                        '</div>' +
-                        '</div>');
-
-                    $('#AvailablesGamesContainer').append($template);
-
-                    if (key != Object.keys(parameter)[Object.keys(parameter).length - 1]) {
-                        $('#AvailablesGamesContainer').append('<hr>');
-                    }
-                });
-            } else {
-                console.log("the same");
-            }
-        }
-
-    });
-}
-
-function getavailableGamesEvery2s() {
-    GetGamesInterval = setInterval(() => {
-        getavailableGames();
-    }, 2000);
-}
 
 async function start() {
     $("#onlineModeChoose2").hide();
@@ -120,34 +75,14 @@ async function start() {
             }
         });
     });
-
-
-
-    $("#CreateGameBTN").bind("click", function () {
-        $.ajax({
-            url: "../PHP/API.php",
-            type: "POST",
-            dataType: 'json',
-            data: ({
-                createGame: "",
-            }),
-            success: function (parameter) {
-                Message = parameter.Message;
-
-                if (Message == true) {
-                    $("#logoutButton").fadeOut(350);
-                    userLoggedInCheck = 0;
-                    userLoggedIn = false;
-                }
-
-                $("#logoutButton").attr("disabled", false);
-            }
-        });
-    });
 }
 
 
 async function GameModeFunc(mode) {
+    if (isIntervalRunning() == true) {
+        stopInterval();
+    }
+
     GameMode = mode;
 
     if ($('#gameTable').css('display') == 'none' && GameMode != "online") {

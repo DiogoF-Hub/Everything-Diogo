@@ -22,6 +22,9 @@ include_once("../PHP/API.php");
     <script src="../JS/signInUp.js?t=<?= time(); ?>"></script>
 
     <script src="../JS/game.js?t=<?= time(); ?>"></script>
+
+    <script src="../JS/overTheNetwork.js?t=<?= time(); ?>"></script>
+
     <link rel="stylesheet" href="../CSS/mycss.css?t=<?= time(); ?>">
 
     <script src="../JS/confetti.js?t=<?= time(); ?>"></script>
@@ -69,7 +72,6 @@ include_once("../PHP/API.php");
     </div>
 
 
-
     <br>
 
 
@@ -94,6 +96,8 @@ include_once("../PHP/API.php");
                 <div class="d-flex justify-content-center">
                     <h5 style="color: white;">Here you may create a game or join one</h5>
                 </div>
+
+                <br>
 
                 <div class="container d-flex justify-content-center">
                     <div class="row">

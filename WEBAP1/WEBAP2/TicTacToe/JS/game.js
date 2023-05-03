@@ -27,7 +27,7 @@ function start() {
     $(".buttonPlay").click(function () {
 
         //Showing the reset button on the first play
-        if (PlacesTaken == 0) {
+        if (PlacesTaken == 0 && GameMode != 'online') {
             $("#reset").fadeIn(350);
             GameStarted = true;
         }
@@ -44,102 +44,22 @@ function start() {
         PlacesTaken++;
 
 
-        if (GameMode == "user") {
-            if (turn == 1) {//Player1
-                $("#screen").text("PLAYER 2 TURN FOLLOWS");
-
-                //Check sign font from font-awesome
-                $(this).addClass("far fa-circle fa-lg icon");
-                turn = 2;
-
-                if (check("far fa-circle fa-lg icon") == true) {//Player 1 won the game
-                    win("1");
-                    return;
+        switch (GameMode) {
+            case 'user':
+                singlePlayer(this);
+                break;
+            case 'bot':
+                botPlayer(this);
+                break;
+            case 'online':
+                onlinePlayer(this);
+                if (isIntervalRunning() == false) {
+                    getNewMoves();
                 }
-            }
-            else {
-                $("#screen").text("PLAYER 1 TURN FOLLOWS");
-
-                //Cross sign font from font-awesome
-                $(this).addClass("fa fa-times");
-                turn = 1;
-
-                if (check("fa fa-times") == true) {//Player 2 won the game
-                    win("2");
-                    return;
-                }
-            }
-
-            if (check() == "tie") {
-                draw();
-                return;
-            }
-        } else {
-            $(".r").attr("disabled", true);
-            $("#screen").text("BOT TURN FOLLOWS");
-
-            $(this).addClass("far fa-circle fa-lg icon");
-
-
-            // Get the class of the button
-            buttonClass = $(this).attr("class");
-            // Split the class string into an array of substrings
-            classArray = buttonClass.split(" ");
-            // Find the substring that starts with "sq" and extract the number
-            numberSQ = classArray.find(function (substring) {
-                return substring.startsWith("sq");
-            }).substr(2);
-
-
-
-            indexToRemove = arrPlaces.indexOf(parseInt(numberSQ)); // find the index of the value to remove
-            if (indexToRemove !== -1) { // if the value exists in the array
-                arrPlaces.splice(indexToRemove, 1); // remove it using splice()
-            }
-            console.log(arrPlaces);
-
-
-            if (check("far fa-circle fa-lg icon") == true) {//Player 1 won the game
-                win("1");
-            } else {
-
-                if (PlacesTaken == 9 && check() == "tie") {//check before the bot plays if draw
-                    draw();
-                    return;
-                }
-
-                PlacesTaken++;
-
-                timeoutId = setTimeout(() => {
-                    $("#screen").text("PLAYER 1 TURN FOLLOWS");
-
-                    randomNum = getRandomInt();
-
-                    buttonToPlay = "sq" + randomNum;
-                    $("." + buttonToPlay).addClass("fa fa-times")
-
-
-                    indexToRemove = arrPlaces.indexOf(randomNum); // find the index of the value to remove
-                    if (indexToRemove !== -1) { // if the value exists in the array
-                        arrPlaces.splice(indexToRemove, 1); // remove it using splice()
-                    }
-
-
-                    console.log("ramdomNumber: " + randomNum);
-                    console.log("indexToRemove: " + indexToRemove);
-                    console.log(arrPlaces);
-
-
-                    $(".r").attr("disabled", false);
-                }, 1000);
-
-                setTimeout(() => {
-                    if (check("fa fa-times") == true) {
-                        clearTimeout(timeoutId);
-                        win("BOT");
-                    }
-                }, 1010);
-            }
+                break;
+            default:
+                alert("Invalid GameMode");
+                break;
         }
     });
 
@@ -150,10 +70,186 @@ function start() {
         if (GameMode == "bot") {
             clearTimeout(timeoutId);
         }
+
+        if (isIntervalRunning() == true) {
+            stopInterval();
+        }
+
         $(".buttonPlay").attr("disabled", true);
         reset();
     });
 
+}
+
+
+function onlinePlayer(ButtonClicked) {
+
+    if (onlineUser == 1) {
+        $("#screen").text("PLAYER 2 TURN FOLLOWS");
+
+        $(ButtonClicked).addClass("far fa-circle fa-lg icon");
+
+        // Get the class of the button
+        buttonClass = $(ButtonClicked).attr("class");
+        // Split the class string into an array of substrings
+        classArray = buttonClass.split(" ");
+        // Find the substring that starts with "sq" and extract the number in front
+        numberSQ = classArray.find(function (substring) {
+            return substring.startsWith("sq");
+        }).substr(2);
+
+
+        sendMove(numberSQ);
+
+
+        if (check("far fa-circle fa-lg icon") == true) {//Player 1 won the game
+            win("1");
+        } else {
+            if (PlacesTaken == 9 && check() == "tie") {//check before the bot plays if draw
+                draw();
+                return;
+            }
+
+            PlacesTaken++;
+        }
+
+        $(".buttonPlay").attr("disabled", true);
+    } else {
+
+
+        $("#screen").text("PLAYER 1 TURN FOLLOWS");
+
+        $(ButtonClicked).addClass("fa fa-times");
+
+        // Get the class of the button
+        buttonClass = $(ButtonClicked).attr("class");
+        // Split the class string into an array of substrings
+        classArray = buttonClass.split(" ");
+        // Find the substring that starts with "sq" and extract the number in front
+        numberSQ = classArray.find(function (substring) {
+            return substring.startsWith("sq");
+        }).substr(2);
+
+
+        sendMove(numberSQ);
+
+
+        if (check("fa fa-times") == true) {//Player 1 won the game
+            win("1");
+        } else {
+            if (PlacesTaken == 9 && check() == "tie") {//check before the bot plays if draw
+                draw();
+                return;
+            }
+
+            PlacesTaken++;
+        }
+
+        $(".buttonPlay").attr("disabled", true);
+    }
+}
+
+
+function botPlayer(ButtonClicked) {
+    $(".r").attr("disabled", true);
+    $("#screen").text("BOT TURN FOLLOWS");
+
+    $(ButtonClicked).addClass("far fa-circle fa-lg icon");
+
+
+    // Get the class of the button
+    buttonClass = $(ButtonClicked).attr("class");
+    // Split the class string into an array of substrings
+    classArray = buttonClass.split(" ");
+    // Find the substring that starts with "sq" and extract the number in front
+    numberSQ = classArray.find(function (substring) {
+        return substring.startsWith("sq");
+    }).substr(2);
+
+
+
+    indexToRemove = arrPlaces.indexOf(parseInt(numberSQ)); // find the index of the value to remove
+    if (indexToRemove !== -1) { // if the value exists in the array
+        arrPlaces.splice(indexToRemove, 1); // remove it using splice()
+    }
+    console.log(arrPlaces);
+
+
+    if (check("far fa-circle fa-lg icon") == true) {//Player 1 won the game
+        win("1");
+    } else {
+
+        if (PlacesTaken == 9 && check() == "tie") {//check before the bot plays if draw
+            draw();
+            return;
+        }
+
+        PlacesTaken++;
+
+        timeoutId = setTimeout(() => {
+            $("#screen").text("PLAYER 1 TURN FOLLOWS");
+
+            randomNum = getRandomInt();
+
+            buttonToPlay = "sq" + randomNum;
+            $("." + buttonToPlay).addClass("fa fa-times")
+
+
+            indexToRemove = arrPlaces.indexOf(randomNum); // find the index of the value to remove
+            if (indexToRemove !== -1) { // if the value exists in the array
+                arrPlaces.splice(indexToRemove, 1); // remove it using splice()
+            }
+
+
+            console.log("ramdomNumber: " + randomNum);
+            console.log("indexToRemove: " + indexToRemove);
+            console.log(arrPlaces);
+
+
+            $(".r").attr("disabled", false);
+        }, 1000);
+
+        setTimeout(() => {
+            if (check("fa fa-times") == true) {
+                clearTimeout(timeoutId);
+                win("BOT");
+            }
+        }, 1010);
+    }
+}
+
+
+
+function singlePlayer(ButtonClicked) {
+    if (turn == 1) {//Player1
+        $("#screen").text("PLAYER 2 TURN FOLLOWS");
+
+        //Check sign font from font-awesome
+        $(ButtonClicked).addClass("far fa-circle fa-lg icon");
+        turn = 2;
+
+        if (check("far fa-circle fa-lg icon") == true) {//Player 1 won the game
+            win("1");
+            return;
+        }
+    }
+    else {
+        $("#screen").text("PLAYER 1 TURN FOLLOWS");
+
+        //Cross sign font from font-awesome
+        $(ButtonClicked).addClass("fa fa-times");
+        turn = 1;
+
+        if (check("fa fa-times") == true) {//Player 2 won the game
+            win("2");
+            return;
+        }
+    }
+
+    if (check() == "tie") {
+        draw();
+        return;
+    }
 }
 
 

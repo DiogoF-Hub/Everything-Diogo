@@ -4,7 +4,7 @@ USE TicTacToe;
 
 CREATE TABLE Users(
     UserID INT AUTO_INCREMENT PRIMARY KEY,
-    userName VARCHAR(15) UNIQUE,
+    userName VARCHAR(15) NOT NULL UNIQUE,
     email_id VARCHAR(320) NOT NULL UNIQUE,
     firstname VARCHAR(25) NOT NULL,
     lastname VARCHAR(25) NOT NULL,
@@ -22,9 +22,9 @@ CREATE TABLE Games(
     GameStatus INT(1)
 );
 
-INSERT INTO  Games ( FirstPlayerID, SecondPlayerID, GameStatus) VALUES("1", "0", "1");
-INSERT INTO  Games ( FirstPlayerID, SecondPlayerID, GameStatus) VALUES("2", "0", "1");
-INSERT INTO  Games ( FirstPlayerID, SecondPlayerID, GameStatus) VALUES("3", "0", "1");
+-- INSERT INTO  Games ( FirstPlayerID, SecondPlayerID, GameStatus) VALUES("1", "0", "0");
+-- INSERT INTO  Games ( FirstPlayerID, SecondPlayerID, GameStatus) VALUES("2", "0", "0");
+-- INSERT INTO  Games ( FirstPlayerID, SecondPlayerID, GameStatus) VALUES("3", "0", "0");
 -- INSERT INTO  Games ( FirstPlayerID, SecondPlayerID, GameStatus) VALUES("5", "0", "1");
 
 
@@ -33,6 +33,9 @@ CREATE TABLE Moves(
     Player VARCHAR(320),
     Place INT(1)
 );
+-- INSERT INTO  Moves ( GameID, Player, Place) VALUES("1", "1", "3");
+-- INSERT INTO  Moves ( GameID, Player, Place) VALUES("1", "2", "5");
+-- INSERT INTO  Moves ( GameID, Player, Place) VALUES("1", "1", "7");
 
 
 ALTER TABLE
