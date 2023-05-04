@@ -19,13 +19,13 @@ $userNameRegex = "/^[A-Za-z0-9_-]+$/";
 
 function getGameID($connection, $Response, $A0, $A1)
 {
-    $sqlGetGameID1 = $connection->prepare("SELECT * FROM Games WHERE FirstPlayerID=? AND SecondPlayerID!=? AND GameStatus=?");
-    $sqlGetGameID1->bind_param("iii", $_SESSION["userID"], $A0, $A1);
+    $sqlGetGameID1 = $connection->prepare("SELECT * FROM Games WHERE FirstPlayerID=? AND GameStatus=?");
+    $sqlGetGameID1->bind_param("ii", $_SESSION["userID"], $A1);
     $sqlGetGameID1->execute();
     $result = $sqlGetGameID1->get_result();
     $GameExist = $result->num_rows;
 
-    if ($GameExist < 1) {
+    if ($GameExist != 1) {
         $sqlGetGameID2 = $connection->prepare("SELECT * FROM Games WHERE SecondPlayerID=? AND GameStatus=?");
         $sqlGetGameID2->bind_param("ii", $_SESSION["userID"], $A1);
         $sqlGetGameID2->execute();
@@ -36,7 +36,7 @@ function getGameID($connection, $Response, $A0, $A1)
             $row2 = $result2->fetch_assoc();
             $GameID = $row2["GameID"];
         } else {
-            $Response->Message = false;
+            $Response->Message = $_SESSION["userID"];
             echo json_encode($Response);
             die();
         }
@@ -292,8 +292,8 @@ if (isset($_POST["createGame"]) && $_SESSION["UserLoggedIn"] == true) {
     $A0 = 0;
     $A1 = 1;
 
-    $sqlUpdateExistantGame = $connection->prepare("UPDATE Games SET GameStatus=? WHERE SecondPlayerID!=? AND FirstPlayerID=?");
-    $sqlUpdateExistantGame->bind_param("iii", $A0, $A0, $_SESSION["userID"]);
+    $sqlUpdateExistantGame = $connection->prepare("UPDATE Games SET GameStatus=? WHERE SecondPlayerID=? AND FirstPlayerID=?");
+    $sqlUpdateExistantGame->bind_param("iii", $A1, $A0, $_SESSION["userID"]);
 
     if ($sqlUpdateExistantGame->execute()) {
 
@@ -384,13 +384,14 @@ if (isset($_POST["checkMove"]) && $_SESSION["UserLoggedIn"] == true) {
 
     while ($row = $result->fetch_assoc()) {
         if ($row["Player"] == 1) {
-            $arraySlots[$row["Place"]] = "cirle";
+            $arraySlots[$row["Place"]] = "circle";
         } else {
             $arraySlots[$row["Place"]] = "cross";
         }
     }
 
     $Response->Moves = $arraySlots;
+    $Response->Message = true;
 
     echo json_encode($Response);
     die();
@@ -415,6 +416,8 @@ if (isset($_POST["sendMove"]) && $_SESSION["UserLoggedIn"] == true) {
     if ($sqlInsertMove->execute()) {
         $Response->Message = true;
     }
+
+    $Response->Message = true;
 
     echo json_encode($Response);
     die();

@@ -53,9 +53,6 @@ function start() {
                 break;
             case 'online':
                 onlinePlayer(this);
-                if (isIntervalRunning() == false) {
-                    getNewMoves();
-                }
                 break;
             default:
                 alert("Invalid GameMode");

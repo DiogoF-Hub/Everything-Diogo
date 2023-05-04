@@ -15,6 +15,9 @@ arr[9] = 'empty';
 newMoves = false;
 
 
+let getNewMovesInterval;
+
+
 
 
 function start() {
@@ -36,6 +39,9 @@ function start() {
                     setTimeout(() => {
                         $("#gameTable").fadeIn(650);
                     }, 375);
+                    if (isIntervalRunning() == false) {
+                        getNewMoves();
+                    }
                 } else {
                     location.reload();
                 }
@@ -124,6 +130,10 @@ function JoinFunc(ButtonClicked) {
                 setTimeout(() => {
                     $("#gameTable").fadeIn(650);
                 }, 375);
+
+                if (isIntervalRunning() == false) {
+                    getNewMoves();
+                }
             } else {
                 location.reload();
             }
@@ -135,7 +145,7 @@ function JoinFunc(ButtonClicked) {
 
 
 function getNewMoves() {
-    myInterval = setInterval(function () {
+    getNewMovesInterval = setInterval(function () {
         $.ajax({
             url: "../PHP/API.php",
             type: "POST",
@@ -146,6 +156,8 @@ function getNewMoves() {
             success: function (parameter) {
                 Message = parameter.Message;
 
+                console.log(Message);
+
                 if (Message == true) {
 
                     phpArray = parameter.Moves;
@@ -153,21 +165,33 @@ function getNewMoves() {
                     for (var key in phpArray) {
                         if (phpArray.hasOwnProperty(key)) { //Checks if an object has a property with a specific key
                             if (arr[key] !== phpArray[key]) {
-                                arr[key] = phpArray[key];
+                                //arr[key] = phpArray[key];
+                                arr = phpArray;
                                 newMoves = true;
+                                break;
                             }
                         } else {
-                            location.reload();
+                            console.log("2")
+                            //location.reload();
                         }
                     }
 
                     if (newMoves == true) {
                         newMoves = false;
                         updateMoves();
+
+                        if (onlineUser == 1) {
+                            onlineUser = 2;
+                        }
+
+                        if (onlineUser == 2) {
+                            onlineUser = 1;
+                        }
                     }
 
                 } else {
-                    location.reload();
+                    console.log("1")
+                    //location.reload();
                 }
 
             }
@@ -177,24 +201,27 @@ function getNewMoves() {
 
 
 function stopInterval() {
-    clearInterval(myInterval);
-    myInterval = undefined;
+    clearInterval(getNewMovesInterval);
+    getNewMovesInterval = undefined;
 }
 
 
 function isIntervalRunning() {
-    return myInterval !== undefined;
+    return getNewMovesInterval !== undefined;
 }
 
 
 
 function updateMoves() {
+    $(".r").removeClass("far fa-circle fa-lg icon");
+    $(".r").removeClass("fa fa-times");
     $.each(arr, function (key, value) {
-        if (value == "circle" && !$(".sq" + key).hasClass("far fa-circle fa-lg icon")) {
+        console.log(value, " ", key);
+        if (value == "circle") {
             $(".sq" + key).addClass("far fa-circle fa-lg icon");
         }
 
-        if (value == "cross" && !$(".sq" + key).hasClass("fa fa-times")) {
+        if (value == "cross") {
             $(".sq" + key).addClass("fa fa-times");
         }
     });
@@ -216,7 +243,8 @@ function sendMove(move) {
             Message = parameter.Message;
 
             if (Message != true) {
-                location.reload();
+                console.log("3")
+                //location.reload();
             }
         }
     });

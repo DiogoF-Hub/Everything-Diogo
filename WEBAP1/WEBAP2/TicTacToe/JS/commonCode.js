@@ -11,8 +11,6 @@ let GetGamesInterval;
 
 onlineUser = 2;
 
-let myInterval;
-
 
 async function checkUserLoggedIn() {
     let anwser = false;
