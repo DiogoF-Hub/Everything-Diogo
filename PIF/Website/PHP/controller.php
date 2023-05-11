@@ -36,7 +36,7 @@ if (isset($_GET["hostname"], $_GET["rfid"])) {
 
 
         if ($row["open_door_any_time"] == 1) {
-            $data = array('allowed' => true, 'this' => 2);
+            $data = array('allowed' => true);
             echo json_encode($data);
             die();
         }
@@ -67,7 +67,7 @@ if (isset($_GET["hostname"], $_GET["rfid"])) {
             $roomFree = $result3->num_rows;
 
             if ($roomFree == 0) {
-                $data = array('allowed' => true, 'this' => 1);
+                $data = array('allowed' => true);
                 echo json_encode($data);
                 die();
             }
@@ -83,8 +83,7 @@ if (isset($_GET["hostname"], $_GET["rfid"])) {
         $BookResults = $result2->num_rows;
 
         if ($BookResults == 1) {
-            $data = array('allowed' => true, 'this' => 3); //open
-            echo $dateNow, " +++ ", $userID, " +++ ", $HoursArr[$HourNow], " +++ ", $HoursArr[$HourNow], " +++ ", $RoomID;
+            $data = array('allowed' => true); //open
         } else {
             $data = array('allowed' => false);
         }
