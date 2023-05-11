@@ -146,3 +146,31 @@ if (isset($_POST["inputDate"], $_POST["startTimeVal"], $_POST["endTimeVal"]) && 
         returnRes(data: $Response);
     }
 }
+
+
+
+
+
+if (isset($_POST["RemoveReserv"])) {
+    $Response = new stdClass();
+
+    $sqlCheckReserv = $connection->prepare("SELECT * FROM Booking_info WHERE booking_id=?");
+    $sqlCheckReserv->bind_param("s", $_POST["RemoveReserv"]);
+    $sqlCheckReserv->execute();
+    $result = $sqlCheckReserv->get_result();
+    $ReservExist = $result->num_rows;
+
+    if ($ReservExist == 1) {
+        $sqlDeleteReserv = $connection->prepare("DELETE FROM Booking_info WHERE booking_id=?");
+        $sqlDeleteReserv->bind_param("s", $_POST["RemoveReserv"]);
+
+        if ($sqlDeleteReserv->execute()) {
+            $Response->Message = true;
+            returnRes(data: $Response);
+        }
+    }
+
+
+    $Response->Message = false;
+    returnRes(data: $Response);
+}

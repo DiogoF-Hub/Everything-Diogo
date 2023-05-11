@@ -17,6 +17,7 @@ function start() {
         }
     });
 
+
     $("#open_door_any_timeSwitch").bind("change", function () { //Here I bind the input type checkbox that runs this func when its being checked
         //Here I get the true or false if the input is checked or not
         open_door_any_timeSwitch = $("#open_door_any_timeSwitch").is(':checked');
@@ -29,25 +30,12 @@ function start() {
         }
     });
 
-    $("#ScheduleSwitch").bind("change", function () { //Here I bind the input type checkbox that runs this func when its being checked
-        //Here I get the true or false if the input is checked or not
-        ScheduleSwitch = $("#ScheduleSwitch").is(':checked');
-
-        if (ScheduleSwitch == true) {//If this one is true I make the other input checked and disabled
-            $("#view_scheduleSwitch").prop('checked', true);
-            $("#view_scheduleSwitch").attr("disabled", true);
-        } else {//if not I just remove the disable attribute from the input
-            $("#view_scheduleSwitch").attr("disabled", false);
-        }
-    });
 
     $("#createGroupBtn").bind("click", async function () { //This will run every time the user clicks on create group button
         JSvalidation = 0; //I define this variable = to 0, so then I use this to check if everything is all right to submit
 
         //Here I define all of this variables = 0, so then I can use them for the POST
         Schedule = 0;
-        view_schedule = 0;
-        view_sensitive_data = 0;
         open_door_any_time = 0;
         open_door_when_its_available = 0;
 
@@ -56,8 +44,6 @@ function start() {
 
         //Here I take the input val, if they are checked or not (true, false)
         ScheduleSwitch = $("#ScheduleSwitch").is(':checked');
-        view_scheduleSwitch = $("#view_scheduleSwitch").is(':checked');
-        view_sensitive_dataSwitch = $("#view_sensitive_dataSwitch").is(':checked');
         open_door_any_timeSwitch = $("#open_door_any_timeSwitch").is(':checked');
         open_door_when_its_availableSwitch = $("#open_door_when_its_availableSwitch").is(':checked');
 
@@ -75,16 +61,8 @@ function start() {
 
         if (ScheduleSwitch == true) { //if this is true i I define the variables = 1 (I don't need to write == true, but it makes easier to understand)
             Schedule = 1;             //If the user can schedule, the user can view it too so I force it like this
-            view_schedule = 1;
-        } else {//if its false
-            if (view_scheduleSwitch == true) {//and if the other one its false only then I check this one and change to 1 if its true
-                view_schedule = 1;            //And there is the possibility that the user can view the schedule but schedule
-            }
         }
 
-        if (view_sensitive_dataSwitch == true) { //if this is true i I define the variables = 1 (I don't need to write == true, but it makes easier to understand)
-            view_sensitive_data = 1;
-        }
 
         if (open_door_any_timeSwitch == true) {//if this is true i I define the variables = 1 (I don't need to write == true, but it makes easier to understand)
             open_door_any_time = 1;            //If the user can open the door at any time, the user can open the door when its available too so I force it like this
@@ -102,8 +80,6 @@ function start() {
                 data: ({//the data names with the variables with theirs values (my names of the post and the name of the variables are the same)
                     groupName: groupName,
                     Schedule: Schedule,
-                    view_schedule: view_schedule,
-                    view_sensitive_data: view_sensitive_data,
                     open_door_any_time: open_door_any_time,
                     open_door_when_its_available: open_door_when_its_available
                 }),

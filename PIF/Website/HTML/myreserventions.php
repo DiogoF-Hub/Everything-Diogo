@@ -35,7 +35,7 @@ if (!$_SESSION["userloggedIn"]) { //Here I check if the user is logged in and if
     ?>
     <section class="section1">
         <?php
-        $sqlGetReserv = $connection->prepare("SELECT * FROM booking_info NATURAL JOIN Rooms WHERE user_id=?");
+        $sqlGetReserv = $connection->prepare("SELECT * FROM Booking_info NATURAL JOIN Rooms WHERE user_id=?");
         $sqlGetReserv->bind_param("s", $_SESSION["user_id"]); //bind the user id from the session
         $sqlGetReserv->execute();
         $result = $sqlGetReserv->get_result();
@@ -45,7 +45,7 @@ if (!$_SESSION["userloggedIn"]) { //Here I check if the user is logged in and if
         if ($totalReserv > 0) {
         ?>
             <div class="text-center">
-                <div class="card mx-auto" style="max-width: 900px;">
+                <div class="card mx-auto" style="max-width: 1000px;">
                     <div id="allReservsDiv" class="container card-body">
 
 
@@ -74,16 +74,16 @@ if (!$_SESSION["userloggedIn"]) { //Here I check if the user is logged in and if
                             <div>
                                 <div class="row justify-content-between">
                                     <div class="col">
-                                        <div class="d-inline-block">Room number: <span class="fw-bold"><?= $row["number"] ?></span></div>
+                                        <div class="d-inline-block"><span class="active1">Room number: </span><?= $row["number"] ?></div>
                                     </div>
                                     <div class="col">
-                                        <div class="d-inline-block">Date: <span class="fw-bold"><?= $row["booking_date"] ?></span></div>
+                                        <div class="d-inline-block"><span class="active1">Date: </span><?= $row["booking_date"] ?></div>
                                     </div>
                                     <div class="col">
-                                        <div class="d-inline-block">Start Time: <span class="fw-bold"><?= $HoursArr[$row["start_time"]] ?></span></div>
+                                        <div class="d-inline-block"><span class="active1">Time: </span><?= $HoursArr[$row["start_time"]] ?> - <?= $HoursArr[$row["end_time"]] ?></div>
                                     </div>
                                     <div class="col">
-                                        <div class="d-inline-block">End Time: <span class="fw-bold"><?= $HoursArr[$row["end_time"]] ?></span></div>
+                                        <div class="d-inline-block"><span class="active1">Purpose: </span><?= $row["purpose"] ?></div>
                                     </div>
                                     <div class="col">
                                         <input type="text" hidden value="<?= $row['booking_id']; ?>">

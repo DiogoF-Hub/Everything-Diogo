@@ -54,7 +54,7 @@ if (isset($_POST["newgroup"], $_POST["userid"], $_SESSION["userloggedIn"]) && $_
 
 
 //if admin creates group
-if (isset($_POST["groupName"], $_POST["Schedule"], $_POST["view_schedule"], $_POST["view_sensitive_data"], $_POST["open_door_any_time"], $_POST["open_door_when_its_available"]) && $_SESSION["userloggedIn"] == true && $_SESSION["group_id"] == 2) {
+if (isset($_POST["groupName"], $_POST["Schedule"], $_POST["open_door_any_time"], $_POST["open_door_when_its_available"]) && $_SESSION["userloggedIn"] == true && $_SESSION["group_id"] == 2) {
     $Response = new stdClass(); //create response
 
 
@@ -65,7 +65,7 @@ if (isset($_POST["groupName"], $_POST["Schedule"], $_POST["view_schedule"], $_PO
     $open_door_when_its_availableSwitch = 0;
 
     //validation
-    if (!empty($_POST["groupName"]) || !empty($_POST["Schedule"]) || !empty($_POST["view_sensitive_data"]) || !empty($_POST["open_door_any_time"]) || !empty($_POST["open_door_when_its_available"])) {
+    if (!empty($_POST["groupName"]) || !empty($_POST["Schedule"]) || !empty($_POST["open_door_any_time"]) || !empty($_POST["open_door_when_its_available"])) {
 
         $groupNameTaken = $connection->prepare("SELECT group_name from Groups_permissions WHERE group_name=?");
         $groupNameTaken->bind_param("s", $_POST["groupName"]);
@@ -78,15 +78,6 @@ if (isset($_POST["groupName"], $_POST["Schedule"], $_POST["view_schedule"], $_PO
             if ($_POST["Schedule"] == 1) {
                 $ScheduleSwitch = 1;
                 $view_scheduleSwitch = 1;
-            } else {
-                if ($_POST["view_schedule"] == 1) {
-                    $view_scheduleSwitch = 1;
-                }
-            }
-
-
-            if ($_POST["view_sensitive_data"] == 1) {
-                $view_sensitive_dataSwitch = 1;
             }
 
             if ($_POST["open_door_any_time"] == 1) {
@@ -101,8 +92,8 @@ if (isset($_POST["groupName"], $_POST["Schedule"], $_POST["view_schedule"], $_PO
 
             //insert
             $A0 = 0;
-            $userIn = $connection->prepare("INSERT INTO Groups_permissions (group_name, admin, schedule, view_schedule, view_sensitive_data, open_door_any_time, open_door_available) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $userIn->bind_param("siiiiii", $_POST["groupName"], $A0, $ScheduleSwitch, $view_scheduleSwitch, $view_sensitive_dataSwitch, $open_door_any_timeSwitch, $open_door_when_its_availableSwitch);
+            $userIn = $connection->prepare("INSERT INTO Groups_permissions (group_name, admin, schedule, open_door_any_time, open_door_available) VALUES (?, ?, ?, ?, ?)");
+            $userIn->bind_param("siiii", $_POST["groupName"], $A0, $ScheduleSwitch, $open_door_any_timeSwitch, $open_door_when_its_availableSwitch);
             $userIn->execute();
 
             $Response->Message = "1";
