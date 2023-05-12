@@ -35,7 +35,7 @@ if (!$_SESSION["userloggedIn"]) { //Here I check if the user is logged in and if
     ?>
     <section class="section1">
         <?php
-        $sqlGetReserv = $connection->prepare("SELECT * FROM Booking_info NATURAL JOIN Rooms WHERE user_id=?");
+        $sqlGetReserv = $connection->prepare("SELECT * FROM Booking_info NATURAL JOIN Rooms WHERE user_id=? ORDER BY booking_date ASC, start_time ASC");
         $sqlGetReserv->bind_param("s", $_SESSION["user_id"]); //bind the user id from the session
         $sqlGetReserv->execute();
         $result = $sqlGetReserv->get_result();
