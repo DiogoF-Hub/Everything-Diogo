@@ -196,6 +196,7 @@ function RoomsShow() { //show rooms available from date and time
         $("#inputDate").parent().children("div").eq(1).html("");
     }
 
+
     //select start time validation
     if (!startTimeVal || !endTimeVal) {
         window.location.reload();
@@ -264,6 +265,8 @@ function RoomsShow() { //show rooms available from date and time
         } else {
             window.location.reload();
         }
+    } else {
+        toggle = true;
     }
 }
 

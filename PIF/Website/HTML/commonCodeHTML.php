@@ -64,8 +64,14 @@ function nav($ActivePage, $ActiveDropdown) //nav bar function with 2 parameters
                         <a class="nav-link active dropdown-toggle <?php if ($ActivePage == "profile") print "active1" ?>" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><?= $_SESSION["firstname"] . " " . $_SESSION["lastname"] ?></a>
                         <ul class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item dropdownSelect <?php if ($ActiveDropdown == "profile1") print "active1" ?>" href="profile.php">Edit Profile</a></li>
-                            <hr>
-                            <li><a class="dropdown-item dropdownSelect <?php if ($ActiveDropdown == "profile2") print "active1" ?>" href="myreserventions.php">My Reserventions</a></li>
+                            <?php
+                            if ($_SESSION["group_right_schedule"] == 1) {
+                            ?>
+                                <hr>
+                                <li><a class="dropdown-item dropdownSelect <?php if ($ActiveDropdown == "profile2") print "active1" ?>" href="myreserventions.php">My Reserventions</a></li>
+                            <?php
+                            }
+                            ?>
                         </ul>
                     </li>
 

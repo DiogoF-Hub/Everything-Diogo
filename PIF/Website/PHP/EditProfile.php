@@ -190,6 +190,15 @@ if (!empty($_FILES) && $_SESSION["userloggedIn"] == true) {
         UPLOAD_ERR_EXTENSION => "A PHP extension stopped the file upload"
     );
 
+
+    $fileSize = $_FILES["image"]["size"];
+    if ($fileSize > 10485760) {
+        // File size is larger than 10MB
+        $Response->Message = "1";
+        returnRes(data: $Response);
+    }
+
+
     $image = $_FILES["image"];
 
     if ($image["error"] == UPLOAD_ERR_OK) { //If the upload was successful
