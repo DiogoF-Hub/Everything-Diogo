@@ -54,10 +54,11 @@ function start() {
     }
 
 
-    $.each(hoursArr, function (index, value) {
-        let myoption2 = `<option value=${index}>${value.startTime}</option>`;
-        $("#start-time").append(myoption2);
-    });
+    // $.each(hoursArr, function (index, value) {
+    //     let myoption2 = `<option value=${index}>${value.startTime}</option>`;
+    //     $("#start-time").append(myoption2);
+    // });
+
 
 
     $("#end-time").attr("disabled", true);
@@ -102,23 +103,29 @@ function start() {
             }
 
 
-            $.ajax({ //ajax call
-                url: "../PHP/newReservation.php",
-                type: "POST",
-                dataType: "json",
-                data: ({
-                    dateSelected: dateSelected,
-                    startTime: startTime,
-                    endTime: endTime
-                }),
-                success: function (parameter) {
-                    bla = parameter.data.Message;
-
-                },
-            });
+            $("#reservForm").submit();
 
         } else {
             alert("Please select all the options needed");
+        }
+    });
+
+
+
+    $("#reservBTN").bind("click", function () {
+        roomSelected = $("#roomSelected").val();
+        purpose = $("#purpose").val();
+
+
+        if ($.isNumeric(roomSelected) && roomSelected != "-1") {
+            if (purpose === "") {
+                alert("The purpose must be written");
+                return;
+            }
+
+            $("#reservFormLast").submit();
+        } else {
+            alert("select a room")
         }
     });
 }

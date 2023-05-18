@@ -1,48 +1,52 @@
 <?php
-require("../HTML/CommonCode.php");
+if (isset($_GET["date"], $_GET["start-time"], $_GET["end-time"], $_POST["roomSelected"], $_POST["purpose"])) {
+    if ($_GET["end-time"] < $_GET["start-time"] || !is_numeric($_POST["roomSelected"]) || $_POST["roomSelected"] == "-1" || $_POST["purpose"] === "") {
+        header("Location: Home.php");
+        die();
+    }
 
 
 
-if (isset($_POST["dateSelected"], $_POST["startTime"], $_POST["endTime"])) {
+    //check if the room is really available
+    $RoomsTaken = [];
+    $HoursSelected = range($_GET["start-time"], $_GET["end-time"] + 1);
 
 
+    $time = strtotime($_GET["date"]);
+    $dataFormated = date('Y-m-d', $time);
 
 
-    $occupiedRooms = [];
-    $rangeTaken = range($startTime, $endTime + 1);
+    $sqlGetReservDate = $connection->prepare("SELECT * FROM Reserve_Details WHERE 'date'=?");
+    $sqlGetReservDate->bind_param("s", $dataFormated);
+    $sqlGetReservDate->execute();
+    $result = $sqlGetReservDate->get_result();
 
-
-    $time = strtotime($dateVal);
-    $newformat = date('Y-m-d', $time);
-
-    $sqlStatement = $connection->prepare("SELECT * FROM Booking_info WHERE booking_date=?");
-    $sqlStatement->bind_param("s", $newformat);
-    $sqlStatement->execute();
-    $result2 = $sqlStatement->get_result();
-
-    while ($row2 = $result2->fetch_assoc()) {
-        if (!in_array($row2["room_id"], $occupiedRooms)) {
-            $rangeRow = range($row2["start_time"], $row2["end_time"]);
+    while ($row = $result->fetch_assoc()) {
+        if (!in_array($row["room_id"], $RoomsTaken)) {
+            $rangeRow = range($row["start_time"], $row["end_time"]);
             for ($i = 0; $i < count($rangeRow); $i++) {
-                if (in_array($rangeRow[$i], $rangeTaken) && !in_array($row2["room_id"], $occupiedRooms)) {
-                    $occupiedRooms[] = $row2["room_id"]; //create arr with all occupiedRooms
+                if (in_array($rangeRow[$i], $HoursSelected) && !in_array($row["room_id"], $RoomsTaken)) {
+                    $RoomsTaken[] = $row["room_id"];
                 }
             }
         }
     }
 
-    $sqlStatement = $connection->prepare("SELECT * FROM Rooms");
-    $sqlStatement->execute();
-    $result2 = $sqlStatement->get_result();
-    while ($row2 = $result2->fetch_assoc()) {
-        if (in_array($row2["room_id"], $occupiedRooms)) {
-            continue;
-        }
-        $room = new stdClass();
-        $room->room_number = $row2["number"];
-        $room->room_id = $row2["room_id"];
-        $room->room_capacity = $row2["capacity"];
-        $room->room_description = $row2["description"];
-        array_push($roomsArr, $room); //push all available rooms
+
+    if (in_array($_POST["roomSelected"], $RoomsTaken)) {
+        header("Location: Home.php");
+        die();
+    }
+
+    $endTime = $_GET["end-time"] + 1;
+
+    $sqlInsertReserv = $connection->prepare("INSERT INTO `Reserve_Details` (`purpose`, `room_id`, `date`, `user_email`, `start_time`, `end_time`) VALUES(?, ?, ?, ?, ? ,?);");
+    $sqlInsertReserv->bind_param("ssssss", $_POST["purpose"], $_POST["roomSelected"], $_GET["date"], $_SESSION["email"], $_GET["start-time"], $endTime);
+    if ($sqlInsertReserv->execute()) {
+        print '<script>
+        alert("The room was reserved");
+        var currentPath = window.location.pathname;
+        window.location.href = currentPath;
+        </script>';
     }
 }
