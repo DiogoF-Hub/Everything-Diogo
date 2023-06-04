@@ -58,8 +58,8 @@ CREATE TABLE `Booking_info`(
     `user_id` INT NOT NULL,
     `booking_date` DATE NOT NULL,
     `purpose` VARCHAR(1000) NOT NULL,
-    `start_time` ENUM('1', '2', '3', '4', '5', '6', '7', '8', '9') NOT NULL,
-    `end_time` ENUM('2', '3', '4', '5', '6', '7', '8', '9', '10') NOT NULL
+    `start_time` INT NOT NULL,
+    `end_time` INT NOT NULL
 );
 
 

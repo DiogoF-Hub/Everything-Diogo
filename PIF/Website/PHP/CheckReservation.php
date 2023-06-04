@@ -24,7 +24,6 @@ function rooms($dateVal, $startTime, $endTime) //func to filter rooms
 
     while ($row2 = $result2->fetch_assoc()) {
         if (!in_array($row2["room_id"], $occupiedRooms)) {
-
             if ($row2["end_time"] != $startTime) {
                 $rangeRow = range($row2["start_time"], $row2["end_time"]);
                 for ($i = 0; $i < count($rangeRow); $i++) {
@@ -60,7 +59,7 @@ if (isset($_POST["inputDate2"], $_POST["startTimeVal2"], $_POST["endTimeVal2"], 
 
     $dateVal = $_POST["inputDate2"];
     $startTime = $_POST["startTimeVal2"];
-    $endTime = $_POST["endTimeVal2"];
+    $endTime = $_POST["endTimeVal2"] + 1;
     $RoomID = $_POST["roomsIDSelect"];
     $purpose = $_POST["purpose"];
 
